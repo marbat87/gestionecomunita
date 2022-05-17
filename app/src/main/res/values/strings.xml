@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">gestionecomunita</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="tutte_comunita">Tutte</string>
+    <string name="oltre_un_anno_comunita">Visitate oltre un anno fa</string>
+    <string name="tappa_comunita">Elenco per tappa</string>
+    <string name="diocesi_comunita">Elenco per tappa</string>
+</resources>
