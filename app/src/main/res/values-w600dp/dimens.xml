@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="fab_margin">48dp</dimen>
+    <dimen name="container_horizontal_margin">48dp</dimen>
+    <dimen name="text_field_space">48dp</dimen>
+    <dimen name="text_field_space_no_error">68dp</dimen>
+</resources>

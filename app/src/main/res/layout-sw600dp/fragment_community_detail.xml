@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/community_detail_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.comunita.CommunityDetailHostFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:statusBarForeground="?colorSurface">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/app_bar"
+            style="@style/Widget.Material3.Toolbar.Surface"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:title="@string/comunita" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/material_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/comunita_dati_generali" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/comunita_elenco_fratelli" />
+
+        </com.google.android.material.tabs.TabLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/community_detail_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/last_edit_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_field_space"
+                android:paddingStart="@dimen/container_horizontal_margin"
+                android:paddingEnd="@dimen/container_horizontal_margin"
+                android:textAppearance="?textAppearanceBodyMedium"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/diocesi_text_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/text_field_space"
+                android:layout_marginTop="@dimen/text_field_space"
+                android:layout_marginEnd="@dimen/text_field_space"
+                android:enabled="false"
+                android:hint="@string/diocesi"
+                app:layout_constraintTop_toBottomOf="@id/last_edit_date">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/numero_text_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/text_field_space"
+                android:layout_marginTop="@dimen/text_field_space"
+                android:layout_marginEnd="@dimen/text_field_space"
+                android:enabled="false"
+                android:hint="@string/comunita"
+                app:errorEnabled="true"
+                app:layout_constraintTop_toBottomOf="@id/diocesi_text_field">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/parrocchia_text_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/text_field_space"
+                android:layout_marginTop="@dimen/text_field_space"
+                android:layout_marginEnd="@dimen/text_field_space"
+                android:enabled="false"
+                android:hint="@string/parrocchia"
+                app:errorEnabled="true"
+                app:layout_constraintTop_toBottomOf="@id/numero_text_field">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/email_text_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/text_field_space"
+                android:layout_marginTop="@dimen/text_field_space"
+                android:layout_marginEnd="@dimen/text_field_space"
+                android:enabled="false"
+                android:hint="@string/e_mail"
+                app:errorEnabled="true"
+                app:layout_constraintTop_toBottomOf="@id/parrocchia_text_field">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/responsabile_text_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/text_field_space"
+                android:layout_marginTop="@dimen/text_field_space"
+                android:layout_marginEnd="@dimen/text_field_space"
+                android:enabled="false"
+                android:hint="@string/responsabile"
+                app:errorEnabled="true"
+                app:layout_constraintTop_toBottomOf="@id/email_text_field">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/telefono_text_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/text_field_space"
+                android:layout_marginTop="@dimen/text_field_space"
+                android:layout_marginEnd="@dimen/text_field_space"
+                android:enabled="false"
+                android:hint="@string/telefono"
+                app:errorEnabled="true"
+                app:layout_constraintTop_toBottomOf="@id/responsabile_text_field">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tappa_text_field"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/text_field_space"
+                android:layout_marginTop="@dimen/text_field_space"
+                android:layout_marginEnd="@dimen/text_field_space"
+                android:enabled="false"
+                android:hint="@string/tappa"
+                app:errorEnabled="true"
+                app:layout_constraintTop_toBottomOf="@id/telefono_text_field">
+
+                <AutoCompleteTextView
+                    android:id="@+id/tappa_autcomplete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    app:simpleItems="@array/passaggi_entries"
+                    tools:ignore="LabelFor" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/data_convivenza_text_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/text_field_space"
+                android:layout_marginTop="@dimen/text_field_space"
+                android:layout_marginEnd="@dimen/text_field_space"
+                android:enabled="false"
+                android:hint="@string/data_convivenza"
+                app:errorEnabled="true"
+                app:layout_constraintTop_toBottomOf="@id/tappa_text_field">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/data_visita_text_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/text_field_space"
+                android:layout_marginTop="@dimen/text_field_space"
+                android:layout_marginEnd="@dimen/text_field_space"
+                android:enabled="false"
+                android:hint="@string/data_ultima_visita"
+                app:errorEnabled="true"
+                app:layout_constraintTop_toBottomOf="@id/data_convivenza_text_field">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/note_text_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/text_field_space"
+                android:layout_marginTop="@dimen/text_field_space"
+                android:layout_marginEnd="@dimen/text_field_space"
+                android:enabled="false"
+                android:hint="@string/note"
+                app:errorEnabled="true"
+                app:layout_constraintTop_toBottomOf="@id/data_visita_text_field">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/brothers_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:layoutManager="LinearLayoutManager"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:listitem="@layout/community_row_item" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
+        app:srcCompat="@drawable/edit_24px"
+        tools:ignore="ContentDescription" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_brother"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:visibility="gone"
+        app:srcCompat="@drawable/add_24px"
+        tools:ignore="ContentDescription" />
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomAppBar"
+        style="@style/Widget.Material3.BottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:hideOnScroll="true"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:menu="@menu/bottom_app_bar_menu" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
