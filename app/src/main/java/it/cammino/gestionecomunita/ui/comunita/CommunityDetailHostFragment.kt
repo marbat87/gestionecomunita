@@ -1,26 +1,37 @@
 package it.cammino.gestionecomunita.ui.comunita
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import it.cammino.gestionecomunita.ItemClickState
 import it.cammino.gestionecomunita.MainActivityViewModel
 import it.cammino.gestionecomunita.databinding.FragmentCommunityHostBinding
 import it.cammino.gestionecomunita.ui.GestioneComunitaFragment
 import it.cammino.gestionecomunita.ui.comunita.detail.CommunityDetailFragment
+import it.cammino.gestionecomunita.ui.comunita.list.CommunityListFragment
+import it.cammino.gestionecomunita.ui.comunita.list.CommunityListViewModel
 
 class CommunityDetailHostFragment : GestioneComunitaFragment() {
 
     private val activityViewModel: MainActivityViewModel by activityViewModels()
+    private val mViewModel: CommunityListViewModel by viewModels()
 
     private var _binding: FragmentCommunityHostBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mViewModel.onlyNotVisitedForOneYear = arguments?.getBoolean(CommunityListFragment.SOLO_NON_VISITATE_UNO_ANNO, false) ?: false
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,6 +86,14 @@ class CommunityDetailHostFragment : GestioneComunitaFragment() {
             }
         }
 
+    }
+
+    companion object {
+        fun newInstance(onlyNotVisitedOneYear: Boolean): CommunityDetailHostFragment {
+            val f = CommunityDetailHostFragment()
+            f.arguments = bundleOf(CommunityListFragment.SOLO_NON_VISITATE_UNO_ANNO to onlyNotVisitedOneYear)
+            return f
+        }
     }
 
 //    override fun onSupportNavigateUp(): Boolean {

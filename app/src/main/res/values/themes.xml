@@ -90,8 +90,8 @@
     </style>
 
     <style name="Widget.Gestionecomunita.TabLayout" parent="Widget.Material3.TabLayout">
-        <item name="tabGravity">center</item>
-        <item name="tabMode">auto</item>
+        <item name="tabGravity">start</item>
+        <item name="tabMode">scrollable</item>
     </style>
 
     <style name="TextAppearance.GestioneComunita.DisplayLarge" parent="TextAppearance.Material3.DisplayLarge">

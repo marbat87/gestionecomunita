@@ -20,6 +20,7 @@ import it.cammino.gestionecomunita.database.entity.Comunita
 import it.cammino.gestionecomunita.databinding.FragmentCommunityDetailBinding
 import it.cammino.gestionecomunita.util.Utility
 import it.cammino.gestionecomunita.util.systemLocale
+import it.cammino.gestionecomunita.util.validateMandatoryField
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -75,8 +76,8 @@ class CommunityDetailFragment : Fragment() {
             editMode(it || mViewModel.createMode)
         }
 
-        binding.fabEdit.setOnClickListener {
-            mViewModel.editMode.value = true
+        binding.fabAddBrother.setOnClickListener {
+//            mViewModel.editMode.value = true
         }
 
         binding.tappaAutcomplete.setOnItemClickListener { _, _, i, _ ->
@@ -89,7 +90,13 @@ class CommunityDetailFragment : Fragment() {
             if (motionEvent.action == MotionEvent.ACTION_UP) {
                 val picker =
                     MaterialDatePicker.Builder.datePicker()
-                        .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                        .setSelection(
+                            if (binding.dataConvivenzaTextField.editText?.text.isNullOrBlank()) MaterialDatePicker.todayInUtcMilliseconds() else
+                                Utility.getDateFromString(
+                                    requireContext(),
+                                    binding.dataConvivenzaTextField.editText?.text?.toString() ?: ""
+                                )?.time
+                        )
                         .setTitleText(R.string.data_convivenza)
                         .build()
                 picker.show(
@@ -114,7 +121,13 @@ class CommunityDetailFragment : Fragment() {
             if (motionEvent.action == MotionEvent.ACTION_UP) {
                 val picker =
                     MaterialDatePicker.Builder.datePicker()
-                        .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                        .setSelection(
+                            if (binding.dataVisitaTextField.editText?.text.isNullOrBlank()) MaterialDatePicker.todayInUtcMilliseconds() else
+                                Utility.getDateFromString(
+                                    requireContext(),
+                                    binding.dataVisitaTextField.editText?.text?.toString() ?: ""
+                                )?.time
+                        )
                         .setTitleText(R.string.data_ultima_visita)
                         .build()
                 picker.show(requireActivity().supportFragmentManager, "dataVisitaTextFieldPicker")
@@ -154,6 +167,10 @@ class CommunityDetailFragment : Fragment() {
 
         binding.bottomAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
+                R.id.edit_community -> {
+                    mViewModel.editMode.value = true
+                    true
+                }
                 R.id.cancel_change -> {
                     mViewModel.editMode.value = false
                     lifecycleScope.launch { retrieveData() }
@@ -234,6 +251,10 @@ class CommunityDetailFragment : Fragment() {
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
+        binding.lastEditDate.text = getString(
+            R.string.data_ultima_modifica,
+            getTimestampFormatted(mViewModel.comunita.dataUltimaModifica)
+        )
         binding.diocesiTextField.editText?.setText(savedInstanceState?.getCharSequence("diocesiTextField"))
         binding.numeroTextField.editText?.setText(savedInstanceState?.getCharSequence("numeroTextField"))
         binding.parrocchiaTextField.editText?.setText(savedInstanceState?.getCharSequence("parrocchiaTextField"))
@@ -263,9 +284,17 @@ class CommunityDetailFragment : Fragment() {
         binding.dataConvivenzaTextField.isEnabled = editMode
         binding.dataVisitaTextField.isEnabled = editMode
         binding.noteTextField.isEnabled = editMode
-        binding.fabEdit.isVisible = !editMode
         binding.fabAddBrother.isVisible = editMode && mViewModel.selectedTabIndex == 1
-        binding.bottomAppBar.isVisible = editMode
+        binding.bottomAppBar.menu.clear()
+        binding.bottomAppBar.inflateMenu(if (editMode) R.menu.bottom_app_bar_edit_menu else R.menu.bottom_app_bar_menu)
+        if (!editMode) {
+            binding.numeroTextField.error = null
+            binding.parrocchiaTextField.error = null
+            binding.tappaTextField.error = null
+            binding.emailTextField.error = null
+            binding.dataConvivenzaTextField.error = null
+            binding.dataVisitaTextField.error = null
+        }
     }
 
     private fun getTimestampFormatted(dateTimestamp: Date?): String {
@@ -286,19 +315,14 @@ class CommunityDetailFragment : Fragment() {
     private fun validateForm(): Boolean {
         var valid = true
 
-        binding.numeroTextField.editText?.let {
-            if (it.text.isNullOrBlank()) {
-                binding.numeroTextField.error = getString(R.string.mandatory_field)
-                valid = false
-            } else binding.numeroTextField.error = null
-        }
+        if (!requireContext().validateMandatoryField(binding.numeroTextField))
+            valid = false
 
-        binding.parrocchiaTextField.editText?.let {
-            if (it.text.isNullOrBlank()) {
-                binding.parrocchiaTextField.error = getString(R.string.mandatory_field)
-                valid = false
-            } else binding.parrocchiaTextField.error = null
-        }
+        if (!requireContext().validateMandatoryField(binding.parrocchiaTextField))
+            valid = false
+
+        if (!requireContext().validateMandatoryField(binding.tappaTextField))
+            valid = false
 
         binding.emailTextField.editText?.let {
             if (!it.text.isNullOrEmpty() && !Patterns.EMAIL_ADDRESS.matcher(it.text).matches()) {
@@ -381,6 +405,9 @@ class CommunityDetailFragment : Fragment() {
                     requireContext().resources.getTextArray(R.array.passaggi_entries)[mViewModel.comunita.idTappa],
                     false
                 )
+            else {
+                binding.tappaAutcomplete.text = null
+            }
             mViewModel.comunita.dataConvivenza?.let {
                 binding.dataConvivenzaTextField.editText?.setText(
                     Utility.getStringFromDate(

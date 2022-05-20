@@ -45,6 +45,7 @@
         android:id="@+id/community_detail_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="?actionBarSize"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -83,7 +84,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/text_field_space"
-                android:layout_marginTop="@dimen/text_field_space"
+                android:layout_marginTop="@dimen/text_field_space_no_error"
                 android:layout_marginEnd="@dimen/text_field_space"
                 android:enabled="false"
                 android:hint="@string/comunita"
@@ -142,7 +143,6 @@
                 android:layout_marginEnd="@dimen/text_field_space"
                 android:enabled="false"
                 android:hint="@string/responsabile"
-                app:errorEnabled="true"
                 app:layout_constraintTop_toBottomOf="@id/email_text_field">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -156,11 +156,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/text_field_space"
-                android:layout_marginTop="@dimen/text_field_space"
+                android:layout_marginTop="@dimen/text_field_space_no_error"
                 android:layout_marginEnd="@dimen/text_field_space"
                 android:enabled="false"
                 android:hint="@string/telefono"
-                app:errorEnabled="true"
                 app:layout_constraintTop_toBottomOf="@id/responsabile_text_field">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -176,11 +175,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/text_field_space"
-                android:layout_marginTop="@dimen/text_field_space"
+                android:layout_marginTop="@dimen/text_field_space_no_error"
                 android:layout_marginEnd="@dimen/text_field_space"
                 android:enabled="false"
                 android:hint="@string/tappa"
-                app:errorEnabled="true"
                 app:layout_constraintTop_toBottomOf="@id/telefono_text_field">
 
                 <AutoCompleteTextView
@@ -198,7 +196,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/text_field_space"
-                android:layout_marginTop="@dimen/text_field_space"
+                android:layout_marginTop="@dimen/text_field_space_no_error"
                 android:layout_marginEnd="@dimen/text_field_space"
                 android:enabled="false"
                 android:hint="@string/data_convivenza"
@@ -238,7 +236,6 @@
                 android:layout_marginEnd="@dimen/text_field_space"
                 android:enabled="false"
                 android:hint="@string/note"
-                app:errorEnabled="true"
                 app:layout_constraintTop_toBottomOf="@id/data_visita_text_field">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -255,29 +252,19 @@
         android:id="@+id/brothers_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="?actionBarSize"
         android:visibility="gone"
         app:layoutManager="LinearLayoutManager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/community_row_item" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_edit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginBottom="@dimen/fab_margin"
-        app:srcCompat="@drawable/edit_24px"
-        tools:ignore="ContentDescription" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_brother"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginBottom="@dimen/fab_margin"
-        android:visibility="gone"
+        app:layout_anchor="@id/app_bar_layout"
+        app:layout_anchorGravity="bottom|end"
         app:srcCompat="@drawable/add_24px"
         tools:ignore="ContentDescription" />
 
@@ -287,8 +274,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        app:hideOnScroll="true"
-        app:layout_scrollFlags="scroll|enterAlways"
         app:menu="@menu/bottom_app_bar_menu" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

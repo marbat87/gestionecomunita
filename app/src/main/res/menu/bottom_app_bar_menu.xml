@@ -4,18 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
-        android:id="@+id/cancel_change"
-        android:icon="@drawable/undo_24px"
-        android:orderInCategory="4"
-        android:title="@android:string/cancel"
-        risuscito:showAsAction="always"
-        tools:ignore="AlwaysShowAction" />
-
-    <item
-        android:id="@+id/confirm_changes"
-        android:icon="@drawable/save_24px"
-        android:orderInCategory="4"
-        android:title="@android:string/ok"
+        android:id="@+id/edit_community"
+        android:icon="@drawable/edit_24px"
+        android:title="@string/edit"
         risuscito:showAsAction="always"
         tools:ignore="AlwaysShowAction" />
 
