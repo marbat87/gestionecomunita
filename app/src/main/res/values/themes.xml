@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.Gestionecomunita" parent="Theme.Material3.Light">
+    <style name="Theme.Gestionecomunita" parent="Theme.Material3.Light.NoActionBar">
         <item name="colorPrimary">@color/md_theme_light_primary</item>
         <item name="colorOnPrimary">@color/md_theme_light_onPrimary</item>
         <item name="colorPrimaryContainer">@color/md_theme_light_primaryContainer</item>
@@ -29,5 +29,143 @@
         <!--                <item name="colorInversePrimary">@color/md_theme_light_inversePrimary</item>-->
         <!--                <item name="colorShadow">@color/md_theme_light_shadow</item>-->
         <item name="colorPrimaryInverse">@color/md_theme_light_primaryInverse</item>
+    </style>
+
+    <style name="Gestionecomunita.Theme" parent="Base.Gestionecomunita.Theme">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+    <style name="Base.Gestionecomunita.Theme" parent="Theme.Gestionecomunita">
+        <item name="android:windowActivityTransitions">true</item>
+
+        <item name="gestionecomunita_regular_font">@font/googlesans_regular</item>
+        <item name="gestionecomunita_medium_font">@font/googlesans_medium</item>
+
+        <item name="android:textViewStyle">@style/Widget.Gestionecomunita.TextView</item>
+
+        <item name="windowActionModeOverlay">true</item>
+
+        <item name="tabStyle">@style/Widget.Gestionecomunita.TabLayout</item>
+
+        <item name="textAppearanceDisplayLarge">
+            @style/TextAppearance.GestioneComunita.DisplayLarge
+        </item>
+        <item name="textAppearanceDisplayMedium">
+            @style/TextAppearance.GestioneComunita.DisplayMedium
+        </item>
+        <item name="textAppearanceDisplaySmall">
+            @style/TextAppearance.GestioneComunita.DisplaySmall
+        </item>
+        <item name="textAppearanceHeadlineLarge">
+            @style/TextAppearance.GestioneComunita.HeadlineLarge
+        </item>
+        <item name="textAppearanceHeadlineMedium">
+            @style/TextAppearance.GestioneComunita.HeadlineMedium
+        </item>
+        <item name="textAppearanceHeadlineSmall">
+            @style/TextAppearance.GestioneComunita.HeadlineSmall
+        </item>
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.GestioneComunita.TitleLarge
+        </item>
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.GestioneComunita.TitleMedium
+        </item>
+        <item name="textAppearanceTitleSmall">@style/TextAppearance.GestioneComunita.TitleSmall
+        </item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.GestioneComunita.BodyLarge</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.GestioneComunita.BodyMedium
+        </item>
+        <item name="textAppearanceBodySmall">@style/TextAppearance.GestioneComunita.BodySmall</item>
+        <item name="textAppearanceLabelLarge">@style/TextAppearance.GestioneComunita.LabelLarge
+        </item>
+        <item name="textAppearanceLabelMedium">@style/TextAppearance.GestioneComunita.LabelMedium
+        </item>
+        <item name="textAppearanceLabelSmall">@style/TextAppearance.GestioneComunita.LabelSmall
+        </item>
+
+    </style>
+
+    <style name="Widget.Gestionecomunita.TextView" parent="Widget.AppCompat.TextView">
+        <item name="fontFamily">?gestionecomunita_regular_font</item>
+        <item name="android:fontFamily">?gestionecomunita_regular_font</item>
+    </style>
+
+    <style name="Widget.Gestionecomunita.TabLayout" parent="Widget.Material3.TabLayout">
+        <item name="tabGravity">center</item>
+        <item name="tabMode">auto</item>
+    </style>
+
+    <style name="TextAppearance.GestioneComunita.DisplayLarge" parent="TextAppearance.Material3.DisplayLarge">
+        <item name="fontFamily">?gestionecomunita_regular_font</item>
+        <item name="android:fontFamily">?gestionecomunita_regular_font</item>
+    </style>
+
+    <style name="TextAppearance.GestioneComunita.DisplayMedium" parent="TextAppearance.Material3.DisplayMedium">
+        <item name="fontFamily">?gestionecomunita_regular_font</item>
+        <item name="android:fontFamily">?gestionecomunita_regular_font</item>
+    </style>
+
+    <style name="TextAppearance.GestioneComunita.DisplaySmall" parent="TextAppearance.Material3.DisplaySmall">
+        <item name="fontFamily">?gestionecomunita_regular_font</item>
+        <item name="android:fontFamily">?gestionecomunita_regular_font</item>
+    </style>
+
+    <style name="TextAppearance.GestioneComunita.HeadlineLarge" parent="TextAppearance.Material3.HeadlineLarge">
+        <item name="fontFamily">?gestionecomunita_regular_font</item>
+        <item name="android:fontFamily">?gestionecomunita_regular_font</item>
+    </style>
+
+    <style name="TextAppearance.GestioneComunita.HeadlineMedium" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="fontFamily">?gestionecomunita_regular_font</item>
+        <item name="android:fontFamily">?gestionecomunita_regular_font</item>
+    </style>
+
+    <style name="TextAppearance.GestioneComunita.HeadlineSmall" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="fontFamily">?gestionecomunita_regular_font</item>
+        <item name="android:fontFamily">?gestionecomunita_regular_font</item>
+    </style>
+
+    <style name="TextAppearance.GestioneComunita.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
+        <item name="fontFamily">?gestionecomunita_regular_font</item>
+        <item name="android:fontFamily">?gestionecomunita_regular_font</item>
+    </style>
+
+    <style name="TextAppearance.GestioneComunita.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
+        <item name="fontFamily">?gestionecomunita_medium_font</item>
+        <item name="android:fontFamily">?gestionecomunita_medium_font</item>
+    </style>
+
+    <style name="TextAppearance.GestioneComunita.TitleSmall" parent="TextAppearance.Material3.TitleSmall">
+        <item name="fontFamily">?gestionecomunita_medium_font</item>
+        <item name="android:fontFamily">?gestionecomunita_medium_font</item>
+    </style>
+
+    <style name="TextAppearance.GestioneComunita.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
+        <item name="fontFamily">?gestionecomunita_regular_font</item>
+        <item name="android:fontFamily">?gestionecomunita_regular_font</item>
+    </style>
+
+    <style name="TextAppearance.GestioneComunita.BodyMedium" parent="TextAppearance.Material3.BodyMedium">
+        <item name="fontFamily">?gestionecomunita_regular_font</item>
+        <item name="android:fontFamily">?gestionecomunita_regular_font</item>
+    </style>
+
+    <style name="TextAppearance.GestioneComunita.BodySmall" parent="TextAppearance.Material3.BodySmall">
+        <item name="fontFamily">?gestionecomunita_regular_font</item>
+        <item name="android:fontFamily">?gestionecomunita_regular_font</item>
+    </style>
+
+    <style name="TextAppearance.GestioneComunita.LabelLarge" parent="TextAppearance.Material3.LabelLarge">
+        <item name="fontFamily">?gestionecomunita_medium_font</item>
+        <item name="android:fontFamily">?gestionecomunita_medium_font</item>
+    </style>
+
+    <style name="TextAppearance.GestioneComunita.LabelMedium" parent="TextAppearance.Material3.LabelMedium">
+        <item name="fontFamily">?gestionecomunita_medium_font</item>
+        <item name="android:fontFamily">?gestionecomunita_medium_font</item>
+    </style>
+
+    <style name="TextAppearance.GestioneComunita.LabelSmall" parent="TextAppearance.Material3.LabelSmall">
+        <item name="fontFamily">?gestionecomunita_medium_font</item>
+        <item name="android:fontFamily">?gestionecomunita_medium_font</item>
     </style>
 </resources>

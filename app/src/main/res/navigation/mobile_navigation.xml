@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="it.cammino.gestionecomunita.ui.home.HomeFragment"
+        android:name="it.cammino.gestionecomunita.ui.comunita.ComunitaIndexFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/tabs_layout" />
 
     <fragment
         android:id="@+id/navigation_dashboard"

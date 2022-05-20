@@ -1,6 +1,8 @@
 package it.cammino.gestionecomunita
 
+import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.NavHostFragment
@@ -8,11 +10,14 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import it.cammino.gestionecomunita.databinding.ActivityMainBinding
+import it.cammino.gestionecomunita.ui.ThemeableActivity
+import it.cammino.gestionecomunita.ui.comunita.CommunityDetailHostActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ThemeableActivity() {
+
+    private val mViewModel: MainActivityViewModel by viewModels()
 
     private lateinit var binding: ActivityMainBinding
 
@@ -21,6 +26,8 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setSupportActionBar(binding.mainToolbar)
 
         val navView: BottomNavigationView = binding.navView
 
@@ -36,10 +43,26 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        binding.extendedFab.setOnClickListener {
+//            val fragment = CommunityDetailFragment()
+//            val args = Bundle()
+//            args.putBoolean(CommunityDetailFragment.EDIT_MODE, true)
+//            fragment.arguments = args
+//            supportFragmentManager.commit {
+//                replace(
+//                    R.id.nav_host_fragment_community_detail,
+//                    fragment,
+//                    R.id.navigation_home.toString()
+//                )
+//            }
+            val intent = Intent(this, CommunityDetailHostActivity::class.java)
+            startActivity(intent)
+        }
     }
 
-//    fun getFab(): FloatingActionButton {
-//        return binding.fabPager.mainFab
+//    fun getFab(): ExtendedFloatingActionButton {
+//        return binding.extendedFab
 //    }
 
     fun setTabVisible(visible: Boolean) {

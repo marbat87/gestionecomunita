@@ -1,4 +1,4 @@
-package it.cammino.catechisti.database.entity
+package it.cammino.gestionecomunita.database.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -7,12 +7,12 @@ import java.sql.Date
 @Entity
 open class Comunita {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     var id: Int = 0
 
     var diocesi: String = ""
 
-    var comunita: String = ""
+    var numero: String = ""
 
     var parrocchia: String = ""
 
@@ -24,7 +24,7 @@ open class Comunita {
 
     var telefono: String = ""
 
-    var idTappa: Int = 0
+    var idTappa: Int = -1
 
     var dataUltimaModifica= Date(System.currentTimeMillis())
 

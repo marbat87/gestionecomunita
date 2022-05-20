@@ -92,11 +92,11 @@ class ComunitaIndexFragment : GestioneComunitaFragment() {
 
         override fun createFragment(position: Int): Fragment =
             when (position) {
-                0 -> SimpleIndexFragment.newInstance(0)
-                1 -> SimpleIndexFragment.newInstance(1)
-                2 -> SectionedIndexFragment.newInstance(0)
-                3 -> SimpleIndexFragment.newInstance(2)
-                else -> SimpleIndexFragment.newInstance(0)
+                0 -> CommunityDetailHostFragment()
+                1 -> CommunityDetailHostFragment()
+                2 -> CommunityDetailHostFragment()
+                3 -> CommunityDetailHostFragment()
+                else -> CommunityDetailHostFragment()
             }
     }
 

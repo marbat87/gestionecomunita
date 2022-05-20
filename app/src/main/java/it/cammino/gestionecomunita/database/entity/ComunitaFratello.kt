@@ -1,7 +1,8 @@
-package it.cammino.catechisti.database.entity
+package it.cammino.gestionecomunita.database.entity
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
