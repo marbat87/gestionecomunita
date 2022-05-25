@@ -12,11 +12,18 @@ fun communityListItem(block: CommunityListItem.() -> Unit): CommunityListItem =
 
 class CommunityListItem : AbstractBindingItem<CommunityRowItemBinding>() {
 
-    var comunita: StringHolder? = null
+    lateinit var numeroComunita: StringHolder
         private set
-    var setComunita: String? = null
+    var setNumeroComunita: String? = null
         set(value) {
-            comunita = StringHolder(value)
+            numeroComunita = StringHolder(value)
+        }
+
+    lateinit var parrocchia: StringHolder
+        private set
+    var setParrocchia: String? = null
+        set(value) {
+            parrocchia = StringHolder(value)
         }
 
     var responsabile: StringHolder? = null
@@ -45,10 +52,15 @@ class CommunityListItem : AbstractBindingItem<CommunityRowItemBinding>() {
     override fun bindView(binding: CommunityRowItemBinding, payloads: List<Any>) {
         val ctx = binding.root.context
 
-        StringHolder.applyTo(comunita, binding.textComunita)
+        binding.textComunita.text = ctx.getString(
+            R.string.comunita_item_name,
+            numeroComunita.getText(ctx),
+            parrocchia.getText(ctx)
+        )
         responsabile?.let {
+            val resp = it.getText(ctx)
             binding.textResponsabile.text =
-                ctx.getString(R.string.responsabile_dots, it.getText(ctx))
+                ctx.getString(R.string.responsabile_dots, if (!resp.isNullOrBlank()) resp else "N.D.")
         }
     }
 

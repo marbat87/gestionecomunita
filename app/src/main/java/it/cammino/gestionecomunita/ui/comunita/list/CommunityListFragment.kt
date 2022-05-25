@@ -1,21 +1,21 @@
 package it.cammino.gestionecomunita.ui.comunita.list
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.mikepenz.fastadapter.IAdapter
 import com.mikepenz.fastadapter.adapters.FastItemAdapter
-import it.cammino.gestionecomunita.ItemClickState
-import it.cammino.gestionecomunita.MainActivityViewModel
-import it.cammino.gestionecomunita.database.entity.Comunita
 import it.cammino.gestionecomunita.databinding.FragmentCommunityListBinding
 import it.cammino.gestionecomunita.item.CommunityListItem
 import it.cammino.gestionecomunita.item.communityListItem
+import it.cammino.gestionecomunita.ui.comunita.CommunityDetailHostActivity
+import it.cammino.gestionecomunita.ui.comunita.detail.CommunityDetailFragment
 import it.cammino.gestionecomunita.util.Utility
 import java.sql.Date
 import java.util.*
@@ -23,7 +23,6 @@ import java.util.*
 class CommunityListFragment : Fragment() {
 
     private val viewModel: CommunityListViewModel by viewModels({ requireParentFragment() })
-    private val activityViewModel: MainActivityViewModel by activityViewModels()
 
     private var _binding: FragmentCommunityListBinding? = null
 
@@ -56,12 +55,28 @@ class CommunityListFragment : Fragment() {
         subscribeUiChanges()
 
         mAdapter.onClickListener =
-            { _: View?, _: IAdapter<CommunityListItem>, item: CommunityListItem, _: Int ->
+            { mView: View?, _: IAdapter<CommunityListItem>, item: CommunityListItem, _: Int ->
                 var consume = false
                 if (SystemClock.elapsedRealtime() - mLastClickTime >= Utility.CLICK_DELAY) {
                     mLastClickTime = SystemClock.elapsedRealtime()
-                    activityViewModel.clickedId = item.id
-                    activityViewModel.itemCLickedState.value = ItemClickState.CLICKED
+//                    viewModel.clickedId = item.id
+//                    viewModel.itemCLickedState.value = CommunityListViewModel.ItemClickState.CLICKED
+                    val args = Bundle()
+                    args.putInt(CommunityDetailFragment.ARG_ITEM_ID, item.id)
+                    args.putBoolean(CommunityDetailFragment.EDIT_MODE, false)
+                    args.putBoolean(CommunityDetailFragment.CREATE_MODE, false)
+                    var options: ActivityOptionsCompat? = null
+                    mView?.let {
+                        it.transitionName = "shared_element_comunita"
+                        options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                            requireActivity(),
+                            mView,
+                            "shared_element_comunita" // The transition name to be matched in Activity B.
+                        )
+                    }
+                    val intent = Intent(requireContext(), CommunityDetailHostActivity::class.java)
+                    intent.putExtras(args)
+                    startActivity(intent, options?.toBundle())
                     consume = true
                 }
                 consume
@@ -83,21 +98,22 @@ class CommunityListFragment : Fragment() {
     }
 
     private fun subscribeUiChanges() {
-        viewModel.itemsResult?.observe(viewLifecycleOwner) { comunita -> mAdapter.set(comunita
-            .filter {
-                val oneYearAgo = Calendar.getInstance().apply { add(Calendar.YEAR, -1) }
-                !viewModel.onlyNotVisitedForOneYear || it.dataUltimaVisita == null || it.dataUltimaVisita!! < Date(oneYearAgo.time.time)
-            }.map {
-                communityListItem {
-                    setComunita = "${it.numero} - ${it.parrocchia}"
-                    setResponsabile = it.responsabile
-                    id = it.id
-                }
-            }) }
-    }
-
-    companion object {
-        const val SOLO_NON_VISITATE_UNO_ANNO = "soloNonVisitateUnAnno"
+        val oneYearAgo = Calendar.getInstance().apply { add(Calendar.YEAR, -1) }
+        viewModel.itemsResult?.observe(viewLifecycleOwner) { comunita ->
+            mAdapter.set(comunita
+                .filter {
+                    viewModel.indexType == CommunityListViewModel.IndexType.TUTTE || it.dataUltimaVisita == null || it.dataUltimaVisita!! <= Date(
+                        oneYearAgo.time.time
+                    )
+                }.map {
+                    communityListItem {
+                        setNumeroComunita = it.numero
+                        setParrocchia = it.parrocchia
+                        setResponsabile = it.responsabile
+                        id = it.id
+                    }
+                })
+        }
     }
 
 }

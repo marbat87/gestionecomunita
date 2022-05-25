@@ -7,7 +7,4 @@ import androidx.lifecycle.MutableLiveData
 class MainActivityViewModel(application: Application) :
     AndroidViewModel(application) {
 
-    val itemCLickedState = MutableLiveData(ItemClickState.UNCLICKED)
-    var clickedId = 0
-
 }

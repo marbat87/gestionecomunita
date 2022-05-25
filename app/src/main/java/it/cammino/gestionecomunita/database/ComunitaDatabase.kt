@@ -11,15 +11,19 @@ import it.cammino.gestionecomunita.database.entity.Comunita
 import it.cammino.gestionecomunita.database.entity.ComunitaFratello
 import it.cammino.gestionecomunita.database.entity.Fratello
 import it.cammino.gestionecomunita.database.dao.ComunitaDao
+import it.cammino.gestionecomunita.database.dao.ComunitaFratelloDao
+import it.cammino.gestionecomunita.database.dao.FratelloDao
 
 @Database(
-    entities = [(Comunita::class), (ComunitaFratello::class), (Fratello::class)],
+    entities = [(Comunita::class), (Fratello::class)],
     version = 1
 )
 @TypeConverters(Converters::class)
 abstract class ComunitaDatabase : RoomDatabase() {
 
     abstract fun comunitaDao(): ComunitaDao
+    abstract fun fratelloDao(): FratelloDao
+    abstract fun comunitaFratelloDao(): ComunitaFratelloDao
 
     companion object {
 

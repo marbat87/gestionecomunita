@@ -7,8 +7,10 @@ import java.sql.Date
 @Entity
 open class Fratello {
 
-    @PrimaryKey
-    var id: Int = 0
+    @PrimaryKey(autoGenerate = true)
+    var idFratello: Int = 0
+
+    var idComunita: Int = 0
 
     var nome: String = ""
 

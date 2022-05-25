@@ -14,6 +14,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.databinding.TabsLayoutBinding
 import it.cammino.gestionecomunita.ui.GestioneComunitaFragment
+import it.cammino.gestionecomunita.ui.comunita.list.CommunityListViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -82,7 +83,7 @@ class ComunitaIndexFragment : GestioneComunitaFragment() {
 //                        ?: "0"
 //                )
 //            } else
-                binding.viewPager.currentItem = mViewModel.pageViewed
+            binding.viewPager.currentItem = mViewModel.pageViewed
         }
 
     }
@@ -92,10 +93,10 @@ class ComunitaIndexFragment : GestioneComunitaFragment() {
 
         override fun createFragment(position: Int): Fragment =
             when (position) {
-                0 -> CommunityDetailHostFragment.newInstance(false)
-                1 -> CommunityDetailHostFragment.newInstance(true)
-                2 -> CommunityDetailHostFragment.newInstance(false)
-                3 -> CommunityDetailHostFragment.newInstance(false)
+                0 -> CommunityDetailHostFragment.newInstance(CommunityListViewModel.IndexType.TUTTE)
+                1 -> CommunityDetailHostFragment.newInstance(CommunityListViewModel.IndexType.VISITATE_OLTRE_ANNO)
+                2 -> CommunitySectionedHostFragment.newInstance(CommunityListViewModel.IndexType.TAPPA)
+                3 -> CommunitySectionedHostFragment.newInstance(CommunityListViewModel.IndexType.DIOCESI)
                 else -> CommunityDetailHostFragment()
             }
     }

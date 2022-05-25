@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?><!--<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"-->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="?attr/materialCardViewFilledStyle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginBottom="4dp"
+    android:clickable="true"
+    android:focusable="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/siple_row_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/listPreferredItemHeightSmall"
+        android:paddingStart="?listPreferredItemPaddingStart"
+        android:paddingEnd="?listPreferredItemPaddingEnd">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/title_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingTop="@dimen/text_field_space"
+            android:paddingBottom="@dimen/text_field_space"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/group_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?textAppearanceTitleMedium"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/group_indicator"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Marco Rossi" />
+
+            <ImageView
+                android:id="@+id/group_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="?listPreferredItemPaddingStart"
+                android:contentDescription="@null"
+                android:src="@drawable/expand_less_24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/group_title"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="?android:textColorSecondary" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/texts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="divider, text_nome, text_cognome, text_cognome_label, text_nome_label, text_num_figli, text_num_figli_label, text_stato_civile, text_stato_civile_label, text_data_inizio_cammino, text_data_inizio_cammino_label" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="cancella_fratello, modifica_fratello" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/title_section" />
+
+        <TextView
+            android:id="@+id/text_nome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_field_space"
+            android:textAppearance="?textAppearanceBodyLarge"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            tools:text="Rossi" />
+
+        <TextView
+            android:id="@+id/text_nome_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/nome"
+            android:textAppearance="?textAppearanceLabelMedium"
+            app:layout_constraintTop_toBottomOf="@id/text_nome" />
+
+        <TextView
+            android:id="@+id/text_cognome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_field_space"
+            android:textAppearance="?textAppearanceBodyLarge"
+            app:layout_constraintTop_toBottomOf="@id/text_nome_label"
+            tools:text="Marco" />
+
+        <TextView
+            android:id="@+id/text_cognome_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cognome"
+            android:textAppearance="?textAppearanceLabelMedium"
+            app:layout_constraintTop_toBottomOf="@id/text_cognome" />
+
+        <TextView
+            android:id="@+id/text_stato_civile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_field_space"
+            android:textAppearance="?textAppearanceBodyLarge"
+            app:layout_constraintTop_toBottomOf="@id/text_cognome_label"
+            tools:text="sposato" />
+
+        <TextView
+            android:id="@+id/text_stato_civile_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/stato_civile"
+            android:textAppearance="?textAppearanceLabelMedium"
+            app:layout_constraintTop_toBottomOf="@id/text_stato_civile" />
+
+        <TextView
+            android:id="@+id/text_num_figli"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_field_space"
+            android:textAppearance="?textAppearanceBodyLarge"
+            app:layout_constraintTop_toBottomOf="@id/text_stato_civile_label"
+            tools:text="4" />
+
+        <TextView
+            android:id="@+id/text_num_figli_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/num_figli"
+            android:textAppearance="?textAppearanceLabelMedium"
+            app:layout_constraintTop_toBottomOf="@id/text_num_figli" />
+
+        <TextView
+            android:id="@+id/text_data_inizio_cammino"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_field_space"
+            android:textAppearance="?textAppearanceBodyLarge"
+            app:layout_constraintTop_toBottomOf="@id/text_num_figli_label"
+            tools:text="13/12/2000" />
+
+        <TextView
+            android:id="@+id/text_data_inizio_cammino_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/text_field_space"
+            android:text="@string/data_inizio_cammino"
+            android:textAppearance="?textAppearanceLabelMedium"
+            app:layout_constraintBottom_toTopOf="@id/cancella_fratello"
+            app:layout_constraintTop_toBottomOf="@id/text_data_inizio_cammino" />
+
+        <TextView
+            android:id="@+id/positon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/text_data_inizio_cammino_label" />
+
+        <Button
+            android:id="@+id/cancella_fratello"
+            style="@style/Widget.Material3.Button.ElevatedButton.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:text="@string/cancella"
+            app:icon="@drawable/delete_24px"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/modifica_fratello"
+            style="@style/Widget.Material3.Button.ElevatedButton.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:text="@string/modifica"
+            app:icon="@drawable/edit_24px"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

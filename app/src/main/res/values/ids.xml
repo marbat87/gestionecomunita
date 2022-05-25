@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="fastadapter_community_item_id" type="id" />
+    <item name="fastadapter_expandable_item_id" type="id" />
+    <item name="fastadapter_sub_item_id" type="id" />
+    <item name="community_detail_fragment" type="id" />
 </resources>

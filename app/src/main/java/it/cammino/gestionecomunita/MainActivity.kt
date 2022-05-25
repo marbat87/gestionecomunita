@@ -2,12 +2,9 @@ package it.cammino.gestionecomunita
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
@@ -17,7 +14,7 @@ import it.cammino.gestionecomunita.ui.comunita.CommunityDetailHostActivity
 
 class MainActivity : ThemeableActivity() {
 
-    private val mViewModel: MainActivityViewModel by viewModels()
+//    private val mViewModel: MainActivityViewModel by viewModels()
 
     private lateinit var binding: ActivityMainBinding
 
@@ -36,12 +33,12 @@ class MainActivity : ThemeableActivity() {
         val navController = navHostFragment.navController
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
-            )
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
+//        val appBarConfiguration = AppBarConfiguration(
+//            setOf(
+//                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
+//            )
+//        )
+//        setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
         binding.extendedFab.setOnClickListener {
@@ -56,8 +53,14 @@ class MainActivity : ThemeableActivity() {
 //                    R.id.navigation_home.toString()
 //                )
 //            }
+            binding.extendedFab.transitionName = "shared_element_comunita"
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                this,
+                binding.extendedFab,
+                "shared_element_comunita" // The transition name to be matched in Activity B.
+            )
             val intent = Intent(this, CommunityDetailHostActivity::class.java)
-            startActivity(intent)
+            startActivity(intent, options.toBundle())
         }
     }
 

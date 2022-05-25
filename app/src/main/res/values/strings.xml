@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">gestionecomunita</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="app_name">Cammino Neocatecumenale</string>
+    <string name="title_comunita">Comunità</string>
+    <string name="title_centro_voc">Centro vocazionale</string>
+    <string name="title_promemoria">Promemoria</string>
     <string name="tutte_comunita">Tutte</string>
     <string name="oltre_un_anno_comunita">Visitate oltre un anno fa</string>
     <string name="tappa_comunita">Elenco per tappa</string>
@@ -31,6 +31,7 @@
     <string name="e_mail">e-mail</string>
     <string name="responsabile">Responsabile</string>
     <string name="responsabile_dots">Responsabile: %1$s</string>
+    <string name="comunita_item_name">%1$s - %2$s</string>
     <string name="telefono">Telefono</string>
     <string name="tappa">Tappa di Cammino</string>
     <string name="data_convivenza">Data convivenza</string>
@@ -40,7 +41,21 @@
     <string name="comunita_dati_generali">Dati generali</string>
     <string name="comunita_elenco_fratelli">Elenco fratelli</string>
     <string name="invalid_email">Indirizzo e-mail non valido</string>
+    <string name="invalid_number">Il campo deve essere numerico</string>
     <string name="invalid_date">Data non valida</string>
     <string name="mandatory_field">Campo obbligatorio</string>
     <string name="edit">Modifica</string>
+    <string name="nome">Nome</string>
+    <string name="cognome">Cognome</string>
+    <string name="stato_civile">Stato civile</string>
+    <string name="num_figli">N° figli</string>
+    <string name="data_inizio_cammino">Data inizio cammino</string>
+    <string name="cancella">Cancella</string>
+    <string name="modifica">Modifica</string>
+    <string name="nuovo_fratello">Nuovo fratello</string>
+    <string name="modifica_fratello">Modifica fratello</string>
+    <string name="save">Salva</string>
+    <string name="delete_fratello">Elimina fratello</string>
+    <string name="delete_confirm">elimina</string>
+    <string name="delete_fratello_dialog">Sei sicuro di voler cancellare il fratello dalla comunità?</string>
 </resources>

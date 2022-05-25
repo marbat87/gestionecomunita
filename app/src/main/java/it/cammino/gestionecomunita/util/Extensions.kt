@@ -83,3 +83,19 @@ fun Context.validateMandatoryField(textInput: TextInputLayout): Boolean {
     }
     return true
 }
+
+fun String.capitalize(res: Resources): String {
+    return this.replaceFirstChar {
+        if (it.isLowerCase()) it.titlecase(
+            res.systemLocale
+        ) else it.toString()
+    }
+}
+
+fun CharSequence.capitalize(res: Resources): String {
+    return this.toString().replaceFirstChar {
+        if (it.isLowerCase()) it.titlecase(
+            res.systemLocale
+        ) else it.toString()
+    }
+}

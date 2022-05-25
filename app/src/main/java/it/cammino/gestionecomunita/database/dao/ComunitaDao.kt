@@ -23,7 +23,7 @@ interface ComunitaDao {
     fun liveById(idComunita: Int): LiveData<Comunita>
 
     @Insert
-    fun insertComunita(comunita: Comunita)
+    fun insertComunita(comunita: Comunita): Long
 
     @Update
     fun updateComnuita(comunita: Comunita)

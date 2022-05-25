@@ -20,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways"
+            app:navigationIcon="@drawable/arrow_back_24px"
             app:title="@string/comunita" />
 
         <com.google.android.material.tabs.TabLayout
@@ -45,7 +46,7 @@
         android:id="@+id/community_detail_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="?actionBarSize"
+        android:background="?android:colorBackground"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -205,7 +206,8 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:inputType="date" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -223,7 +225,8 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:inputType="date" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -234,8 +237,10 @@
                 android:layout_marginStart="@dimen/text_field_space"
                 android:layout_marginTop="@dimen/text_field_space"
                 android:layout_marginEnd="@dimen/text_field_space"
+                android:layout_marginBottom="@dimen/text_field_space"
                 android:enabled="false"
                 android:hint="@string/note"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/data_visita_text_field">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -252,7 +257,6 @@
         android:id="@+id/brothers_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="?actionBarSize"
         android:visibility="gone"
         app:layoutManager="LinearLayoutManager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -262,9 +266,9 @@
         android:id="@+id/fab_add_brother"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
-        app:layout_anchor="@id/app_bar_layout"
-        app:layout_anchorGravity="bottom|end"
+        android:layout_marginBottom="12dp"
         app:srcCompat="@drawable/add_24px"
         tools:ignore="ContentDescription" />
 
@@ -272,8 +276,63 @@
         android:id="@+id/bottomAppBar"
         style="@style/Widget.Material3.BottomAppBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:layout_gravity="bottom"
-        app:menu="@menu/bottom_app_bar_menu" />
+        app:hideOnScroll="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/edit_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="cancel_change, confirm_changes" />
+
+            <Button
+                android:id="@+id/cancel_change"
+                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:icon="@drawable/undo_24px"
+                app:iconSize="24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <Button
+                android:id="@+id/confirm_changes"
+                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:visibility="gone"
+                app:icon="@drawable/save_24px"
+                app:iconSize="24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/cancel_change"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <Button
+                android:id="@+id/edit_community"
+                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/edit_24px"
+                app:iconSize="24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="SpeakableTextPresentCheck"
+                tools:visibility="visible" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </com.google.android.material.bottomappbar.BottomAppBar>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

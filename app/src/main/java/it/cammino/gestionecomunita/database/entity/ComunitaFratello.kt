@@ -1,30 +1,14 @@
 package it.cammino.gestionecomunita.database.entity
 
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Index
-import androidx.room.PrimaryKey
+import androidx.room.Embedded
+import androidx.room.Relation
 
-@Entity(
-    foreignKeys = [ForeignKey(
-        entity = Comunita::class,
-        parentColumns = arrayOf("id"),
-        childColumns = arrayOf("idComunita"),
-        onDelete = ForeignKey.CASCADE
-    ), ForeignKey(
-        entity = Fratello::class,
-        parentColumns = arrayOf("id"),
-        childColumns = arrayOf("idFratello"),
-        onDelete = ForeignKey.CASCADE
-    )]
+data class ComunitaFratello(
+    @Embedded
+    val comunita: Comunita,
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "idComunita",
+    )
+    val fratelli: List<Fratello>
 )
-open class ComunitaFratello {
-
-    @PrimaryKey
-    var id: Int = 0
-
-    var idComunita: Int = 0
-
-    var idFratello: Int = 0
-
-}
