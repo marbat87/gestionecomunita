@@ -21,6 +21,7 @@ import com.google.android.material.tabs.TabLayout
 import com.mikepenz.fastadapter.adapters.FastItemAdapter
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.database.ComunitaDatabase
+import it.cammino.gestionecomunita.database.entity.Comunita
 import it.cammino.gestionecomunita.database.entity.Fratello
 import it.cammino.gestionecomunita.databinding.FragmentCommunityDetailBinding
 import it.cammino.gestionecomunita.dialog.*
@@ -70,7 +71,7 @@ open class CommunityDetailFragment : Fragment() {
                 // Load the placeholder content specified by the fragment
                 // arguments. In a real-world scenario, use a Loader
                 // to load content from a content provider.
-                viewModel.listId = it.getInt(ARG_ITEM_ID)
+                viewModel.listId = it.getLong(ARG_ITEM_ID)
                 viewModel.editMode.value = it.getBoolean(EDIT_MODE, true)
                 viewModel.createMode = it.getBoolean(CREATE_MODE, true)
             }
@@ -215,6 +216,23 @@ open class CommunityDetailFragment : Fragment() {
             viewModel.editMode.value = true
         }
 
+        binding.deleteCommunity.setOnClickListener {
+            mMainActivity?.let { mActivity ->
+                SimpleDialogFragment.show(
+                    SimpleDialogFragment.Builder(
+                        mActivity,
+                        DELETE_COMMUNITY
+                    )
+                        .title(R.string.delete_community)
+                        .icon(R.drawable.delete_24px)
+                        .content(R.string.delete_community_dialog)
+                        .positiveButton(R.string.delete_confirm)
+                        .negativeButton(android.R.string.cancel),
+                    mActivity.supportFragmentManager
+                )
+            }
+        }
+
         binding.cancelChange.setOnClickListener {
             viewModel.editMode.value = false
             lifecycleScope.launch { retrieveData() }
@@ -258,7 +276,7 @@ open class CommunityDetailFragment : Fragment() {
         }
 
         inputdialogViewModel.state.observe(viewLifecycleOwner) {
-            Log.d(TAG, "inputdialogViewModel state $it")
+            Log.d(TAG, "inputDialogViewModel state $it")
             if (!inputdialogViewModel.handled) {
                 when (it) {
                     is DialogState.Positive -> {
@@ -275,6 +293,7 @@ open class CommunityDetailFragment : Fragment() {
                         fratello.isExpanded = true
                         when (inputdialogViewModel.mTag) {
                             ADD_BROTHER -> {
+                                fratello.position = mAdapter.itemAdapter.adapterItemCount
                                 mAdapter.add(fratello)
                             }
                             EDIT_BROTHER -> {
@@ -298,6 +317,9 @@ open class CommunityDetailFragment : Fragment() {
                             DELETE_BROTHER -> {
                                 simpleDialogViewModel.handled = true
                                 mAdapter.remove(viewModel.selectedFratello)
+                            }
+                            DELETE_COMMUNITY -> {
+                                lifecycleScope.launch { deleteComunita() }
                             }
                         }
                     }
@@ -392,6 +414,7 @@ open class CommunityDetailFragment : Fragment() {
         binding.brothersList.isVisible = !generalDetails
         binding.fabAddBrother.isVisible = !generalDetails && viewModel.editMode.value == true
         binding.communityDetailScrollView.isVisible = generalDetails
+        binding.bottomAppBar.performShow()
     }
 
     private fun editMode(editMode: Boolean) {
@@ -407,7 +430,7 @@ open class CommunityDetailFragment : Fragment() {
         binding.noteTextField.isEnabled = editMode
         binding.fabAddBrother.isVisible = editMode && viewModel.selectedTabIndex == 1
         binding.editMenu.isVisible = editMode
-        binding.editCommunity.isVisible = !editMode
+        binding.communityMenu.isVisible = !editMode
         if (!editMode) {
             binding.numeroTextField.error = null
             binding.parrocchiaTextField.error = null
@@ -487,8 +510,9 @@ open class CommunityDetailFragment : Fragment() {
 
     private suspend fun saveComunita() {
         withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
-            val id = ComunitaDatabase.getInstance(requireContext()).comunitaDao()
-                .insertComunita(viewModel.comunita)
+            val db = ComunitaDatabase.getInstance(requireContext())
+            val insertedId = db.comunitaDao().insertComunita(viewModel.comunita)
+            Log.d(TAG, "save insertedId : $insertedId")
             val fratelli = ArrayList<Fratello>()
             mAdapter.itemAdapter.adapterItems.forEach {
                 val fratello = Fratello()
@@ -497,9 +521,10 @@ open class CommunityDetailFragment : Fragment() {
                 fratello.statoCivile = it.statoCivile?.getText(requireContext()) ?: ""
                 fratello.numFigli = it.numFigli
                 fratello.dataInizioCammino = it.dataInizioCammino
-                fratello.idComunita = id.toInt()
+                fratello.idComunita = insertedId
                 fratelli.add(fratello)
             }
+            db.fratelloDao().insertFratelli(fratelli)
         }
         activity?.finish()
     }
@@ -527,6 +552,15 @@ open class CommunityDetailFragment : Fragment() {
 
         }
         viewModel.editMode.value = false
+    }
+
+    private suspend fun deleteComunita() {
+        withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+            val db = ComunitaDatabase.getInstance(requireContext())
+            db.fratelloDao().truncateTableByComunita(viewModel.listId)
+            db.comunitaDao().deleteComunita(Comunita().apply { id = viewModel.listId })
+        }
+        activity?.finish()
     }
 
     private suspend fun retrieveData() {
@@ -605,7 +639,7 @@ open class CommunityDetailFragment : Fragment() {
         }
     }
 
-    val mDeleteClickClickListener = View.OnClickListener {
+    private val mDeleteClickClickListener = View.OnClickListener {
         mMainActivity?.let { mActivity ->
             viewModel.selectedFratello =
                 (it.parent.parent as? View)?.findViewById<TextView>(R.id.positon)?.text.toString()
@@ -625,7 +659,7 @@ open class CommunityDetailFragment : Fragment() {
         }
     }
 
-    val mExpandClickClickListener = View.OnClickListener {
+    private val mExpandClickClickListener = View.OnClickListener {
         val parent = it.parent.parent as? View
         mAdapter.notifyItemChanged(
             parent?.findViewById<TextView>(R.id.positon)?.text.toString()
@@ -633,7 +667,7 @@ open class CommunityDetailFragment : Fragment() {
         )
     }
 
-    val mEditClickClickListener = View.OnClickListener {
+    private val mEditClickClickListener = View.OnClickListener {
         mMainActivity?.let { mActivity ->
 
             val parent = it.parent.parent as? View
@@ -681,6 +715,7 @@ open class CommunityDetailFragment : Fragment() {
         const val ADD_BROTHER = "add_brother"
         const val EDIT_BROTHER = "edit_brother"
         const val DELETE_BROTHER = "delete_brother"
+        const val DELETE_COMMUNITY = "delete_community"
 
     }
 

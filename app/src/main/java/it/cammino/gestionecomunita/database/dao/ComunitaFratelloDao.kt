@@ -9,10 +9,10 @@ interface ComunitaFratelloDao {
 
     @Transaction
     @Query("SELECT * FROM comunita where id = :idComunita")
-    fun getComunitaWithFratelli(idComunita: Int): ComunitaFratello?
+    fun getComunitaWithFratelli(idComunita: Long): ComunitaFratello?
 
     @Transaction
     @Query("SELECT * FROM comunita where id = :idComunita")
-    fun liveComunitaWithFratelli(idComunita: Int): LiveData<ComunitaFratello>?
+    fun liveComunitaWithFratelli(idComunita: Long): LiveData<ComunitaFratello>?
 
 }

@@ -46,7 +46,7 @@ open class GestioneComunitaFragment : Fragment() {
                 viewModel.itemCLickedState.value = CommunityListViewModel.ItemClickState.UNCLICKED
 //                val fragment: Fragment = CommunityDetailFragment()
                 val args = Bundle()
-                args.putInt(CommunityDetailFragment.ARG_ITEM_ID, viewModel.clickedId)
+                args.putLong(CommunityDetailFragment.ARG_ITEM_ID, viewModel.clickedId)
                 args.putBoolean(CommunityDetailFragment.EDIT_MODE, false)
                 args.putBoolean(CommunityDetailFragment.CREATE_MODE, false)
 //                fragment.arguments = args

@@ -10,7 +10,7 @@ import it.cammino.gestionecomunita.database.entity.Comunita
 class CommunityListViewModel(application: Application) : AndroidViewModel(application) {
 
     val itemCLickedState = MutableLiveData(ItemClickState.UNCLICKED)
-    var clickedId = 0
+    var clickedId: Long = 0
 
     var itemsResult: LiveData<List<Comunita>>? = null
         private set

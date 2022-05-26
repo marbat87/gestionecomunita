@@ -8,7 +8,7 @@ import java.sql.Date
 open class Comunita {
 
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
+    var id: Long = 0
 
     var diocesi: String = ""
 

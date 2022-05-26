@@ -317,6 +317,12 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="SpeakableTextPresentCheck" />
 
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/community_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="edit_community, delete_community" />
+
             <Button
                 android:id="@+id/edit_community"
                 style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly"
@@ -327,8 +333,19 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="SpeakableTextPresentCheck"
-                tools:visibility="visible" />
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <Button
+                android:id="@+id/delete_community"
+                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/delete_24px"
+                app:iconSize="24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/edit_community"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="SpeakableTextPresentCheck" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

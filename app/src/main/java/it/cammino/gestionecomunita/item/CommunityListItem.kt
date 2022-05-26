@@ -33,9 +33,9 @@ class CommunityListItem : AbstractBindingItem<CommunityRowItemBinding>() {
             responsabile = StringHolder(value)
         }
 
-    var id: Int = 0
+    var id: Long = 0
         set(value) {
-            identifier = value.toLong()
+            identifier = value
             field = value
         }
 
@@ -60,7 +60,10 @@ class CommunityListItem : AbstractBindingItem<CommunityRowItemBinding>() {
         responsabile?.let {
             val resp = it.getText(ctx)
             binding.textResponsabile.text =
-                ctx.getString(R.string.responsabile_dots, if (!resp.isNullOrBlank()) resp else "N.D.")
+                ctx.getString(
+                    R.string.responsabile_dots,
+                    if (!resp.isNullOrBlank()) resp else "N.D."
+                )
         }
     }
 
@@ -69,8 +72,8 @@ class CommunityListItem : AbstractBindingItem<CommunityRowItemBinding>() {
         binding.textResponsabile.text = null
     }
 
-    companion object {
-        private val TAG = CommunityListItem::class.java.canonicalName
-    }
+//    companion object {
+//        private val TAG = CommunityListItem::class.java.canonicalName
+//    }
 
 }

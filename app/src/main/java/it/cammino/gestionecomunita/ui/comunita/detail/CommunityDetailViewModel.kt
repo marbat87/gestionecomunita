@@ -12,7 +12,7 @@ import it.cammino.gestionecomunita.item.ExpandableBrotherItem
 class CommunityDetailViewModel(application: Application) :
     AndroidViewModel(application) {
 
-    var listId: Int = -1
+    var listId: Long = -1
     val editMode = MutableLiveData(true)
     var createMode = true
     var comunita: Comunita = Comunita()

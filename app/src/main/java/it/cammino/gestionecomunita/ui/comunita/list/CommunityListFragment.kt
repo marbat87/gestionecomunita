@@ -3,6 +3,7 @@ package it.cammino.gestionecomunita.ui.comunita.list
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -62,7 +63,7 @@ class CommunityListFragment : Fragment() {
 //                    viewModel.clickedId = item.id
 //                    viewModel.itemCLickedState.value = CommunityListViewModel.ItemClickState.CLICKED
                     val args = Bundle()
-                    args.putInt(CommunityDetailFragment.ARG_ITEM_ID, item.id)
+                    args.putLong(CommunityDetailFragment.ARG_ITEM_ID, item.id)
                     args.putBoolean(CommunityDetailFragment.EDIT_MODE, false)
                     args.putBoolean(CommunityDetailFragment.CREATE_MODE, false)
                     var options: ActivityOptionsCompat? = null
@@ -106,6 +107,7 @@ class CommunityListFragment : Fragment() {
                         oneYearAgo.time.time
                     )
                 }.map {
+                    Log.d(TAG, "get id: ${it.id}")
                     communityListItem {
                         setNumeroComunita = it.numero
                         setParrocchia = it.parrocchia
@@ -114,6 +116,11 @@ class CommunityListFragment : Fragment() {
                     }
                 })
         }
+    }
+
+    companion object {
+        internal val TAG = CommunityListFragment::class.java.canonicalName
+
     }
 
 }

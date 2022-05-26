@@ -47,9 +47,9 @@ class CommunityDetailHostActivity : ThemeableActivity() {
                 CommunityDetailFragment.CREATE_MODE,
                 this.intent.extras?.getBoolean(CommunityDetailFragment.CREATE_MODE) ?: true
             )
-            args.putInt(
+            args.putLong(
                 CommunityDetailFragment.ARG_ITEM_ID,
-                this.intent.extras?.getInt(CommunityDetailFragment.ARG_ITEM_ID) ?: -1
+                this.intent.extras?.getLong(CommunityDetailFragment.ARG_ITEM_ID) ?: -1
             )
             fragment.arguments = args
             supportFragmentManager.commit {

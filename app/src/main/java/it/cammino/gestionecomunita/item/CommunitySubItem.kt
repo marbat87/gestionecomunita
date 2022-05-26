@@ -35,7 +35,7 @@ class CommunitySubItem : AbstractExpandableItem<CommunitySubItem.ViewHolder>(),
             responsabile = StringHolder(value)
         }
 
-    var id: Int = 0
+    var id: Long = 0
 
     override val type: Int
         get() = R.id.fastadapter_sub_item_id

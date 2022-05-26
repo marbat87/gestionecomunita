@@ -11,7 +11,7 @@ import it.cammino.gestionecomunita.database.entity.Fratello
 interface FratelloDao {
 
     @Query("DELETE FROM fratello where idComunita = :idComunita")
-    fun truncateTableByComunita(idComunita: Int)
+    fun truncateTableByComunita(idComunita: Long)
 
     @Insert
     fun insertFratelli(fratello: List<Fratello>)

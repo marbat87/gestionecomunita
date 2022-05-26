@@ -8,9 +8,9 @@ import java.sql.Date
 open class Fratello {
 
     @PrimaryKey(autoGenerate = true)
-    var idFratello: Int = 0
+    var idFratello: Long = 0
 
-    var idComunita: Int = 0
+    var idComunita: Long = 0
 
     var nome: String = ""
 

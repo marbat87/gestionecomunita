@@ -55,7 +55,9 @@
     <string name="nuovo_fratello">Nuovo fratello</string>
     <string name="modifica_fratello">Modifica fratello</string>
     <string name="save">Salva</string>
-    <string name="delete_fratello">Elimina fratello</string>
+    <string name="delete_fratello">Cancella fratello</string>
     <string name="delete_confirm">elimina</string>
     <string name="delete_fratello_dialog">Sei sicuro di voler cancellare il fratello dalla comunità?</string>
+    <string name="delete_community">Cancella comunità</string>
+    <string name="delete_community_dialog">Sei sicuro di voler cancellare la comunità?</string>
 </resources>
