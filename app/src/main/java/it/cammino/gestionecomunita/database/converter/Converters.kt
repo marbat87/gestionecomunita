@@ -1,4 +1,4 @@
-package it.cammino.catechisti.database.converter
+package it.cammino.gestionecomunita.database.converter
 
 import androidx.room.TypeConverter
 import java.sql.Date

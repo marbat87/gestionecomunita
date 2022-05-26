@@ -24,10 +24,9 @@
             android:id="@+id/title_section"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
             android:clickable="true"
             android:focusable="true"
-            android:paddingTop="@dimen/text_field_space"
-            android:paddingBottom="@dimen/text_field_space"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView

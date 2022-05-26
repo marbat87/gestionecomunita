@@ -6,14 +6,15 @@ import com.mikepenz.fastadapter.binding.AbstractBindingItem
 import com.mikepenz.fastadapter.ui.utils.StringHolder
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.databinding.CommunityRowItemBinding
+import it.cammino.gestionecomunita.util.Utility
+import java.sql.Date
 
 fun communityListItem(block: CommunityListItem.() -> Unit): CommunityListItem =
     CommunityListItem().apply(block)
 
 class CommunityListItem : AbstractBindingItem<CommunityRowItemBinding>() {
 
-    lateinit var numeroComunita: StringHolder
-        private set
+    private lateinit var numeroComunita: StringHolder
     var setNumeroComunita: String? = null
         set(value) {
             numeroComunita = StringHolder(value)
@@ -32,6 +33,21 @@ class CommunityListItem : AbstractBindingItem<CommunityRowItemBinding>() {
         set(value) {
             responsabile = StringHolder(value)
         }
+
+    private var dataUltimaVisita: Date? = null
+    var setDataUltimaVisita: Date? = null
+        set(value) {
+            dataUltimaVisita = value
+            field = value
+        }
+
+    private var dateMode: Boolean = false
+    var setDateMode: Boolean = false
+        set(value) {
+            dateMode = value
+            field = value
+        }
+
 
     var id: Long = 0
         set(value) {
@@ -57,14 +73,36 @@ class CommunityListItem : AbstractBindingItem<CommunityRowItemBinding>() {
             numeroComunita.getText(ctx),
             parrocchia.getText(ctx)
         )
-        responsabile?.let {
-            val resp = it.getText(ctx)
-            binding.textResponsabile.text =
-                ctx.getString(
-                    R.string.responsabile_dots,
-                    if (!resp.isNullOrBlank()) resp else "N.D."
-                )
-        }
+        if (dateMode)
+            dataUltimaVisita?.let {
+                val date = Utility.getStringFromDate(ctx, it)
+                binding.textResponsabile.text =
+                    ctx.getString(
+                        R.string.ultima_visita_dots,
+                        if (!date.isNullOrBlank()) date else "N.D."
+                    )
+            } ?: run {
+                binding.textResponsabile.text =
+                    ctx.getString(
+                        R.string.ultima_visita_dots,
+                        ND
+                    )
+            }
+        else
+            responsabile?.let {
+                val resp = it.getText(ctx)
+                binding.textResponsabile.text =
+                    ctx.getString(
+                        R.string.responsabile_dots,
+                        if (!resp.isNullOrBlank()) resp else ND
+                    )
+            } ?: run {
+                binding.textResponsabile.text =
+                    ctx.getString(
+                        R.string.responsabile_dots,
+                        ND
+                    )
+            }
     }
 
     override fun unbindView(binding: CommunityRowItemBinding) {
@@ -72,8 +110,9 @@ class CommunityListItem : AbstractBindingItem<CommunityRowItemBinding>() {
         binding.textResponsabile.text = null
     }
 
-//    companion object {
-//        private val TAG = CommunityListItem::class.java.canonicalName
-//    }
+    companion object {
+        //        private val TAG = CommunityListItem::class.java.canonicalName
+        private const val ND = "N.D."
+    }
 
 }

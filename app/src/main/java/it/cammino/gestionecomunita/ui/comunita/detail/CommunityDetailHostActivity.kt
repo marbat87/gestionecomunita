@@ -1,4 +1,4 @@
-package it.cammino.gestionecomunita.ui.comunita
+package it.cammino.gestionecomunita.ui.comunita.detail
 
 import android.os.Bundle
 import android.view.View
@@ -8,7 +8,6 @@ import com.google.android.material.transition.platform.MaterialContainerTransfor
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.databinding.ActivityCommunityDetailBinding
 import it.cammino.gestionecomunita.ui.ThemeableActivity
-import it.cammino.gestionecomunita.ui.comunita.detail.CommunityDetailFragment
 
 class CommunityDetailHostActivity : ThemeableActivity() {
 

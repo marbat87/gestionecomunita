@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.comunita.CommunityDetailHostActivity"
+            android:name=".ui.comunita.detail.CommunityDetailHostActivity"
             android:exported="false" />
     </application>
 

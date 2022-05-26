@@ -6,9 +6,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import it.cammino.catechisti.database.converter.Converters
+import it.cammino.gestionecomunita.database.converter.Converters
 import it.cammino.gestionecomunita.database.entity.Comunita
-import it.cammino.gestionecomunita.database.entity.ComunitaFratello
 import it.cammino.gestionecomunita.database.entity.Fratello
 import it.cammino.gestionecomunita.database.dao.ComunitaDao
 import it.cammino.gestionecomunita.database.dao.ComunitaFratelloDao

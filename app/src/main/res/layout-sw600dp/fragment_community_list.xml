@@ -11,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="LinearLayoutManager"
-        tools:context="it.cammino.gestionecomunita.ui.comunita.CommunityDetailHostFragment"
         tools:listitem="@layout/community_row_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

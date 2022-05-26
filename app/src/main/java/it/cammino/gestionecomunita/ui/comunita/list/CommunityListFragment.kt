@@ -1,13 +1,12 @@
 package it.cammino.gestionecomunita.ui.comunita.list
 
-import android.content.Intent
+import android.content.Context
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.mikepenz.fastadapter.IAdapter
@@ -15,21 +14,28 @@ import com.mikepenz.fastadapter.adapters.FastItemAdapter
 import it.cammino.gestionecomunita.databinding.FragmentCommunityListBinding
 import it.cammino.gestionecomunita.item.CommunityListItem
 import it.cammino.gestionecomunita.item.communityListItem
-import it.cammino.gestionecomunita.ui.comunita.CommunityDetailHostActivity
-import it.cammino.gestionecomunita.ui.comunita.detail.CommunityDetailFragment
+import it.cammino.gestionecomunita.ui.comunita.ComunitaIndexViewModel
 import it.cammino.gestionecomunita.util.Utility
 import java.sql.Date
 import java.util.*
 
-class CommunityListFragment : Fragment() {
+open class CommunityListFragment : Fragment() {
 
-    private val viewModel: CommunityListViewModel by viewModels({ requireParentFragment() })
+    private val viewModel: CommunityListViewModel by viewModels()
+    private val indexViewModel: ComunitaIndexViewModel by viewModels({ requireParentFragment() })
 
     private var _binding: FragmentCommunityListBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        viewModel.indexType =
+            arguments?.getSerializable(CommunityListViewModel.INDEX_TYPE) as? CommunityListViewModel.IndexType
+                ?: CommunityListViewModel.IndexType.TUTTE
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,46 +62,18 @@ class CommunityListFragment : Fragment() {
         subscribeUiChanges()
 
         mAdapter.onClickListener =
-            { mView: View?, _: IAdapter<CommunityListItem>, item: CommunityListItem, _: Int ->
+            { _: View?, _: IAdapter<CommunityListItem>, item: CommunityListItem, _: Int ->
                 var consume = false
                 if (SystemClock.elapsedRealtime() - mLastClickTime >= Utility.CLICK_DELAY) {
                     mLastClickTime = SystemClock.elapsedRealtime()
-//                    viewModel.clickedId = item.id
-//                    viewModel.itemCLickedState.value = CommunityListViewModel.ItemClickState.CLICKED
-                    val args = Bundle()
-                    args.putLong(CommunityDetailFragment.ARG_ITEM_ID, item.id)
-                    args.putBoolean(CommunityDetailFragment.EDIT_MODE, false)
-                    args.putBoolean(CommunityDetailFragment.CREATE_MODE, false)
-                    var options: ActivityOptionsCompat? = null
-                    mView?.let {
-                        it.transitionName = "shared_element_comunita"
-                        options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                            requireActivity(),
-                            mView,
-                            "shared_element_comunita" // The transition name to be matched in Activity B.
-                        )
-                    }
-                    val intent = Intent(requireContext(), CommunityDetailHostActivity::class.java)
-                    intent.putExtras(args)
-                    startActivity(intent, options?.toBundle())
+                    indexViewModel.clickedId = item.id
+                    indexViewModel.itemCLickedState.value =
+                        ComunitaIndexViewModel.ItemClickState.CLICKED
                     consume = true
                 }
                 consume
             }
 
-//        binding.extendedFab.setOnClickListener {
-//            val fragment: Fragment = CommunityDetailFragment()
-//            val args = Bundle()
-//            args.putBoolean(CommunityDetailFragment.EDIT_MODE, true)
-//            fragment.arguments = args
-//            activity?.supportFragmentManager?.commit {
-//                replace(
-//                    R.id.nav_host_fragment_community_detail,
-//                    fragment,
-//                    R.id.navigation_home.toString()
-//                )
-//            }
-//        }
     }
 
     private fun subscribeUiChanges() {
@@ -113,14 +91,23 @@ class CommunityListFragment : Fragment() {
                         setParrocchia = it.parrocchia
                         setResponsabile = it.responsabile
                         id = it.id
+                        setDataUltimaVisita = it.dataUltimaVisita
+                        setDateMode = viewModel.indexType == CommunityListViewModel.IndexType.VISITATE_OLTRE_ANNO
                     }
                 })
         }
     }
 
+
     companion object {
         internal val TAG = CommunityListFragment::class.java.canonicalName
 
+        fun newInstance(indexType: CommunityListViewModel.IndexType): CommunityListFragment {
+            val f = CommunityListFragment()
+            f.arguments = Bundle()
+            f.arguments?.putSerializable(CommunityListViewModel.INDEX_TYPE, indexType)
+            return f
+        }
     }
 
 }

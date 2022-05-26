@@ -1,14 +1,7 @@
 package it.cammino.gestionecomunita.util
 
-import android.app.Activity
 import android.content.Context
-import android.os.Build
 import android.util.Log
-import android.view.View
-import android.view.WindowManager
-import androidx.annotation.RequiresApi
-import androidx.core.view.WindowInsetsControllerCompat
-import com.google.android.material.elevation.SurfaceColors
 import java.sql.Date
 import java.text.ParseException
 import java.text.SimpleDateFormat

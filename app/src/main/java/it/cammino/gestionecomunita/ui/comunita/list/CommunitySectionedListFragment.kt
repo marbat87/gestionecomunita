@@ -1,5 +1,6 @@
 package it.cammino.gestionecomunita.ui.comunita.list
 
+import android.content.Context
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
@@ -22,18 +23,29 @@ import it.cammino.gestionecomunita.item.CommunitySubItem
 import it.cammino.gestionecomunita.item.ExpandableItem
 import it.cammino.gestionecomunita.item.communitySubItem
 import it.cammino.gestionecomunita.item.expandableItem
+import it.cammino.gestionecomunita.ui.comunita.ComunitaIndexViewModel
 import it.cammino.gestionecomunita.util.Utility
 import java.util.*
+import kotlin.math.floor
 
 class CommunitySectionedListFragment : Fragment() {
 
-    private val viewModel: CommunityListViewModel by viewModels({ requireParentFragment() })
+    private val viewModel: CommunityListViewModel by viewModels()
+    private val indexViewModel: ComunitaIndexViewModel by viewModels({ requireParentFragment() })
 
     private var _binding: FragmentCommunityListBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        viewModel.indexType =
+            arguments?.getSerializable(CommunityListViewModel.INDEX_TYPE) as? CommunityListViewModel.IndexType
+                ?: CommunityListViewModel.IndexType.TUTTE
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,9 +76,9 @@ class CommunitySectionedListFragment : Fragment() {
                 if (item is CommunitySubItem) {
                     if (SystemClock.elapsedRealtime() - mLastClickTime >= Utility.CLICK_DELAY) {
                         mLastClickTime = SystemClock.elapsedRealtime()
-                        viewModel.clickedId = item.id
-                        viewModel.itemCLickedState.value =
-                            CommunityListViewModel.ItemClickState.CLICKED
+                        indexViewModel.clickedId = item.id
+                        indexViewModel.itemCLickedState.value =
+                            ComunitaIndexViewModel.ItemClickState.CLICKED
                         consume = true
                     }
                 }
@@ -92,19 +104,6 @@ class CommunitySectionedListFragment : Fragment() {
 
         subscribeUiChanges()
 
-//        binding.extendedFab.setOnClickListener {
-//            val fragment: Fragment = CommunityDetailFragment()
-//            val args = Bundle()
-//            args.putBoolean(CommunityDetailFragment.EDIT_MODE, true)
-//            fragment.arguments = args
-//            activity?.supportFragmentManager?.commit {
-//                replace(
-//                    R.id.nav_host_fragment_community_detail,
-//                    fragment,
-//                    R.id.navigation_home.toString()
-//                )
-//            }
-//        }
     }
 
     private fun subscribeUiChanges() {
@@ -141,18 +140,10 @@ class CommunitySectionedListFragment : Fragment() {
                                 if (viewModel.indexType == CommunityListViewModel.IndexType.TAPPA) tappe[comunita[i].idTappa] else comunita[i].diocesi
                             totItems = totCanti
                             position = totListe++
-//                            onPreItemClickListener = { _: View?, _: IAdapter<ExpandableItem>, item: ExpandableItem, _: Int ->
-//                                if (!item.isExpanded) {
-//                                    if (activityViewModel.isGridLayout)
-//                                        glm?.scrollToPositionWithOffset(
-//                                            item.position, 0)
-//                                    else
-//                                        llm?.scrollToPositionWithOffset(
-//                                            item.position, 0)
-//                                }
-//                                false
-//                            }
-                            identifier = comunita[i].idTappa.toLong()
+                            identifier =
+                                if (viewModel.indexType == CommunityListViewModel.IndexType.TAPPA) comunita[i].idTappa.toLong() else floor(
+                                    Math.random() * 10000
+                                ).toLong()
                             subItems = mSubItems
                             subItems.sortBy {
                                 (it as? CommunitySubItem)?.parrocchia?.getText(
@@ -172,6 +163,13 @@ class CommunitySectionedListFragment : Fragment() {
 
     companion object {
         private val TAG = CommunitySectionedListFragment::class.java.canonicalName
+
+        fun newInstance(indexType: CommunityListViewModel.IndexType): CommunitySectionedListFragment {
+            val f = CommunitySectionedListFragment()
+            f.arguments = Bundle()
+            f.arguments?.putSerializable(CommunityListViewModel.INDEX_TYPE, indexType)
+            return f
+        }
     }
 
 }

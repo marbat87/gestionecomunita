@@ -11,6 +11,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -27,7 +28,6 @@ import it.cammino.gestionecomunita.databinding.FragmentCommunityDetailBinding
 import it.cammino.gestionecomunita.dialog.*
 import it.cammino.gestionecomunita.item.ExpandableBrotherItem
 import it.cammino.gestionecomunita.item.expandableBrotherItem
-import it.cammino.gestionecomunita.ui.comunita.CommunityDetailHostActivity
 import it.cammino.gestionecomunita.util.Utility
 import it.cammino.gestionecomunita.util.systemLocale
 import it.cammino.gestionecomunita.util.validateMandatoryField
@@ -53,14 +53,14 @@ open class CommunityDetailFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private var mMainActivity: CommunityDetailHostActivity? = null
+    private var mMainActivity: AppCompatActivity? = null
 
     private val mAdapter: FastItemAdapter<ExpandableBrotherItem> = FastItemAdapter()
     private var llm: LinearLayoutManager? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        mMainActivity = activity as? CommunityDetailHostActivity
+        mMainActivity = activity as? AppCompatActivity
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -234,8 +234,12 @@ open class CommunityDetailFragment : Fragment() {
         }
 
         binding.cancelChange.setOnClickListener {
-            viewModel.editMode.value = false
-            lifecycleScope.launch { retrieveData() }
+            if (viewModel.createMode) {
+                activity?.finishAfterTransition()
+            } else {
+                viewModel.editMode.value = false
+                lifecycleScope.launch { retrieveData() }
+            }
         }
 
         binding.confirmChanges.setOnClickListener {
@@ -526,7 +530,7 @@ open class CommunityDetailFragment : Fragment() {
             }
             db.fratelloDao().insertFratelli(fratelli)
         }
-        activity?.finish()
+        activity?.finishAfterTransition()
     }
 
     private suspend fun updateComunita() {
@@ -560,7 +564,7 @@ open class CommunityDetailFragment : Fragment() {
             db.fratelloDao().truncateTableByComunita(viewModel.listId)
             db.comunitaDao().deleteComunita(Comunita().apply { id = viewModel.listId })
         }
-        activity?.finish()
+        activity?.finishAfterTransition()
     }
 
     private suspend fun retrieveData() {

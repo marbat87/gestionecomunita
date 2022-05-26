@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package it.cammino.gestionecomunita.util
 
 import android.annotation.TargetApi

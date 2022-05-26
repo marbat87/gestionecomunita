@@ -51,7 +51,7 @@ class ExpandableBrotherItem : AbstractBindingItem<FratelloDetailItemBinding>() {
             field = value
         }
 
-    var editable: Boolean = false
+    private var editable: Boolean = false
     var setEditable: Boolean = false
         set(value) {
             editable = value

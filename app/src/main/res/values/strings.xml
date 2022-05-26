@@ -31,6 +31,7 @@
     <string name="e_mail">e-mail</string>
     <string name="responsabile">Responsabile</string>
     <string name="responsabile_dots">Responsabile: %1$s</string>
+    <string name="ultima_visita_dots">Ultima visita: %1$s</string>
     <string name="comunita_item_name">%1$s - %2$s</string>
     <string name="telefono">Telefono</string>
     <string name="tappa">Tappa di Cammino</string>
