@@ -16,8 +16,6 @@ import it.cammino.gestionecomunita.item.CommunityListItem
 import it.cammino.gestionecomunita.item.communityListItem
 import it.cammino.gestionecomunita.ui.comunita.ComunitaIndexViewModel
 import it.cammino.gestionecomunita.util.Utility
-import java.sql.Date
-import java.util.*
 
 open class CommunityListFragment : Fragment() {
 
@@ -78,7 +76,8 @@ open class CommunityListFragment : Fragment() {
 
     private fun subscribeUiChanges() {
         viewModel.itemsResult?.observe(viewLifecycleOwner) { comunita ->
-            val orderedComunita = if (viewModel.indexType == CommunityListViewModel.IndexType.VISITATE_OLTRE_ANNO) comunita.sortedBy { it.dataUltimaVisita } else comunita
+            val orderedComunita =
+                if (viewModel.indexType == CommunityListViewModel.IndexType.VISITATE_OLTRE_ANNO) comunita.sortedBy { it.dataUltimaVisita } else comunita
             mAdapter.set(orderedComunita
                 .map {
                     Log.d(TAG, "get id: ${it.id}")
@@ -88,7 +87,8 @@ open class CommunityListFragment : Fragment() {
                         setResponsabile = it.responsabile
                         id = it.id
                         setDataUltimaVisita = it.dataUltimaVisita
-                        setDateMode = viewModel.indexType == CommunityListViewModel.IndexType.VISITATE_OLTRE_ANNO
+                        setDateMode =
+                            viewModel.indexType == CommunityListViewModel.IndexType.VISITATE_OLTRE_ANNO
                     }
                 })
         }
