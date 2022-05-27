@@ -2,15 +2,15 @@ package it.cammino.gestionecomunita.item
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import com.mikepenz.fastadapter.binding.AbstractBindingItem
-import com.mikepenz.fastadapter.ui.utils.StringHolder
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.databinding.FratelloDetailItemBinding
 import it.cammino.gestionecomunita.util.Utility
+import it.cammino.gestionecomunita.util.Utility.DASH
+import it.cammino.gestionecomunita.util.Utility.EMPTY_STRING
 import java.sql.Date
 
 fun expandableBrotherItem(block: ExpandableBrotherItem.() -> Unit): ExpandableBrotherItem =
@@ -18,58 +18,38 @@ fun expandableBrotherItem(block: ExpandableBrotherItem.() -> Unit): ExpandableBr
 
 class ExpandableBrotherItem : AbstractBindingItem<FratelloDetailItemBinding>() {
 
-    var nome: StringHolder? = null
-        private set
-    var setNome: String? = null
-        set(value) {
-            nome = StringHolder(value)
-        }
-    var cognome: StringHolder? = null
-        private set
-    var setCognome: String? = null
-        set(value) {
-            cognome = StringHolder(value)
-        }
-    var statoCivile: StringHolder? = null
-        private set
-    var setStatoCivile: String? = null
-        set(value) {
-            statoCivile = StringHolder(value)
-        }
+    var nome: String = EMPTY_STRING
+    var cognome: String = EMPTY_STRING
+
+    var statoCivile: String = EMPTY_STRING
+    var coniuge: String = EMPTY_STRING
+
+    var tribu: String = EMPTY_STRING
+
+    var annoNascita: Date? = null
+
+    var carisma: String = EMPTY_STRING
+
     var numFigli: Int = 0
-        private set
-    var setNumFigli: Int = 0
-        set(value) {
-            numFigli = value
-            field = value
-        }
+
     var dataInizioCammino: Date? = null
-        private set
-    var setDataInizioCammino: Date? = null
-        set(value) {
-            dataInizioCammino = value
-            field = value
-        }
 
-    private var editable: Boolean = false
-    var setEditable: Boolean = false
-        set(value) {
-            editable = value
-            field = value
-        }
+    var comunitaOrigine: String = EMPTY_STRING
+    var dataArrivo: Date? = null
 
-    var deleteClickClickListener: View.OnClickListener? = null
-    var editClickClickListener: View.OnClickListener? = null
-    var expandClickClickListener: View.OnClickListener? = null
+    var stato: Int = 0
+
+    var note: String = EMPTY_STRING
+
+    var editable: Boolean = false
+
+    var deleteClickClickListener: OnClickListener? = null
+    var editClickClickListener: OnClickListener? = null
+    var expandClickClickListener: OnClickListener? = null
 
     var isExpanded: Boolean = false
 
     var position: Int = 0
-    var setPosition: Int = 0
-        set(value) {
-            position = value
-            field = value
-        }
 
     override val type: Int
         get() = R.id.fastadapter_expandable_item_id
@@ -85,15 +65,30 @@ class ExpandableBrotherItem : AbstractBindingItem<FratelloDetailItemBinding>() {
     override fun bindView(binding: FratelloDetailItemBinding, payloads: List<Any>) {
         val ctx = binding.root.context
 
-        binding.groupTitle.text = "${nome?.getText(ctx)} ${cognome?.getText(ctx)}"
-        binding.textNome.text = nome?.getText(ctx)
-        val cognomeText = cognome?.getText(ctx)
-        binding.textCognome.text = if (cognomeText.isNullOrBlank()) DASH else cognomeText
-        val statoCivileText = statoCivile?.getText(ctx)
-        binding.textStatoCivile.text =
-            if (statoCivileText.isNullOrBlank()) DASH else statoCivileText
+        binding.groupTitle.text = "$nome $cognome"
+        binding.textNome.text = nome
+        binding.textCognome.text = cognome.ifBlank { DASH }
+        binding.textStatoCivile.text = statoCivile.ifBlank { DASH }
+        binding.textConiuge.text = coniuge.ifBlank { DASH }
         binding.textNumFigli.text = numFigli.toString()
-        binding.positon.text = position.toString()
+        binding.textTribu.text = tribu.ifBlank { DASH }
+        annoNascita?.let {
+            binding.textAnnoNascita.text = Utility.getStringFromDate(ctx, it)
+        } ?: run {
+            binding.textAnnoNascita.text = DASH
+        }
+        binding.textCarisma.text = carisma.ifBlank { DASH }
+        binding.textComunitaProvenienza.text = comunitaOrigine.ifBlank { DASH }
+        dataArrivo?.let {
+            binding.textDataArrivo.text = Utility.getStringFromDate(ctx, it)
+        } ?: run {
+            binding.textDataArrivo.text = DASH
+        }
+
+        binding.textStato.text = ctx.resources.getStringArray(R.array.stati)[stato]
+        binding.textStatoInt.text = stato.toString()
+
+        binding.textNote.text = note.ifBlank { DASH }
         dataInizioCammino?.let {
             binding.textDataInizioCammino.text = Utility.getStringFromDate(ctx, it)
         } ?: run {
@@ -110,11 +105,11 @@ class ExpandableBrotherItem : AbstractBindingItem<FratelloDetailItemBinding>() {
             binding.buttons.isVisible = editable
         }
 
-        deleteClickClickListener?.let { binding.cancellaFratello.setOnClickListener(it) }
-        editClickClickListener?.let { binding.modificaFratello.setOnClickListener(it) }
+        binding.cancellaFratello.setOnClickListener { deleteClickClickListener?.onClick(this) }
+        binding.modificaFratello.setOnClickListener { editClickClickListener?.onClick(this) }
         binding.titleSection.setOnClickListener {
             isExpanded = !isExpanded
-            expandClickClickListener?.onClick(it)
+            expandClickClickListener?.onClick(this)
         }
 
     }
@@ -124,13 +119,20 @@ class ExpandableBrotherItem : AbstractBindingItem<FratelloDetailItemBinding>() {
         binding.textNome.text = null
         binding.textCognome.text = null
         binding.textStatoCivile.text = null
+        binding.textConiuge.text = null
         binding.textNumFigli.text = null
+        binding.textTribu.text = null
+        binding.textAnnoNascita.text = null
+        binding.textCarisma.text = null
+        binding.textComunitaProvenienza.text = null
+        binding.textDataArrivo.text = null
+        binding.textStato.text = null
+        binding.textNote.text = null
         binding.textDataInizioCammino.text = null
-        binding.positon.text = null
     }
 
-    companion object {
-        const val DASH = "-"
+    interface OnClickListener {
+        fun onClick(it: ExpandableBrotherItem)
     }
 
 }

@@ -24,9 +24,9 @@
             android:id="@+id/title_section"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="?attr/listPreferredItemHeightSmall"
             android:clickable="true"
             android:focusable="true"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
@@ -60,7 +60,7 @@
             android:id="@+id/texts"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="divider, text_nome, text_cognome, text_cognome_label, text_nome_label, text_num_figli, text_num_figli_label, text_stato_civile, text_stato_civile_label, text_data_inizio_cammino, text_data_inizio_cammino_label" />
+            app:constraint_referenced_ids="divider, text_nome, text_cognome, text_cognome_label, text_nome_label, text_num_figli, text_num_figli_label, text_stato_civile, text_stato_civile_label, text_data_inizio_cammino, text_data_inizio_cammino_label, text_coniuge, text_coniuge_label, text_tribu, text_tribu_label, text_anno_nascita, text_anno_nascita_label, text_carisma, text_carisma_label, text_comunita_provenienza, text_comunita_provenienza_label, text_data_arrivo, text_data_arrivo_label, text_stato, text_stato_label, text_note, text_note_label" />
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/buttons"
@@ -126,12 +126,29 @@
             app:layout_constraintTop_toBottomOf="@id/text_stato_civile" />
 
         <TextView
-            android:id="@+id/text_num_figli"
+            android:id="@+id/text_coniuge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_field_space"
             android:textAppearance="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/text_stato_civile_label"
+            tools:text="Maria" />
+
+        <TextView
+            android:id="@+id/text_coniuge_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/coniuge"
+            android:textAppearance="?textAppearanceLabelMedium"
+            app:layout_constraintTop_toBottomOf="@id/text_coniuge" />
+
+        <TextView
+            android:id="@+id/text_num_figli"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_field_space"
+            android:textAppearance="?textAppearanceBodyLarge"
+            app:layout_constraintTop_toBottomOf="@id/text_coniuge_label"
             tools:text="4" />
 
         <TextView
@@ -143,12 +160,63 @@
             app:layout_constraintTop_toBottomOf="@id/text_num_figli" />
 
         <TextView
-            android:id="@+id/text_data_inizio_cammino"
+            android:id="@+id/text_tribu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_field_space"
             android:textAppearance="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/text_num_figli_label"
+            tools:text="Kampala" />
+
+        <TextView
+            android:id="@+id/text_tribu_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tribu"
+            android:textAppearance="?textAppearanceLabelMedium"
+            app:layout_constraintTop_toBottomOf="@id/text_tribu" />
+
+        <TextView
+            android:id="@+id/text_anno_nascita"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_field_space"
+            android:textAppearance="?textAppearanceBodyLarge"
+            app:layout_constraintTop_toBottomOf="@id/text_tribu_label"
+            tools:text="04/09/1987" />
+
+        <TextView
+            android:id="@+id/text_anno_nascita_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/data_nascita"
+            android:textAppearance="?textAppearanceLabelMedium"
+            app:layout_constraintTop_toBottomOf="@id/text_anno_nascita" />
+
+        <TextView
+            android:id="@+id/text_carisma"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_field_space"
+            android:textAppearance="?textAppearanceBodyLarge"
+            app:layout_constraintTop_toBottomOf="@id/text_anno_nascita_label"
+            tools:text="-" />
+
+        <TextView
+            android:id="@+id/text_carisma_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/carisma"
+            android:textAppearance="?textAppearanceLabelMedium"
+            app:layout_constraintTop_toBottomOf="@id/text_carisma" />
+
+        <TextView
+            android:id="@+id/text_data_inizio_cammino"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_field_space"
+            android:textAppearance="?textAppearanceBodyLarge"
+            app:layout_constraintTop_toBottomOf="@id/text_carisma_label"
             tools:text="13/12/2000" />
 
         <TextView
@@ -158,15 +226,87 @@
             android:layout_marginBottom="@dimen/text_field_space"
             android:text="@string/data_inizio_cammino"
             android:textAppearance="?textAppearanceLabelMedium"
-            app:layout_constraintBottom_toTopOf="@id/cancella_fratello"
             app:layout_constraintTop_toBottomOf="@id/text_data_inizio_cammino" />
 
         <TextView
-            android:id="@+id/positon"
+            android:id="@+id/text_comunita_provenienza"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_field_space"
+            android:textAppearance="?textAppearanceBodyLarge"
+            app:layout_constraintTop_toBottomOf="@id/text_data_inizio_cammino_label"
+            tools:text="san gerardo" />
+
+        <TextView
+            android:id="@+id/text_comunita_provenienza_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/text_field_space"
+            android:text="@string/comunita_provenienza"
+            android:textAppearance="?textAppearanceLabelMedium"
+            app:layout_constraintTop_toBottomOf="@id/text_comunita_provenienza" />
+
+        <TextView
+            android:id="@+id/text_data_arrivo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_field_space"
+            android:textAppearance="?textAppearanceBodyLarge"
+            app:layout_constraintTop_toBottomOf="@id/text_comunita_provenienza_label"
+            tools:text="13/12/2010" />
+
+        <TextView
+            android:id="@+id/text_data_arrivo_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/text_field_space"
+            android:text="@string/data_arrivo"
+            android:textAppearance="?textAppearanceLabelMedium"
+            app:layout_constraintTop_toBottomOf="@id/text_data_arrivo" />
+
+        <TextView
+            android:id="@+id/text_stato"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_field_space"
+            android:textAppearance="?textAppearanceBodyLarge"
+            app:layout_constraintTop_toBottomOf="@id/text_data_arrivo_label"
+            tools:text="Attivo" />
+
+        <TextView
+            android:id="@+id/text_stato_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/text_field_space"
+            android:text="@string/stato_attuale"
+            android:textAppearance="?textAppearanceLabelMedium"
+            app:layout_constraintTop_toBottomOf="@id/text_stato" />
+
+        <TextView
+            android:id="@+id/text_note"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_field_space"
+            android:textAppearance="?textAppearanceBodyLarge"
+            app:layout_constraintTop_toBottomOf="@id/text_stato_label"
+            tools:text="Test" />
+
+        <TextView
+            android:id="@+id/text_stato_int"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/text_data_inizio_cammino_label" />
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/text_note_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/text_field_space"
+            android:text="@string/note"
+            android:textAppearance="?textAppearanceLabelMedium"
+            app:layout_constraintBottom_toTopOf="@id/cancella_fratello"
+            app:layout_constraintTop_toBottomOf="@id/text_note" />
 
         <Button
             android:id="@+id/cancella_fratello"

@@ -77,14 +77,10 @@ open class CommunityListFragment : Fragment() {
     }
 
     private fun subscribeUiChanges() {
-        val oneYearAgo = Calendar.getInstance().apply { add(Calendar.YEAR, -1) }
         viewModel.itemsResult?.observe(viewLifecycleOwner) { comunita ->
-            mAdapter.set(comunita
-                .filter {
-                    viewModel.indexType == CommunityListViewModel.IndexType.TUTTE || it.dataUltimaVisita == null || it.dataUltimaVisita!! <= Date(
-                        oneYearAgo.time.time
-                    )
-                }.map {
+            val orderedComunita = if (viewModel.indexType == CommunityListViewModel.IndexType.VISITATE_OLTRE_ANNO) comunita.sortedBy { it.dataUltimaVisita } else comunita
+            mAdapter.set(orderedComunita
+                .map {
                     Log.d(TAG, "get id: ${it.id}")
                     communityListItem {
                         setNumeroComunita = it.numero

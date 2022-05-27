@@ -9,6 +9,8 @@ import java.text.SimpleDateFormat
 object Utility {
 
     const val CLICK_DELAY: Long = 2000
+    const val EMPTY_STRING = ""
+    const val DASH = "-"
     private val TAG = Utility::class.java.canonicalName
 
     fun getDateFromString(ctx: Context, inputString: String): Date? {
@@ -44,5 +46,7 @@ object Utility {
 
         return date
     }
+
+
 
 }

@@ -5,7 +5,8 @@
         <item>@string/catechesi_iniziali</item>
         <item>@string/scrutinio_1</item>
         <item>@string/shema</item>
-        <item>@string/scrutinio_2</item>
+        <item>@string/scrutinio_2_aperto</item>
+        <item>@string/scrutinio_2_chiuso</item>
         <item>@string/iniziazione_preghiera</item>
         <item>@string/traditio</item>
         <item>@string/ritraditio</item>
@@ -18,21 +19,10 @@
         <item>@string/elezione_3</item>
     </string-array>
 
-    <integer-array name="passaggi_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-        <item>11</item>
-        <item>12</item>
-        <item>13</item>
-        <item>14</item>
-    </integer-array>
+    <string-array name="stati">
+        <item>@string/stato_attivo</item>
+        <item>@string/stato_non_attivo</item>
+        <item>@string/stato_deceduto</item>
+    </string-array>
 
 </resources>

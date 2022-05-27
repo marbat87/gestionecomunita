@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -29,6 +28,7 @@ import it.cammino.gestionecomunita.dialog.*
 import it.cammino.gestionecomunita.item.ExpandableBrotherItem
 import it.cammino.gestionecomunita.item.expandableBrotherItem
 import it.cammino.gestionecomunita.util.Utility
+import it.cammino.gestionecomunita.util.Utility.EMPTY_STRING
 import it.cammino.gestionecomunita.util.systemLocale
 import it.cammino.gestionecomunita.util.validateMandatoryField
 import kotlinx.coroutines.Dispatchers
@@ -245,27 +245,32 @@ open class CommunityDetailFragment : Fragment() {
         binding.confirmChanges.setOnClickListener {
             if (validateForm()) {
                 viewModel.comunita.diocesi =
-                    binding.diocesiTextField.editText?.text?.toString() ?: ""
+                    binding.diocesiTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
                 viewModel.comunita.numero =
-                    binding.numeroTextField.editText?.text?.toString() ?: ""
+                    binding.numeroTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
                 viewModel.comunita.parrocchia =
-                    binding.parrocchiaTextField.editText?.text?.toString() ?: ""
+                    binding.parrocchiaTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
+                viewModel.comunita.parroco =
+                    binding.parroccoTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
+                viewModel.comunita.catechisti =
+                    binding.catechistiTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
                 viewModel.comunita.email =
-                    binding.emailTextField.editText?.text?.toString() ?: ""
+                    binding.emailTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
                 viewModel.comunita.responsabile =
-                    binding.responsabileTextField.editText?.text?.toString() ?: ""
+                    binding.responsabileTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
                 viewModel.comunita.telefono =
-                    binding.telefonoTextField.editText?.text?.toString() ?: ""
+                    binding.telefonoTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
                 viewModel.comunita.dataConvivenza = Utility.getDateFromString(
                     requireContext(),
-                    binding.dataConvivenzaTextField.editText?.text?.toString() ?: ""
+                    binding.dataConvivenzaTextField.editText?.text?.toString()?.trim()
+                        ?: EMPTY_STRING
                 )
                 viewModel.comunita.dataUltimaVisita = Utility.getDateFromString(
                     requireContext(),
-                    binding.dataVisitaTextField.editText?.text?.toString() ?: ""
+                    binding.dataVisitaTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
                 )
                 viewModel.comunita.note =
-                    binding.noteTextField.editText?.text?.toString() ?: ""
+                    binding.noteTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
                 viewModel.comunita.dataUltimaModifica =
                     Date(Calendar.getInstance().time.time)
 
@@ -289,11 +294,19 @@ open class CommunityDetailFragment : Fragment() {
                             inputdialogViewModel.nomeText,
                             inputdialogViewModel.cognomeText,
                             inputdialogViewModel.statoCivileText,
+                            inputdialogViewModel.coniugeText,
                             inputdialogViewModel.numFigli,
+                            inputdialogViewModel.tribuText,
+                            inputdialogViewModel.annoNascita,
+                            inputdialogViewModel.carismaText,
+                            inputdialogViewModel.comunitaOrigineText,
+                            inputdialogViewModel.dataArrivo,
+                            inputdialogViewModel.statoInt,
+                            inputdialogViewModel.noteText,
                             inputdialogViewModel.dataInizioCammino,
                             viewModel.selectedFratello
                         )
-                        fratello.setEditable = true
+                        fratello.editable = true
                         fratello.isExpanded = true
                         when (inputdialogViewModel.mTag) {
                             ADD_BROTHER -> {
@@ -350,6 +363,8 @@ open class CommunityDetailFragment : Fragment() {
         outState.putCharSequence("diocesiTextField", binding.diocesiTextField.editText?.text)
         outState.putCharSequence("numeroTextField", binding.numeroTextField.editText?.text)
         outState.putCharSequence("parrocchiaTextField", binding.parrocchiaTextField.editText?.text)
+        outState.putCharSequence("parroccoTextField", binding.parroccoTextField.editText?.text)
+        outState.putCharSequence("catechistiTextField", binding.catechistiTextField.editText?.text)
         outState.putCharSequence("emailTextField", binding.emailTextField.editText?.text)
         outState.putCharSequence(
             "responsabileTextField",
@@ -378,6 +393,8 @@ open class CommunityDetailFragment : Fragment() {
         binding.diocesiTextField.editText?.setText(savedInstanceState?.getCharSequence("diocesiTextField"))
         binding.numeroTextField.editText?.setText(savedInstanceState?.getCharSequence("numeroTextField"))
         binding.parrocchiaTextField.editText?.setText(savedInstanceState?.getCharSequence("parrocchiaTextField"))
+        binding.parroccoTextField.editText?.setText(savedInstanceState?.getCharSequence("parroccoTextField"))
+        binding.catechistiTextField.editText?.setText(savedInstanceState?.getCharSequence("catechistiTextField"))
         binding.emailTextField.editText?.setText(savedInstanceState?.getCharSequence("emailTextField"))
         binding.responsabileTextField.editText?.setText(savedInstanceState?.getCharSequence("responsabileTextField"))
         binding.telefonoTextField.editText?.setText(savedInstanceState?.getCharSequence("telefonoTextField"))
@@ -397,17 +414,33 @@ open class CommunityDetailFragment : Fragment() {
         nome: String,
         cognome: String,
         statoCivile: String,
+        coniuge: String,
         numFigli: Int,
+        tribu: String,
+        annoNascita: Date?,
+        carisma: String,
+        comunitaOrigine: String,
+        dataArrivo: Date?,
+        stato: Int,
+        note: String,
         dataInizio: Date?,
         position: Int = 0
     ): ExpandableBrotherItem {
         return expandableBrotherItem {
-            setNome = nome
-            setCognome = cognome
-            setStatoCivile = statoCivile
-            setNumFigli = numFigli
-            setDataInizioCammino = dataInizio
-            setPosition = position
+            this.nome = nome
+            this.cognome = cognome
+            this.statoCivile = statoCivile
+            this.coniuge = coniuge
+            this.tribu = tribu
+            this.annoNascita = annoNascita
+            this.carisma = carisma
+            this.comunitaOrigine = comunitaOrigine
+            this.dataArrivo = dataArrivo
+            this.stato = stato
+            this.note = note
+            this.numFigli = numFigli
+            this.dataInizioCammino = dataInizio
+            this.position = position
             deleteClickClickListener = mDeleteClickClickListener
             expandClickClickListener = mExpandClickClickListener
             editClickClickListener = mEditClickClickListener
@@ -425,6 +458,8 @@ open class CommunityDetailFragment : Fragment() {
         binding.diocesiTextField.isEnabled = editMode
         binding.numeroTextField.isEnabled = editMode
         binding.parrocchiaTextField.isEnabled = editMode
+        binding.parroccoTextField.isEnabled = editMode
+        binding.catechistiTextField.isEnabled = editMode
         binding.emailTextField.isEnabled = editMode
         binding.responsabileTextField.isEnabled = editMode
         binding.telefonoTextField.isEnabled = editMode
@@ -443,7 +478,7 @@ open class CommunityDetailFragment : Fragment() {
             binding.dataConvivenzaTextField.error = null
             binding.dataVisitaTextField.error = null
         }
-        mAdapter.itemAdapter.adapterItems.forEach { it.setEditable = editMode }
+        mAdapter.itemAdapter.adapterItems.forEach { it.editable = editMode }
         mAdapter.notifyAdapterDataSetChanged()
     }
 
@@ -520,9 +555,17 @@ open class CommunityDetailFragment : Fragment() {
             val fratelli = ArrayList<Fratello>()
             mAdapter.itemAdapter.adapterItems.forEach {
                 val fratello = Fratello()
-                fratello.nome = it.nome?.getText(requireContext()) ?: ""
-                fratello.cognome = it.cognome?.getText(requireContext()) ?: ""
-                fratello.statoCivile = it.statoCivile?.getText(requireContext()) ?: ""
+                fratello.nome = it.nome.trim()
+                fratello.cognome = it.cognome.trim()
+                fratello.statoCivile = it.statoCivile.trim()
+                fratello.coniuge = it.coniuge.trim()
+                fratello.tribu = it.tribu.trim()
+                fratello.annoNascita = it.annoNascita
+                fratello.carisma = it.carisma.trim()
+                fratello.comunitaOrigine = it.comunitaOrigine.trim()
+                fratello.dataArrivo = it.dataArrivo
+                fratello.statoAttuale = it.stato
+                fratello.note = it.note.trim()
                 fratello.numFigli = it.numFigli
                 fratello.dataInizioCammino = it.dataInizioCammino
                 fratello.idComunita = insertedId
@@ -544,9 +587,17 @@ open class CommunityDetailFragment : Fragment() {
                 mAdapter.itemAdapter.adapterItems as? ArrayList<ExpandableBrotherItem>
             viewModel.elementi?.forEach {
                 val fratello = Fratello()
-                fratello.nome = it.nome?.getText(requireContext()) ?: ""
-                fratello.cognome = it.cognome?.getText(requireContext()) ?: ""
-                fratello.statoCivile = it.statoCivile?.getText(requireContext()) ?: ""
+                fratello.nome = it.nome.trim()
+                fratello.cognome = it.cognome.trim()
+                fratello.statoCivile = it.statoCivile.trim()
+                fratello.coniuge = it.coniuge.trim()
+                fratello.tribu = it.tribu.trim()
+                fratello.annoNascita = it.annoNascita
+                fratello.carisma = it.carisma.trim()
+                fratello.comunitaOrigine = it.comunitaOrigine.trim()
+                fratello.dataArrivo = it.dataArrivo
+                fratello.statoAttuale = it.stato
+                fratello.note = it.note.trim()
                 fratello.numFigli = it.numFigli
                 fratello.dataInizioCammino = it.dataInizioCammino
                 fratello.idComunita = viewModel.listId
@@ -584,6 +635,8 @@ open class CommunityDetailFragment : Fragment() {
             binding.diocesiTextField.editText?.setText(viewModel.comunita.diocesi)
             binding.numeroTextField.editText?.setText(viewModel.comunita.numero)
             binding.parrocchiaTextField.editText?.setText(viewModel.comunita.parrocchia)
+            binding.catechistiTextField.editText?.setText(viewModel.comunita.catechisti)
+            binding.parroccoTextField.editText?.setText(viewModel.comunita.parroco)
             binding.emailTextField.editText?.setText(viewModel.comunita.email)
             binding.responsabileTextField.editText?.setText(viewModel.comunita.responsabile)
             binding.telefonoTextField.editText?.setText(viewModel.comunita.telefono)
@@ -626,7 +679,15 @@ open class CommunityDetailFragment : Fragment() {
                                 fratello.nome,
                                 fratello.cognome,
                                 fratello.statoCivile,
+                                fratello.coniuge,
                                 fratello.numFigli,
+                                fratello.tribu,
+                                fratello.annoNascita,
+                                fratello.carisma,
+                                fratello.comunitaOrigine,
+                                fratello.dataArrivo,
+                                fratello.statoAttuale,
+                                fratello.note,
                                 fratello.dataInizioCammino,
                                 position++
                             )
@@ -634,7 +695,7 @@ open class CommunityDetailFragment : Fragment() {
                     }
                 }
             }
-            viewModel.elementi?.forEach { it.setEditable = false }
+            viewModel.elementi?.forEach { it.editable = false }
             viewModel.elementi?.let { mAdapter.set(it) }
         } else {
             if (viewModel.elementi == null)
@@ -643,70 +704,67 @@ open class CommunityDetailFragment : Fragment() {
         }
     }
 
-    private val mDeleteClickClickListener = View.OnClickListener {
-        mMainActivity?.let { mActivity ->
-            viewModel.selectedFratello =
-                (it.parent.parent as? View)?.findViewById<TextView>(R.id.positon)?.text.toString()
-                    .toInt()
-            SimpleDialogFragment.show(
-                SimpleDialogFragment.Builder(
-                    mActivity,
-                    DELETE_BROTHER
+    private val mDeleteClickClickListener = object : ExpandableBrotherItem.OnClickListener {
+        override fun onClick(it: ExpandableBrotherItem) {
+            mMainActivity?.let { mActivity ->
+                viewModel.selectedFratello = it.position
+                SimpleDialogFragment.show(
+                    SimpleDialogFragment.Builder(
+                        mActivity,
+                        DELETE_BROTHER
+                    )
+                        .title(R.string.delete_fratello)
+                        .icon(R.drawable.delete_24px)
+                        .content(R.string.delete_fratello_dialog)
+                        .positiveButton(R.string.delete_confirm)
+                        .negativeButton(android.R.string.cancel),
+                    mActivity.supportFragmentManager
                 )
-                    .title(R.string.delete_fratello)
-                    .icon(R.drawable.delete_24px)
-                    .content(R.string.delete_fratello_dialog)
-                    .positiveButton(R.string.delete_confirm)
-                    .negativeButton(android.R.string.cancel),
-                mActivity.supportFragmentManager
-            )
+            }
         }
     }
 
-    private val mExpandClickClickListener = View.OnClickListener {
-        val parent = it.parent.parent as? View
-        mAdapter.notifyItemChanged(
-            parent?.findViewById<TextView>(R.id.positon)?.text.toString()
-                .toInt()
-        )
+    private val mExpandClickClickListener = object : ExpandableBrotherItem.OnClickListener {
+        override fun onClick(it: ExpandableBrotherItem) {
+            mAdapter.notifyItemChanged(it.position)
+        }
     }
 
-    private val mEditClickClickListener = View.OnClickListener {
-        mMainActivity?.let { mActivity ->
+    private val mEditClickClickListener = object : ExpandableBrotherItem.OnClickListener {
+        override fun onClick(it: ExpandableBrotherItem) {
+            mMainActivity?.let { mActivity ->
 
-            val parent = it.parent.parent as? View
-            viewModel.selectedFratello =
-                parent?.findViewById<TextView>(R.id.positon)?.text.toString()
-                    .toInt()
-            val builder = EditBrotherDialogFragment.Builder(
-                mActivity, EDIT_BROTHER
-            )
-                .nomePrefill(parent?.findViewById<TextView>(R.id.text_nome)?.text.toString())
-                .cognomePrefill(parent?.findViewById<TextView>(R.id.text_cognome)?.text.toString())
-                .statoCivilePrefill(parent?.findViewById<TextView>(R.id.text_stato_civile)?.text.toString())
-                .numeroFigliPrefill(
-                    parent?.findViewById<TextView>(R.id.text_num_figli)?.text.toString()
-                        .toInt()
+                viewModel.selectedFratello = it.position
+                val builder = EditBrotherDialogFragment.Builder(
+                    mActivity, EDIT_BROTHER
                 )
-                .dataInizioCamminoPrefill(
-                    Utility.getDateFromString(
-                        mActivity,
-                        parent?.findViewById<TextView>(R.id.text_data_inizio_cammino)?.text.toString()
+                    .nomePrefill(it.nome)
+                    .cognomePrefill(it.cognome)
+                    .statoCivilePrefill(it.statoCivile)
+                    .setConiugePrefill(it.coniuge)
+                    .numeroFigliPrefill(it.numFigli)
+                    .setDataNascitaPrefill(it.annoNascita)
+                    .setCarismaPrefill(it.carisma)
+                    .setTribuPrefill(it.tribu)
+                    .setComunitaOriginePrefill(it.comunitaOrigine)
+                    .setDataArrivoPrefill(it.dataArrivo)
+                    .setStatoPrefill(it.stato)
+                    .setNotePrefill(it.note)
+                    .dataInizioCamminoPrefill(it.dataInizioCammino)
+                    .setEditMode(true)
+                if (mActivity.resources.getBoolean(R.bool.large_layout)) {
+                    builder.positiveButton(R.string.save)
+                        .negativeButton(android.R.string.cancel)
+                    LargeEditBrotherDialogFragment.show(
+                        builder,
+                        mActivity.supportFragmentManager
                     )
-                )
-                .setEditMode(true)
-            if (mActivity.resources.getBoolean(R.bool.large_layout)) {
-                builder.positiveButton(R.string.save)
-                    .negativeButton(android.R.string.cancel)
-                LargeEditBrotherDialogFragment.show(
-                    builder,
-                    mActivity.supportFragmentManager
-                )
-            } else {
-                SmallEditBrotherDialogFragment.show(
-                    builder,
-                    mActivity.supportFragmentManager
-                )
+                } else {
+                    SmallEditBrotherDialogFragment.show(
+                        builder,
+                        mActivity.supportFragmentManager
+                    )
+                }
             }
         }
     }

@@ -18,8 +18,24 @@ open class Fratello {
 
     var statoCivile: String = ""
 
+    var coniuge: String = ""
+
+    var tribu: String = ""
+
+    var annoNascita: Date? = null
+
+    var carisma: String = ""
+
     var numFigli: Int = 0
 
     var dataInizioCammino: Date? = null
+
+    var comunitaOrigine: String = ""
+
+    var dataArrivo: Date? = null
+
+    var note: String = ""
+
+    var statoAttuale: Int = 0
 
 }

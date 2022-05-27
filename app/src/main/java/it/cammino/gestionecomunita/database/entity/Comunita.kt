@@ -16,7 +16,11 @@ open class Comunita {
 
     var parrocchia: String = ""
 
+    var parroco: String = ""
+
     var responsabile: String = ""
+
+    var catechisti: String = ""
 
     var numAnni: Int = 0
 

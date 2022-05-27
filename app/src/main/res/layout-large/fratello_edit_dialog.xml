@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -10,7 +11,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/text_field_space"
         android:layout_marginTop="@dimen/text_field_space"
-        app:layout_goneMarginTop="@dimen/text_field_space"
         android:layout_marginEnd="@dimen/text_field_space"
         android:hint="@string/nome"
         app:errorEnabled="true"
@@ -38,15 +38,38 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/stato_civile_divier"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_field_space"
+        app:layout_constraintTop_toBottomOf="@id/cognome_text_field" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/stato_civile_text_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/text_field_space"
-        android:layout_marginTop="@dimen/text_field_space_no_error"
+        android:layout_marginTop="@dimen/text_field_space"
         android:layout_marginEnd="@dimen/text_field_space"
         android:hint="@string/stato_civile"
-        app:layout_constraintTop_toBottomOf="@id/cognome_text_field">
+        app:layout_constraintTop_toBottomOf="@id/stato_civile_divier">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/coniuge_text_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/text_field_space"
+        android:layout_marginTop="@dimen/text_field_space_no_error"
+        android:layout_marginEnd="@dimen/text_field_space"
+        android:hint="@string/coniuge"
+        app:layout_constraintTop_toBottomOf="@id/stato_civile_text_field">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -62,7 +85,7 @@
         android:layout_marginTop="@dimen/text_field_space_no_error"
         android:layout_marginEnd="@dimen/text_field_space"
         android:hint="@string/num_figli"
-        app:layout_constraintTop_toBottomOf="@id/stato_civile_text_field">
+        app:layout_constraintTop_toBottomOf="@id/coniuge_text_field">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -71,23 +94,166 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/stato_civile_divier2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_field_space"
+        app:layout_constraintTop_toBottomOf="@id/numero_figli_text_field" />
+
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/data_inizio_cammino_text_field"
+        android:id="@+id/tribu_text_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/text_field_space"
+        android:layout_marginTop="@dimen/text_field_space"
+        android:layout_marginEnd="@dimen/text_field_space"
+        android:hint="@string/tribu"
+        app:layout_constraintTop_toBottomOf="@id/stato_civile_divier2">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/data_nascita_text_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/text_field_space"
         android:layout_marginTop="@dimen/text_field_space_no_error"
         android:layout_marginEnd="@dimen/text_field_space"
-        android:layout_marginBottom="@dimen/text_field_space"
-        android:hint="@string/data_inizio_cammino"
+        android:hint="@string/data_nascita"
         app:errorEnabled="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/numero_figli_text_field">
+        app:layout_constraintTop_toBottomOf="@id/tribu_text_field">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="date" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/carisma_text_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/text_field_space"
+        android:layout_marginTop="@dimen/text_field_space"
+        android:layout_marginEnd="@dimen/text_field_space"
+        android:hint="@string/carisma"
+        app:layout_constraintTop_toBottomOf="@id/data_nascita_text_field">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/proveniente_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_field_space_no_error"
+        android:paddingStart="@dimen/container_horizontal_margin"
+        android:paddingEnd="@dimen/container_horizontal_margin"
+        android:text="@string/preveniente_da"
+        android:textAppearance="?textAppearanceBodyMedium"
+        app:layout_constraintTop_toBottomOf="@id/carisma_text_field" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/comunita_origine_text_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/text_field_space"
+        android:layout_marginEnd="@dimen/text_field_space"
+        android:hint="@string/comunita_provenienza"
+        app:layout_constraintTop_toBottomOf="@id/proveniente_text">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/data_arrivo_text_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/text_field_space"
+        android:layout_marginTop="@dimen/text_field_space"
+        android:layout_marginEnd="@dimen/text_field_space"
+        android:hint="@string/data_arrivo"
+        app:errorEnabled="true"
+        app:layout_constraintTop_toBottomOf="@id/comunita_origine_text_field">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="date" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/origine_divier"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/data_arrivo_text_field" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/data_inizio_cammino_text_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/text_field_space"
+        android:layout_marginTop="@dimen/text_field_space"
+        android:layout_marginEnd="@dimen/text_field_space"
+        android:hint="@string/data_inizio_cammino"
+        app:errorEnabled="true"
+        app:layout_constraintTop_toBottomOf="@id/origine_divier">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="date" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/stato_text_field"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/text_field_space"
+        android:layout_marginTop="@dimen/text_field_space"
+        android:layout_marginEnd="@dimen/text_field_space"
+        android:hint="@string/stato_attuale"
+        app:layout_constraintTop_toBottomOf="@id/data_inizio_cammino_text_field">
+
+        <AutoCompleteTextView
+            android:id="@+id/stato_autcomplete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            app:simpleItems="@array/stati"
+            tools:ignore="LabelFor" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/note_text_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/text_field_space"
+        android:layout_marginEnd="@dimen/text_field_space"
+        android:hint="@string/note"
+        app:layout_constraintTop_toBottomOf="@id/stato_text_field">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:gravity="top"
+            android:inputType="text|textMultiLine" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
