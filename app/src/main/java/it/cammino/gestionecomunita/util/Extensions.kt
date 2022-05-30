@@ -73,10 +73,10 @@ private fun Activity.setLighStatusBarFlagM(light: Boolean) {
             .decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
 }
 
-fun Context.validateMandatoryField(textInput: TextInputLayout): Boolean {
+fun Context.validateMandatoryField(textInput: TextInputLayout, showError: Boolean = true): Boolean {
     textInput.editText?.let {
         if (it.text.isNullOrBlank()) {
-            textInput.error = getString(R.string.mandatory_field)
+            textInput.error = if (showError) getString(R.string.mandatory_field) else null
             return false
         } else {
             textInput.error = null

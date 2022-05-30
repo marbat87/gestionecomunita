@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -51,6 +52,20 @@ class SmallEditBrotherDialogFragment : EditBrotherDialogFragment() {
                 viewModel.handled = false
                 viewModel.state.value = DialogState.Positive(this)
                 dismiss()
+            } else {
+                (activity as? AppCompatActivity)?.let { mActivity ->
+                    SimpleDialogFragment.show(
+                        SimpleDialogFragment.Builder(
+                            mActivity,
+                            ERROR_DIALOG
+                        )
+                            .title(R.string.error)
+                            .icon(R.drawable.error_24px)
+                            .content(R.string.campi_non_compilati)
+                            .positiveButton(android.R.string.ok),
+                        mActivity.supportFragmentManager
+                    )
+                }
             }
         }
 
@@ -67,6 +82,7 @@ class SmallEditBrotherDialogFragment : EditBrotherDialogFragment() {
     companion object {
 
         private const val BUILDER_TAG = "bundle_builder"
+        private const val ERROR_DIALOG = "error_dialog"
 
         private fun newInstance() = SmallEditBrotherDialogFragment()
 

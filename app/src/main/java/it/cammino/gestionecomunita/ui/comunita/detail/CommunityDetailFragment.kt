@@ -282,6 +282,21 @@ open class CommunityDetailFragment : Fragment() {
                         retrieveData()
                     }
             }
+            else {
+                mMainActivity?.let { mActivity ->
+                    SimpleDialogFragment.show(
+                        SimpleDialogFragment.Builder(
+                            mActivity,
+                            ERROR_DIALOG
+                        )
+                            .title(R.string.error)
+                            .icon(R.drawable.error_24px)
+                            .content(R.string.campi_non_compilati)
+                            .positiveButton(android.R.string.ok),
+                        mActivity.supportFragmentManager
+                    )
+                }
+            }
         }
 
         inputdialogViewModel.state.observe(viewLifecycleOwner) {
@@ -778,6 +793,7 @@ open class CommunityDetailFragment : Fragment() {
         const val EDIT_BROTHER = "edit_brother"
         const val DELETE_BROTHER = "delete_brother"
         const val DELETE_COMMUNITY = "delete_community"
+        const val ERROR_DIALOG = "community_detail_error_dialog"
 
     }
 

@@ -218,10 +218,10 @@ open class EditBrotherDialogFragment : DialogFragment() {
         }
     }
 
-    protected fun validateForm(mView: View): Boolean {
+    protected fun validateForm(mView: View, showError: Boolean = true): Boolean {
         var valid = true
 
-        if (!requireContext().validateMandatoryField(mView.findViewById(R.id.nome_text_field)))
+        if (!requireContext().validateMandatoryField(mView.findViewById(R.id.nome_text_field), showError))
             valid = false
 
         val inputNome = mView.findViewById<TextInputLayout>(R.id.numero_figli_text_field)
@@ -245,6 +245,34 @@ open class EditBrotherDialogFragment : DialogFragment() {
                 valid = false
             } else
                 dataInizio.error = null
+        }
+
+        val dataNascita = mView.findViewById<TextInputLayout>(R.id.data_nascita_text_field)
+        dataNascita.editText?.let {
+            if (!it.text.isNullOrEmpty() &&
+                Utility.getDateFromString(
+                    requireContext(),
+                    it.text.toString()
+                ) == null
+            ) {
+                dataNascita.error = getString(R.string.invalid_date)
+                valid = false
+            } else
+                dataNascita.error = null
+        }
+
+        val dataArrivo = mView.findViewById<TextInputLayout>(R.id.data_arrivo_text_field)
+        dataArrivo.editText?.let {
+            if (!it.text.isNullOrEmpty() &&
+                Utility.getDateFromString(
+                    requireContext(),
+                    it.text.toString()
+                ) == null
+            ) {
+                dataArrivo.error = getString(R.string.invalid_date)
+                valid = false
+            } else
+                dataArrivo.error = null
         }
 
 

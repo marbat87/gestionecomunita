@@ -3,11 +3,14 @@ package it.cammino.gestionecomunita.dialog
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.KeyEvent
 import androidx.core.os.bundleOf
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputLayout
 import it.cammino.gestionecomunita.R
 
 @Suppress("unused")
@@ -60,7 +63,32 @@ class LargeEditBrotherDialogFragment : EditBrotherDialogFragment() {
             returnValue
         }
 
-        return dialog.show()
+        val alertDialog = dialog.create()
+
+        mView.findViewById<TextInputLayout>(R.id.nome_text_field).editText?.doOnTextChanged { _, _, _, _ ->
+            alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).isEnabled = validateForm(mView)
+        }
+
+        mView.findViewById<TextInputLayout>(R.id.numero_figli_text_field).editText?.doOnTextChanged { _, _, _, _ ->
+            alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).isEnabled = validateForm(mView)
+        }
+
+        mView.findViewById<TextInputLayout>(R.id.data_inizio_cammino_text_field).editText?.doOnTextChanged { _, _, _, _ ->
+            alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).isEnabled = validateForm(mView)
+        }
+
+        mView.findViewById<TextInputLayout>(R.id.data_nascita_text_field).editText?.doOnTextChanged { _, _, _, _ ->
+            alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).isEnabled = validateForm(mView)
+        }
+
+        mView.findViewById<TextInputLayout>(R.id.data_arrivo_text_field).editText?.doOnTextChanged { _, _, _, _ ->
+            alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).isEnabled = validateForm(mView)
+        }
+
+        alertDialog.show()
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).isEnabled = validateForm(mView, false)
+
+        return alertDialog
     }
 
     companion object {

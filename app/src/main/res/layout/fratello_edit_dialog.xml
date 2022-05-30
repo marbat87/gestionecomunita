@@ -74,8 +74,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/text_field_space"
-                app:dividerInsetEnd="@dimen/activity_horizontal_margin"
-                app:dividerInsetStart="@dimen/activity_horizontal_margin"
+                app:dividerInsetEnd="@dimen/container_horizontal_margin"
+                app:dividerInsetStart="@dimen/container_horizontal_margin"
                 app:layout_constraintTop_toBottomOf="@id/cognome_text_field" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -132,8 +132,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/text_field_space"
-                app:dividerInsetEnd="@dimen/activity_horizontal_margin"
-                app:dividerInsetStart="@dimen/activity_horizontal_margin"
+                app:dividerInsetEnd="@dimen/container_horizontal_margin"
+                app:dividerInsetStart="@dimen/container_horizontal_margin"
                 app:layout_constraintTop_toBottomOf="@id/numero_figli_text_field" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -234,8 +234,8 @@
                 android:id="@+id/origine_divier"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:dividerInsetEnd="@dimen/activity_horizontal_margin"
-                app:dividerInsetStart="@dimen/activity_horizontal_margin"
+                app:dividerInsetEnd="@dimen/container_horizontal_margin"
+                app:dividerInsetStart="@dimen/container_horizontal_margin"
                 app:layout_constraintTop_toBottomOf="@id/data_arrivo_text_field" />
 
             <com.google.android.material.textfield.TextInputLayout

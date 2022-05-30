@@ -4,7 +4,7 @@
     <string name="title_centro_voc">Centro vocazionale</string>
     <string name="title_promemoria">Promemoria</string>
     <string name="tutte_comunita">Tutte</string>
-    <string name="oltre_un_anno_comunita">Visitate oltre un anno fa</string>
+    <string name="oltre_un_anno_comunita">Data ultima visita</string>
     <string name="tappa_comunita">Elenco per tappa</string>
     <string name="diocesi_comunita">Elenco per diocesi</string>
     <string name="title_activity_community_detail_host">CommunityDetailHostActivity</string>
@@ -75,4 +75,6 @@
     <string name="delete_fratello_dialog">Sei sicuro di voler cancellare il fratello dalla comunità?</string>
     <string name="delete_community">Cancella comunità</string>
     <string name="delete_community_dialog">Sei sicuro di voler cancellare la comunità?</string>
+    <string name="error">Errore</string>
+    <string name="campi_non_compilati">Alcuni campi non sono compilati correttamente</string>
 </resources>
