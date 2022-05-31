@@ -17,6 +17,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.mikepenz.fastadapter.adapters.FastItemAdapter
 import it.cammino.gestionecomunita.R
@@ -24,13 +25,13 @@ import it.cammino.gestionecomunita.database.ComunitaDatabase
 import it.cammino.gestionecomunita.database.entity.Comunita
 import it.cammino.gestionecomunita.database.entity.Fratello
 import it.cammino.gestionecomunita.database.entity.Passaggio
+import it.cammino.gestionecomunita.database.entity.Promemoria
 import it.cammino.gestionecomunita.databinding.FragmentCommunityDetailBinding
-import it.cammino.gestionecomunita.dialog.CommunityHistoryDialogFragment
-import it.cammino.gestionecomunita.dialog.DialogState
-import it.cammino.gestionecomunita.dialog.EditBrotherDialogFragment
-import it.cammino.gestionecomunita.dialog.SimpleDialogFragment
+import it.cammino.gestionecomunita.dialog.*
+import it.cammino.gestionecomunita.dialog.large.LargeAddNotificationDialogFragment
 import it.cammino.gestionecomunita.dialog.large.LargeCommunityHistoryDialogFragment
 import it.cammino.gestionecomunita.dialog.large.LargeEditBrotherDialogFragment
+import it.cammino.gestionecomunita.dialog.small.SmallAddNotificationDialogFragment
 import it.cammino.gestionecomunita.dialog.small.SmallCommunityHistoryDialogFragment
 import it.cammino.gestionecomunita.dialog.small.SmallEditBrotherDialogFragment
 import it.cammino.gestionecomunita.item.ExpandableBrotherItem
@@ -54,6 +55,9 @@ open class CommunityDetailFragment : Fragment() {
     private val viewModel: CommunityDetailViewModel by viewModels()
     private val inputdialogViewModel: EditBrotherDialogFragment.DialogViewModel by viewModels({ requireActivity() })
     private val simpleDialogViewModel: SimpleDialogFragment.DialogViewModel by viewModels({ requireActivity() })
+    private val addNotificationViewMode: AddNotificationDialogFragment.DialogViewModel by viewModels(
+        { requireActivity() })
+
 
     private var _binding: FragmentCommunityDetailBinding? = null
 
@@ -262,6 +266,28 @@ open class CommunityDetailFragment : Fragment() {
             }
         }
 
+        binding.addNotification.setOnClickListener {
+            mMainActivity?.let { mActivity ->
+                val builder = AddNotificationDialogFragment.Builder(
+                    mActivity, ADD_NOTIFICATION
+                )
+                    .idComunitaPrefill(viewModel.listId)
+                if (mActivity.resources.getBoolean(R.bool.large_layout)) {
+                    builder.positiveButton(R.string.save)
+                        .negativeButton(android.R.string.cancel)
+                    LargeAddNotificationDialogFragment.show(
+                        builder,
+                        mActivity.supportFragmentManager
+                    )
+                } else {
+                    SmallAddNotificationDialogFragment.show(
+                        builder,
+                        mActivity.supportFragmentManager
+                    )
+                }
+            }
+        }
+
         binding.cancelChange.setOnClickListener {
             if (viewModel.createMode) {
                 activity?.finishAfterTransition()
@@ -379,12 +405,38 @@ open class CommunityDetailFragment : Fragment() {
                                 mAdapter.remove(viewModel.selectedFratello)
                             }
                             DELETE_COMMUNITY -> {
+                                simpleDialogViewModel.handled = true
                                 lifecycleScope.launch { deleteComunita() }
                             }
                         }
                     }
                     is DialogState.Negative -> {
                         simpleDialogViewModel.handled = true
+                    }
+                }
+            }
+        }
+
+        addNotificationViewMode.state.observe(viewLifecycleOwner) {
+            Log.d(TAG, "simpleDialogViewModel state $it")
+            if (!addNotificationViewMode.handled) {
+                when (it) {
+                    is DialogState.Positive -> {
+                        when (addNotificationViewMode.mTag) {
+                            ADD_NOTIFICATION -> {
+                                addNotificationViewMode.handled = true
+                                lifecycleScope.launch {
+                                    addPromemoria(
+                                        addNotificationViewMode.idComunita,
+                                        addNotificationViewMode.data,
+                                        addNotificationViewMode.descrizioneText
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    is DialogState.Negative -> {
+                        addNotificationViewMode.handled = true
                     }
                 }
             }
@@ -677,6 +729,23 @@ open class CommunityDetailFragment : Fragment() {
         activity?.finishAfterTransition()
     }
 
+    private suspend fun addPromemoria(idComunita: Long, data: Date?, descrizione: String) {
+        withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+            val db = ComunitaDatabase.getInstance(requireContext())
+            val promemoria = Promemoria()
+            promemoria.note = descrizione
+            promemoria.idComunita = idComunita
+            promemoria.data = data
+            db.promemoriaDao().insertPromemoria(promemoria)
+        }
+        Snackbar.make(
+            requireActivity().findViewById(android.R.id.content),
+            getString(R.string.promemoria_aggiunto),
+            Snackbar.LENGTH_SHORT
+        )
+            .show()
+    }
+
     private suspend fun retrieveData() {
         Log.d(TAG, "createMode ${viewModel.createMode}")
         if (!viewModel.createMode) {
@@ -841,6 +910,7 @@ open class CommunityDetailFragment : Fragment() {
         const val CREATE_MODE = "create_mode"
         const val ADD_BROTHER = "add_brother"
         const val EDIT_BROTHER = "edit_brother"
+        const val ADD_NOTIFICATION = "add_notification"
         const val HISTORY = "history"
         const val DELETE_BROTHER = "delete_brother"
         const val DELETE_COMMUNITY = "delete_community"

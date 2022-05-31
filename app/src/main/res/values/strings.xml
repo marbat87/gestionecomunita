@@ -80,4 +80,8 @@
     <string name="passaggio_dots">Passaggio: %1$s</string>
     <string name="data_passaggio_dots">Data: %1$s</string>
     <string name="history">Storia</string>
+    <string name="nuovo_promemoria">Nuovo promemoria</string>
+    <string name="data">Data</string>
+    <string name="descrizione">Descrizione</string>
+    <string name="promemoria_aggiunto">Promemoria aggiunto</string>
 </resources>
