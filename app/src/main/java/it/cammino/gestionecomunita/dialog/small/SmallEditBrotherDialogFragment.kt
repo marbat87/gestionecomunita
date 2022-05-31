@@ -1,4 +1,4 @@
-package it.cammino.gestionecomunita.dialog
+package it.cammino.gestionecomunita.dialog.small
 
 
 import android.app.Dialog
@@ -14,6 +14,9 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.appbar.MaterialToolbar
 import it.cammino.gestionecomunita.R
+import it.cammino.gestionecomunita.dialog.DialogState
+import it.cammino.gestionecomunita.dialog.EditBrotherDialogFragment
+import it.cammino.gestionecomunita.dialog.SimpleDialogFragment
 
 @Suppress("unused")
 class SmallEditBrotherDialogFragment : EditBrotherDialogFragment() {

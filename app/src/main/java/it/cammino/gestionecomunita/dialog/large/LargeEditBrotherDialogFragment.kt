@@ -1,4 +1,4 @@
-package it.cammino.gestionecomunita.dialog
+package it.cammino.gestionecomunita.dialog.large
 
 
 import android.annotation.SuppressLint
@@ -12,6 +12,8 @@ import androidx.fragment.app.FragmentManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import it.cammino.gestionecomunita.R
+import it.cammino.gestionecomunita.dialog.DialogState
+import it.cammino.gestionecomunita.dialog.EditBrotherDialogFragment
 
 @Suppress("unused")
 class LargeEditBrotherDialogFragment : EditBrotherDialogFragment() {

@@ -77,4 +77,7 @@
     <string name="delete_community_dialog">Sei sicuro di voler cancellare la comunità?</string>
     <string name="error">Errore</string>
     <string name="campi_non_compilati">Alcuni campi non sono compilati correttamente</string>
+    <string name="passaggio_dots">Passaggio: %1$s</string>
+    <string name="data_passaggio_dots">Data: %1$s</string>
+    <string name="history">Storia</string>
 </resources>

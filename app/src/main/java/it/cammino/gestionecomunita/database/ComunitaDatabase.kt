@@ -7,14 +7,17 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import it.cammino.gestionecomunita.database.converter.Converters
+import it.cammino.gestionecomunita.database.dao.ComunitaDao
+import it.cammino.gestionecomunita.database.dao.FratelloDao
+import it.cammino.gestionecomunita.database.dao.PassaggioDao
+import it.cammino.gestionecomunita.database.dao.PromemoriaDao
 import it.cammino.gestionecomunita.database.entity.Comunita
 import it.cammino.gestionecomunita.database.entity.Fratello
-import it.cammino.gestionecomunita.database.dao.ComunitaDao
-import it.cammino.gestionecomunita.database.dao.ComunitaFratelloDao
-import it.cammino.gestionecomunita.database.dao.FratelloDao
+import it.cammino.gestionecomunita.database.entity.Passaggio
+import it.cammino.gestionecomunita.database.entity.Promemoria
 
 @Database(
-    entities = [(Comunita::class), (Fratello::class)],
+    entities = [(Comunita::class), (Fratello::class), (Promemoria::class), (Passaggio::class)],
     version = 1
 )
 @TypeConverters(Converters::class)
@@ -22,7 +25,8 @@ abstract class ComunitaDatabase : RoomDatabase() {
 
     abstract fun comunitaDao(): ComunitaDao
     abstract fun fratelloDao(): FratelloDao
-    abstract fun comunitaFratelloDao(): ComunitaFratelloDao
+    abstract fun passaggioDao(): PassaggioDao
+    abstract fun promemoriaDao(): PromemoriaDao
 
     companion object {
 
@@ -52,19 +56,6 @@ abstract class ComunitaDatabase : RoomDatabase() {
                         ComunitaDatabase::class.java,
                         dbName
                     )
-//                        .addCallback(object : Callback() {
-//                            /**
-//                             * Called when the database is created for the first time. This is called after all the
-//                             * tables are created.
-//                             *
-//                             * @param db The database.
-//                             */
-//                            override fun onCreate(db: SupportSQLiteDatabase) {
-//                                super.onCreate(db)
-//                                Log.d(TAG, "Callback onCreate")
-////                                GlobalScope.launch(Dispatchers.IO) { insertDefaultData(sInstance as ComunitaDatabase) }
-//                            }
-//                        })
                         .build()
                 }
             } else

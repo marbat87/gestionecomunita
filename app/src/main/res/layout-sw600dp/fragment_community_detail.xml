@@ -227,6 +227,7 @@
                 android:layout_marginEnd="@dimen/text_field_space"
                 android:enabled="false"
                 android:hint="@string/data_convivenza"
+                app:endIconMode="clear_text"
                 app:errorEnabled="true"
                 app:layout_constraintTop_toBottomOf="@id/tappa_text_field">
 
@@ -246,6 +247,7 @@
                 android:layout_marginEnd="@dimen/text_field_space"
                 android:enabled="false"
                 android:hint="@string/data_ultima_visita"
+                app:endIconMode="clear_text"
                 app:errorEnabled="true"
                 app:layout_constraintTop_toBottomOf="@id/data_convivenza_text_field">
 
@@ -347,7 +349,7 @@
                 android:id="@+id/community_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:constraint_referenced_ids="edit_community, delete_community" />
+                app:constraint_referenced_ids="edit_community, delete_community, history_community" />
 
             <Button
                 android:id="@+id/edit_community"
@@ -370,6 +372,18 @@
                 app:iconSize="24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/edit_community"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <Button
+                android:id="@+id/history_community"
+                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/history_24px"
+                app:iconSize="24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/delete_community"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="SpeakableTextPresentCheck" />
 

@@ -23,8 +23,16 @@ import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.database.ComunitaDatabase
 import it.cammino.gestionecomunita.database.entity.Comunita
 import it.cammino.gestionecomunita.database.entity.Fratello
+import it.cammino.gestionecomunita.database.entity.Passaggio
 import it.cammino.gestionecomunita.databinding.FragmentCommunityDetailBinding
-import it.cammino.gestionecomunita.dialog.*
+import it.cammino.gestionecomunita.dialog.CommunityHistoryDialogFragment
+import it.cammino.gestionecomunita.dialog.DialogState
+import it.cammino.gestionecomunita.dialog.EditBrotherDialogFragment
+import it.cammino.gestionecomunita.dialog.SimpleDialogFragment
+import it.cammino.gestionecomunita.dialog.large.LargeCommunityHistoryDialogFragment
+import it.cammino.gestionecomunita.dialog.large.LargeEditBrotherDialogFragment
+import it.cammino.gestionecomunita.dialog.small.SmallCommunityHistoryDialogFragment
+import it.cammino.gestionecomunita.dialog.small.SmallEditBrotherDialogFragment
 import it.cammino.gestionecomunita.item.ExpandableBrotherItem
 import it.cammino.gestionecomunita.item.expandableBrotherItem
 import it.cammino.gestionecomunita.util.Utility
@@ -233,6 +241,27 @@ open class CommunityDetailFragment : Fragment() {
             }
         }
 
+        binding.historyCommunity.setOnClickListener {
+            mMainActivity?.let { mActivity ->
+                val builder = CommunityHistoryDialogFragment.Builder(
+                    mActivity, HISTORY
+                )
+                builder.idComunita = viewModel.listId
+                if (mActivity.resources.getBoolean(R.bool.large_layout)) {
+                    builder.positiveButton(android.R.string.ok)
+                    LargeCommunityHistoryDialogFragment.show(
+                        builder,
+                        mActivity.supportFragmentManager
+                    )
+                } else {
+                    SmallCommunityHistoryDialogFragment.show(
+                        builder,
+                        mActivity.supportFragmentManager
+                    )
+                }
+            }
+        }
+
         binding.cancelChange.setOnClickListener {
             if (viewModel.createMode) {
                 activity?.finishAfterTransition()
@@ -281,8 +310,7 @@ open class CommunityDetailFragment : Fragment() {
                         updateComunita()
                         retrieveData()
                     }
-            }
-            else {
+            } else {
                 mMainActivity?.let { mActivity ->
                     SimpleDialogFragment.show(
                         SimpleDialogFragment.Builder(
@@ -401,28 +429,31 @@ open class CommunityDetailFragment : Fragment() {
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        binding.lastEditDate.text = getString(
-            R.string.data_ultima_modifica,
-            getTimestampFormatted(viewModel.comunita.dataUltimaModifica)
-        )
-        binding.diocesiTextField.editText?.setText(savedInstanceState?.getCharSequence("diocesiTextField"))
-        binding.numeroTextField.editText?.setText(savedInstanceState?.getCharSequence("numeroTextField"))
-        binding.parrocchiaTextField.editText?.setText(savedInstanceState?.getCharSequence("parrocchiaTextField"))
-        binding.parroccoTextField.editText?.setText(savedInstanceState?.getCharSequence("parroccoTextField"))
-        binding.catechistiTextField.editText?.setText(savedInstanceState?.getCharSequence("catechistiTextField"))
-        binding.emailTextField.editText?.setText(savedInstanceState?.getCharSequence("emailTextField"))
-        binding.responsabileTextField.editText?.setText(savedInstanceState?.getCharSequence("responsabileTextField"))
-        binding.telefonoTextField.editText?.setText(savedInstanceState?.getCharSequence("telefonoTextField"))
-        binding.tappaAutcomplete.setText(savedInstanceState?.getCharSequence("tappaAutcomplete"))
-        binding.dataConvivenzaTextField.editText?.setText(savedInstanceState?.getCharSequence("dataConvivenzaTextField"))
-        binding.dataVisitaTextField.editText?.setText(savedInstanceState?.getCharSequence("dataVisitaTextField"))
-        binding.noteTextField.editText?.setText(savedInstanceState?.getCharSequence("noteTextField"))
-        viewModel.elementi?.forEach {
-            it.deleteClickClickListener = mDeleteClickClickListener
-            it.expandClickClickListener = mExpandClickClickListener
-            it.editClickClickListener = mEditClickClickListener
+        Log.d(TAG, "onViewStateRestored")
+        savedInstanceState?.let { instance ->
+            binding.lastEditDate.text = getString(
+                R.string.data_ultima_modifica,
+                getTimestampFormatted(viewModel.comunita.dataUltimaModifica)
+            )
+            binding.diocesiTextField.editText?.setText(instance.getCharSequence("diocesiTextField"))
+            binding.numeroTextField.editText?.setText(instance.getCharSequence("numeroTextField"))
+            binding.parrocchiaTextField.editText?.setText(instance.getCharSequence("parrocchiaTextField"))
+            binding.parroccoTextField.editText?.setText(instance.getCharSequence("parroccoTextField"))
+            binding.catechistiTextField.editText?.setText(instance.getCharSequence("catechistiTextField"))
+            binding.emailTextField.editText?.setText(instance.getCharSequence("emailTextField"))
+            binding.responsabileTextField.editText?.setText(instance.getCharSequence("responsabileTextField"))
+            binding.telefonoTextField.editText?.setText(instance.getCharSequence("telefonoTextField"))
+            binding.tappaAutcomplete.setText(instance.getCharSequence("tappaAutcomplete"))
+            binding.dataConvivenzaTextField.editText?.setText(instance.getCharSequence("dataConvivenzaTextField"))
+            binding.dataVisitaTextField.editText?.setText(instance.getCharSequence("dataVisitaTextField"))
+            binding.noteTextField.editText?.setText(instance.getCharSequence("noteTextField"))
+            viewModel.elementi?.forEach {
+                it.deleteClickClickListener = mDeleteClickClickListener
+                it.expandClickClickListener = mExpandClickClickListener
+                it.editClickClickListener = mEditClickClickListener
+            }
+            viewModel.elementi?.let { mAdapter.itemAdapter.set(it) }
         }
-        viewModel.elementi?.let { mAdapter.itemAdapter.set(it) }
     }
 
     private fun createBrotherItem(
@@ -587,6 +618,7 @@ open class CommunityDetailFragment : Fragment() {
                 fratelli.add(fratello)
             }
             db.fratelloDao().insertFratelli(fratelli)
+            updateHistory(insertedId)
         }
         activity?.finishAfterTransition()
     }
@@ -594,6 +626,7 @@ open class CommunityDetailFragment : Fragment() {
     private suspend fun updateComunita() {
         withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
             val db = ComunitaDatabase.getInstance(requireContext())
+            updateHistory(viewModel.listId)
             db.comunitaDao()
                 .updateComnuita(viewModel.comunita)
             db.fratelloDao().truncateTableByComunita(viewModel.listId)
@@ -619,9 +652,20 @@ open class CommunityDetailFragment : Fragment() {
                 fratelli.add(fratello)
             }
             db.fratelloDao().insertFratelli(fratelli)
-
         }
         viewModel.editMode.value = false
+    }
+
+    private fun updateHistory(idComunita: Long) {
+        val db = ComunitaDatabase.getInstance(requireContext())
+        val comunitaLatestTappa = db.comunitaDao().getById(idComunita)?.idTappa ?: 0
+        if (viewModel.createMode || viewModel.comunita.idTappa > comunitaLatestTappa) {
+            val passaggio = Passaggio()
+            passaggio.data = viewModel.comunita.dataConvivenza
+            passaggio.idComunita = idComunita
+            passaggio.passaggio = viewModel.comunita.idTappa
+            db.passaggioDao().insertPassaggio(passaggio)
+        }
     }
 
     private suspend fun deleteComunita() {
@@ -634,10 +678,11 @@ open class CommunityDetailFragment : Fragment() {
     }
 
     private suspend fun retrieveData() {
+        Log.d(TAG, "createMode ${viewModel.createMode}")
         if (!viewModel.createMode) {
             withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
                 val comunitaFratello =
-                    ComunitaDatabase.getInstance(requireContext()).comunitaFratelloDao()
+                    ComunitaDatabase.getInstance(requireContext()).fratelloDao()
                         .getComunitaWithFratelli(viewModel.listId)
                 if (comunitaFratello != null)
                     viewModel.comunita = comunitaFratello.comunita
@@ -716,6 +761,11 @@ open class CommunityDetailFragment : Fragment() {
             if (viewModel.elementi == null)
                 viewModel.elementi = ArrayList()
             viewModel.elementi?.let { mAdapter.set(it) }
+            val passaggio = requireContext().resources.getTextArray(R.array.passaggi_entries)[0]
+            binding.tappaAutcomplete.setText(
+                passaggio,
+                false
+            )
         }
     }
 
@@ -791,6 +841,7 @@ open class CommunityDetailFragment : Fragment() {
         const val CREATE_MODE = "create_mode"
         const val ADD_BROTHER = "add_brother"
         const val EDIT_BROTHER = "edit_brother"
+        const val HISTORY = "history"
         const val DELETE_BROTHER = "delete_brother"
         const val DELETE_COMMUNITY = "delete_community"
         const val ERROR_DIALOG = "community_detail_error_dialog"

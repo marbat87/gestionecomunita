@@ -28,7 +28,7 @@ open class Comunita {
 
     var telefono: String = ""
 
-    var idTappa: Int = -1
+    var idTappa: Int = 0
 
     var dataUltimaModifica= Date(System.currentTimeMillis())
 
