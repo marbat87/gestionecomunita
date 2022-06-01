@@ -2,6 +2,7 @@ package it.cammino.gestionecomunita
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.NavHostFragment
@@ -16,11 +17,12 @@ import it.cammino.gestionecomunita.dialog.small.SmallAddNotificationDialogFragme
 import it.cammino.gestionecomunita.ui.ThemeableActivity
 import it.cammino.gestionecomunita.ui.comunita.detail.CommunityDetailFragment
 import it.cammino.gestionecomunita.ui.comunita.detail.CommunityDetailHostActivity
+import java.sql.Date
 
 
 class MainActivity : ThemeableActivity() {
 
-//    private val mViewModel: MainActivityViewModel by viewModels()
+    private val viewModel: MainActivityViewModel by viewModels()
 
     private lateinit var binding: ActivityMainBinding
 
@@ -46,6 +48,8 @@ class MainActivity : ThemeableActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        navView.getOrCreateBadge(R.id.navigation_notifications)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
@@ -100,6 +104,27 @@ class MainActivity : ThemeableActivity() {
             }
         }
 
+        subscribeUiChanges()
+
+    }
+
+    private fun subscribeUiChanges() {
+        viewModel.itemsResult?.observe(this) { promemoria ->
+            val ora = Date(System.currentTimeMillis())
+            val countScadute = promemoria.count { ora >= it.data }
+            val badgeDrawable = binding.navView.getBadge(R.id.navigation_notifications)
+            if (countScadute > 0) {
+                badgeDrawable?.let {
+                    it.isVisible = true
+                    it.number = countScadute
+                }
+            } else {
+                badgeDrawable?.let {
+                    it.isVisible = false
+                    it.clearNumber()
+                }
+            }
+        }
     }
 
 //    fun getFab(): ExtendedFloatingActionButton {

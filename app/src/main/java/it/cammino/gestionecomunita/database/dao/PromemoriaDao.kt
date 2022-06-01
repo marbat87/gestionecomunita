@@ -9,8 +9,11 @@ import it.cammino.gestionecomunita.database.item.PromemoriaComunita
 @Dao
 interface PromemoriaDao {
 
-    @get:Query("SELECT a.*, b.numero, b.parrocchia FROM promemoria a, comunita b WHERE a.idComunita = b.id ORDER BY data DESC")
-    val liveAll: LiveData<List<PromemoriaComunita>>
+    @get:Query("SELECT a.*, b.numero, b.parrocchia FROM promemoria a, comunita b WHERE a.idComunita = b.id ORDER BY data asc")
+    val liveAllWithComunita: LiveData<List<PromemoriaComunita>>
+
+    @get:Query("SELECT * FROM promemoria ORDER BY data asc")
+    val liveAll: LiveData<List<Promemoria>>
 
     @Query("SELECT * FROM promemoria where idPromemoria = :idPromemoria")
     fun getById(idPromemoria: Long): Promemoria?

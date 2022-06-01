@@ -19,7 +19,7 @@ class NotificationsViewModel(application: Application) : AndroidViewModel(applic
 
     init {
         val mDb = ComunitaDatabase.getInstance(getApplication())
-        itemsResult = mDb.promemoriaDao().liveAll
+        itemsResult = mDb.promemoriaDao().liveAllWithComunita
     }
 
 }

@@ -7,17 +7,11 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import it.cammino.gestionecomunita.database.converter.Converters
-import it.cammino.gestionecomunita.database.dao.ComunitaDao
-import it.cammino.gestionecomunita.database.dao.FratelloDao
-import it.cammino.gestionecomunita.database.dao.PassaggioDao
-import it.cammino.gestionecomunita.database.dao.PromemoriaDao
-import it.cammino.gestionecomunita.database.entity.Comunita
-import it.cammino.gestionecomunita.database.entity.Fratello
-import it.cammino.gestionecomunita.database.entity.Passaggio
-import it.cammino.gestionecomunita.database.entity.Promemoria
+import it.cammino.gestionecomunita.database.dao.*
+import it.cammino.gestionecomunita.database.entity.*
 
 @Database(
-    entities = [(Comunita::class), (Fratello::class), (Promemoria::class), (Passaggio::class)],
+    entities = [(Comunita::class), (Fratello::class), (Promemoria::class), (Passaggio::class), (Vocazione::class)],
     version = 1
 )
 @TypeConverters(Converters::class)
@@ -27,6 +21,7 @@ abstract class ComunitaDatabase : RoomDatabase() {
     abstract fun fratelloDao(): FratelloDao
     abstract fun passaggioDao(): PassaggioDao
     abstract fun promemoriaDao(): PromemoriaDao
+    abstract fun vocazioneDao(): VocazioneDao
 
     companion object {
 
