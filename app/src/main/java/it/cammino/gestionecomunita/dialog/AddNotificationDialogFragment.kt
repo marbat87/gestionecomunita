@@ -43,8 +43,9 @@ open class AddNotificationDialogFragment : DialogFragment() {
 
         lifecycleScope.launch { fillComunitaList(mView, mBuilder) }
 
-        mView.findViewById<TextInputEditText>(R.id.comunita_text_field)
-            .setText(mBuilder.mIdComunitaPrefill.toString())
+        if (!mBuilder.mFreeMode)
+            mView.findViewById<TextInputEditText>(R.id.comunita_text_field)
+                .setText(mBuilder.mIdComunitaPrefill.toString())
 
         val inputData =
             mView.findViewById<TextInputLayout>(R.id.data_text_field).editText
@@ -144,6 +145,7 @@ open class AddNotificationDialogFragment : DialogFragment() {
         var mNegativeButton: CharSequence? = null
         var mCanceable = false
         var mIdComunitaPrefill: Long = 0
+        var mFreeMode: Boolean = false
 
         fun idComunitaPrefill(id: Long): Builder {
             mIdComunitaPrefill = id
@@ -160,6 +162,11 @@ open class AddNotificationDialogFragment : DialogFragment() {
             return this
         }
 
+        fun setFreeMode(freeMode: Boolean): Builder {
+            mFreeMode = freeMode
+            return this
+        }
+
         fun setCanceable(canceable: Boolean): Builder {
             mCanceable = canceable
             return this
@@ -173,8 +180,9 @@ open class AddNotificationDialogFragment : DialogFragment() {
         withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
             comunitaList =
                 ComunitaDatabase.getInstance(requireContext()).comunitaDao().allByName
-            comunita = ComunitaDatabase.getInstance(requireContext()).comunitaDao()
-                .getById(mBuilder.mIdComunitaPrefill) ?: Comunita()
+            if (!mBuilder.mFreeMode)
+                comunita = ComunitaDatabase.getInstance(requireContext()).comunitaDao()
+                    .getById(mBuilder.mIdComunitaPrefill) ?: Comunita()
         }
         val comunitaStrings = comunitaList
             .map {
@@ -187,14 +195,16 @@ open class AddNotificationDialogFragment : DialogFragment() {
         val textView = view.findViewById<AutoCompleteTextView>(R.id.comunita_autcomplete)
         textView.setAdapter(adapter)
 
-        textView.setText(
-            resources.getString(
-                R.string.comunita_item_name,
-                comunita.numero,
-                comunita.parrocchia
-            ), false
-        )
-        view.findViewById<TextInputLayout>(R.id.comunita_auto_text).isEnabled = false
+        if (!mBuilder.mFreeMode) {
+            textView.setText(
+                resources.getString(
+                    R.string.comunita_item_name,
+                    comunita.numero,
+                    comunita.parrocchia
+                ), false
+            )
+        }
+        view.findViewById<TextInputLayout>(R.id.comunita_auto_text).isEnabled = mBuilder.mFreeMode
 
         textView
             .setOnItemClickListener { _, _, i, _ ->

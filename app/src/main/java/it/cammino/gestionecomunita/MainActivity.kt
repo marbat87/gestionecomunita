@@ -3,12 +3,20 @@ package it.cammino.gestionecomunita
 import android.content.Intent
 import android.os.Bundle
 import androidx.core.app.ActivityOptionsCompat
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import it.cammino.gestionecomunita.databinding.ActivityMainBinding
+import it.cammino.gestionecomunita.dialog.AddNotificationDialogFragment
+import it.cammino.gestionecomunita.dialog.large.LargeAddNotificationDialogFragment
+import it.cammino.gestionecomunita.dialog.small.SmallAddNotificationDialogFragment
 import it.cammino.gestionecomunita.ui.ThemeableActivity
+import it.cammino.gestionecomunita.ui.comunita.detail.CommunityDetailFragment
 import it.cammino.gestionecomunita.ui.comunita.detail.CommunityDetailHostActivity
+
 
 class MainActivity : ThemeableActivity() {
 
@@ -31,13 +39,31 @@ class MainActivity : ThemeableActivity() {
         val navController = navHostFragment.navController
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-//        val appBarConfiguration = AppBarConfiguration(
-//            setOf(
-//                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
-//            )
-//        )
-//        setupActionBarWithNavController(navController, appBarConfiguration)
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
+            )
+        )
+        setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.navigation_home -> {
+                    binding.extendedFab?.isVisible = true
+                    binding.extendedFabPromemoria?.isVisible = false
+                }
+                R.id.navigation_dashboard -> {
+                    binding.extendedFab?.isVisible = false
+                    binding.extendedFabPromemoria?.isVisible = false
+                }
+                R.id.navigation_notifications -> {
+                    binding.extendedFab?.isVisible = false
+                    binding.extendedFabPromemoria?.isVisible = true
+                }
+                else -> {}
+            }
+        }
 
         binding.extendedFab?.let { fab ->
             fab.setOnClickListener {
@@ -51,27 +77,29 @@ class MainActivity : ThemeableActivity() {
                 startActivity(intent, options.toBundle())
             }
         }
-//        binding.extendedFab?.setOnClickListener {
-////            val fragment = CommunityDetailFragment()
-////            val args = Bundle()
-////            args.putBoolean(CommunityDetailFragment.EDIT_MODE, true)
-////            fragment.arguments = args
-////            supportFragmentManager.commit {
-////                replace(
-////                    R.id.nav_host_fragment_community_detail,
-////                    fragment,
-////                    R.id.navigation_home.toString()
-////                )
-////            }
-//            binding.extendedFab?.transitionName = "shared_element_comunita"
-//            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-//                this,
-//                binding?.extendedFab,
-//                "shared_element_comunita" // The transition name to be matched in Activity B.
-//            )
-//            val intent = Intent(this, CommunityDetailHostActivity::class.java)
-//            startActivity(intent, options.toBundle())
-//        }
+
+        binding.extendedFabPromemoria?.let { fab ->
+            fab.setOnClickListener {
+                val builder = AddNotificationDialogFragment.Builder(
+                    this, CommunityDetailFragment.ADD_NOTIFICATION
+                )
+                    .setFreeMode(true)
+                if (resources.getBoolean(R.bool.large_layout)) {
+                    builder.positiveButton(R.string.save)
+                        .negativeButton(android.R.string.cancel)
+                    LargeAddNotificationDialogFragment.show(
+                        builder,
+                        supportFragmentManager
+                    )
+                } else {
+                    SmallAddNotificationDialogFragment.show(
+                        builder,
+                        supportFragmentManager
+                    )
+                }
+            }
+        }
+
     }
 
 //    fun getFab(): ExtendedFloatingActionButton {

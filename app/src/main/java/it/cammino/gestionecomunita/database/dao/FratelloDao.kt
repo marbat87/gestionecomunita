@@ -2,7 +2,7 @@ package it.cammino.gestionecomunita.database.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import it.cammino.gestionecomunita.database.entity.ComunitaFratello
+import it.cammino.gestionecomunita.database.item.ComunitaFratello
 import it.cammino.gestionecomunita.database.entity.Fratello
 
 @Dao

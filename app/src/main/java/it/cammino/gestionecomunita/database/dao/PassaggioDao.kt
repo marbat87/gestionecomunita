@@ -2,7 +2,7 @@ package it.cammino.gestionecomunita.database.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import it.cammino.gestionecomunita.database.entity.ComunitaPassaggi
+import it.cammino.gestionecomunita.database.item.ComunitaPassaggi
 import it.cammino.gestionecomunita.database.entity.Passaggio
 
 @Dao

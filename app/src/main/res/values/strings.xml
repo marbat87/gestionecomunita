@@ -84,4 +84,6 @@
     <string name="data">Data</string>
     <string name="descrizione">Descrizione</string>
     <string name="promemoria_aggiunto">Promemoria aggiunto</string>
+    <string name="nessun_promemoria">Non hai ancora aggiunto nessun promemoria.</string>
+    <string name="promemoria_rimosso">Promemoria rimosso</string>
 </resources>

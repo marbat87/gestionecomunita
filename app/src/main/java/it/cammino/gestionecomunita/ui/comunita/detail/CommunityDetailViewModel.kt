@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import it.cammino.gestionecomunita.database.entity.Comunita
-import it.cammino.gestionecomunita.database.entity.ComunitaFratello
+import it.cammino.gestionecomunita.database.item.ComunitaFratello
 import it.cammino.gestionecomunita.item.ExpandableBrotherItem
 
 class CommunityDetailViewModel(application: Application) :
