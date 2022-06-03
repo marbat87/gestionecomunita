@@ -1,10 +1,12 @@
 package it.cammino.gestionecomunita.ui.notifications
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -23,6 +25,8 @@ import it.cammino.gestionecomunita.database.entity.Promemoria
 import it.cammino.gestionecomunita.databinding.FragmentNotificationsBinding
 import it.cammino.gestionecomunita.dialog.AddNotificationDialogFragment
 import it.cammino.gestionecomunita.dialog.DialogState
+import it.cammino.gestionecomunita.dialog.large.LargeAddNotificationDialogFragment
+import it.cammino.gestionecomunita.dialog.small.SmallAddNotificationDialogFragment
 import it.cammino.gestionecomunita.item.SwipeableItem
 import it.cammino.gestionecomunita.item.swipeableItem
 import it.cammino.gestionecomunita.ui.comunita.detail.CommunityDetailFragment
@@ -44,10 +48,17 @@ class NotificationsFragment : Fragment(), ItemTouchCallback, SimpleSwipeCallback
     // onDestroyView.
     private val binding get() = _binding!!
 
+    private var mMainActivity: AppCompatActivity? = null
+
     private var mAdapter: FastItemAdapter<SwipeableItem> = FastItemAdapter()
 
     // drag & drop
     private var mTouchHelper: ItemTouchHelper? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mMainActivity = activity as? AppCompatActivity
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -126,6 +137,30 @@ class NotificationsFragment : Fragment(), ItemTouchCallback, SimpleSwipeCallback
                     }
                     is DialogState.Negative -> {
                         addNotificationViewMode.handled = true
+                    }
+                }
+            }
+        }
+
+        binding.extendedFabPromemoria?.let { fab ->
+            mMainActivity?.let { mActivity ->
+                fab.setOnClickListener {
+                    val builder = AddNotificationDialogFragment.Builder(
+                        mActivity, CommunityDetailFragment.ADD_NOTIFICATION
+                    )
+                        .setFreeMode(true)
+                    if (resources.getBoolean(R.bool.large_layout)) {
+                        builder.positiveButton(R.string.save)
+                            .negativeButton(android.R.string.cancel)
+                        LargeAddNotificationDialogFragment.show(
+                            builder,
+                            mActivity.supportFragmentManager
+                        )
+                    } else {
+                        SmallAddNotificationDialogFragment.show(
+                            builder,
+                            mActivity.supportFragmentManager
+                        )
                     }
                 }
             }

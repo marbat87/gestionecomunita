@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.color.MaterialColors
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.util.OSUtils
+import it.cammino.gestionecomunita.util.isDarkMode
 import it.cammino.gestionecomunita.util.setLigthStatusBar
 import it.cammino.gestionecomunita.util.setupNavBarColor
 
@@ -29,8 +30,7 @@ abstract class ThemeableActivity : AppCompatActivity() {
     }
 
     private fun updateStatusBarLightMode(auto: Boolean) {
-//        mViewModel.mLUtils.setLigthStatusBar(if (auto) !ThemeUtils.isDarkMode(this) else false)
-        setLigthStatusBar(auto)
+        setLigthStatusBar(if (auto) !isDarkMode else false)
     }
 
 //    fun setTransparentStatusBar(trasparent: Boolean) {

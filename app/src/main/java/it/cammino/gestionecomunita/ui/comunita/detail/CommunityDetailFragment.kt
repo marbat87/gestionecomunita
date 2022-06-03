@@ -11,6 +11,8 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -102,9 +104,33 @@ open class CommunityDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.appBar?.setNavigationOnClickListener {
+        val isTablet = resources.getBoolean(R.bool.tablet_layout)
+
+        if (isTablet && !viewModel.createMode)
+            binding.appBar.isVisible = false
+
+        if (isTablet && viewModel.createMode)
+            binding.materialTabs.setBackgroundColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    android.R.color.transparent
+                )
+            )
+
+        binding.appBar.setNavigationOnClickListener {
             activity?.finishAfterTransition()
         }
+
+        binding.appBar.navigationIcon = AppCompatResources.getDrawable(
+            requireContext(),
+            if (viewModel.createMode) R.drawable.close_24px else R.drawable.arrow_back_24px
+        )
+
+        binding.appBar.title =
+            getString(if (viewModel.createMode) R.string.nuova_comunita else R.string.comunita)
+
+        binding.salvaComunita.isVisible = viewModel.createMode
+        binding.bottomAppBar.isVisible = !viewModel.createMode
 
         if (savedInstanceState == null)
             lifecycleScope.launch { retrieveData() }
@@ -298,59 +324,11 @@ open class CommunityDetailFragment : Fragment() {
         }
 
         binding.confirmChanges.setOnClickListener {
-            if (validateForm()) {
-                viewModel.comunita.diocesi =
-                    binding.diocesiTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
-                viewModel.comunita.numero =
-                    binding.numeroTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
-                viewModel.comunita.parrocchia =
-                    binding.parrocchiaTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
-                viewModel.comunita.parroco =
-                    binding.parroccoTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
-                viewModel.comunita.catechisti =
-                    binding.catechistiTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
-                viewModel.comunita.email =
-                    binding.emailTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
-                viewModel.comunita.responsabile =
-                    binding.responsabileTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
-                viewModel.comunita.telefono =
-                    binding.telefonoTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
-                viewModel.comunita.dataConvivenza = Utility.getDateFromString(
-                    requireContext(),
-                    binding.dataConvivenzaTextField.editText?.text?.toString()?.trim()
-                        ?: EMPTY_STRING
-                )
-                viewModel.comunita.dataUltimaVisita = Utility.getDateFromString(
-                    requireContext(),
-                    binding.dataVisitaTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
-                )
-                viewModel.comunita.note =
-                    binding.noteTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
-                viewModel.comunita.dataUltimaModifica =
-                    Date(Calendar.getInstance().time.time)
+            confirmChanges()
+        }
 
-                if (viewModel.createMode)
-                    lifecycleScope.launch { saveComunita() }
-                else
-                    lifecycleScope.launch {
-                        updateComunita()
-                        retrieveData()
-                    }
-            } else {
-                mMainActivity?.let { mActivity ->
-                    SimpleDialogFragment.show(
-                        SimpleDialogFragment.Builder(
-                            mActivity,
-                            ERROR_DIALOG
-                        )
-                            .title(R.string.error)
-                            .icon(R.drawable.error_24px)
-                            .content(R.string.campi_non_compilati)
-                            .positiveButton(android.R.string.ok),
-                        mActivity.supportFragmentManager
-                    )
-                }
-            }
+        binding.salvaComunita.setOnClickListener {
+            confirmChanges()
         }
 
         inputdialogViewModel.state.observe(viewLifecycleOwner) {
@@ -483,10 +461,14 @@ open class CommunityDetailFragment : Fragment() {
         super.onViewStateRestored(savedInstanceState)
         Log.d(TAG, "onViewStateRestored")
         savedInstanceState?.let { instance ->
-            binding.lastEditDate.text = getString(
-                R.string.data_ultima_modifica,
-                getTimestampFormatted(viewModel.comunita.dataUltimaModifica)
-            )
+            if (viewModel.createMode)
+                binding.lastEditDate.isVisible = false
+            else {
+                binding.lastEditDate.text = getString(
+                    R.string.data_ultima_modifica,
+                    getTimestampFormatted(viewModel.comunita.dataUltimaModifica)
+                )
+            }
             binding.diocesiTextField.editText?.setText(instance.getCharSequence("diocesiTextField"))
             binding.numeroTextField.editText?.setText(instance.getCharSequence("numeroTextField"))
             binding.parrocchiaTextField.editText?.setText(instance.getCharSequence("parrocchiaTextField"))
@@ -505,6 +487,62 @@ open class CommunityDetailFragment : Fragment() {
                 it.editClickClickListener = mEditClickClickListener
             }
             viewModel.elementi?.let { mAdapter.itemAdapter.set(it) }
+        }
+    }
+
+    private fun confirmChanges() {
+        if (validateForm()) {
+            viewModel.comunita.diocesi =
+                binding.diocesiTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
+            viewModel.comunita.numero =
+                binding.numeroTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
+            viewModel.comunita.parrocchia =
+                binding.parrocchiaTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
+            viewModel.comunita.parroco =
+                binding.parroccoTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
+            viewModel.comunita.catechisti =
+                binding.catechistiTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
+            viewModel.comunita.email =
+                binding.emailTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
+            viewModel.comunita.responsabile =
+                binding.responsabileTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
+            viewModel.comunita.telefono =
+                binding.telefonoTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
+            viewModel.comunita.dataConvivenza = Utility.getDateFromString(
+                requireContext(),
+                binding.dataConvivenzaTextField.editText?.text?.toString()?.trim()
+                    ?: EMPTY_STRING
+            )
+            viewModel.comunita.dataUltimaVisita = Utility.getDateFromString(
+                requireContext(),
+                binding.dataVisitaTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
+            )
+            viewModel.comunita.note =
+                binding.noteTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
+            viewModel.comunita.dataUltimaModifica =
+                Date(Calendar.getInstance().time.time)
+
+            if (viewModel.createMode)
+                lifecycleScope.launch { saveComunita() }
+            else
+                lifecycleScope.launch {
+                    updateComunita()
+                    retrieveData()
+                }
+        } else {
+            mMainActivity?.let { mActivity ->
+                SimpleDialogFragment.show(
+                    SimpleDialogFragment.Builder(
+                        mActivity,
+                        ERROR_DIALOG
+                    )
+                        .title(R.string.error)
+                        .icon(R.drawable.error_24px)
+                        .content(R.string.campi_non_compilati)
+                        .positiveButton(android.R.string.ok),
+                    mActivity.supportFragmentManager
+                )
+            }
         }
     }
 
@@ -726,7 +764,15 @@ open class CommunityDetailFragment : Fragment() {
             db.fratelloDao().truncateTableByComunita(viewModel.listId)
             db.comunitaDao().deleteComunita(Comunita().apply { id = viewModel.listId })
         }
-        activity?.finishAfterTransition()
+
+        if (resources.getBoolean(R.bool.tablet_layout)) {
+            val fragment =
+                mMainActivity?.supportFragmentManager?.findFragmentByTag(R.id.community_detail_fragment.toString())
+            fragment?.let {
+                mMainActivity?.supportFragmentManager?.beginTransaction()?.remove(it)?.commit()
+            }
+        } else
+            activity?.finishAfterTransition()
     }
 
     private suspend fun addPromemoria(idComunita: Long, data: Date?, descrizione: String) {
@@ -830,6 +876,7 @@ open class CommunityDetailFragment : Fragment() {
             if (viewModel.elementi == null)
                 viewModel.elementi = ArrayList()
             viewModel.elementi?.let { mAdapter.set(it) }
+            binding.lastEditDate.isVisible = false
             val passaggio = requireContext().resources.getTextArray(R.array.passaggi_entries)[0]
             binding.tappaAutcomplete.setText(
                 passaggio,

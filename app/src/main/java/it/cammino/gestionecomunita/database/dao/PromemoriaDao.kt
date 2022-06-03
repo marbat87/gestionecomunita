@@ -2,14 +2,14 @@ package it.cammino.gestionecomunita.database.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import it.cammino.gestionecomunita.database.item.ComunitaPromemoria
 import it.cammino.gestionecomunita.database.entity.Promemoria
+import it.cammino.gestionecomunita.database.item.ComunitaPromemoria
 import it.cammino.gestionecomunita.database.item.PromemoriaComunita
 
 @Dao
 interface PromemoriaDao {
 
-    @get:Query("SELECT a.*, b.numero, b.parrocchia FROM promemoria a, comunita b WHERE a.idComunita = b.id ORDER BY data asc")
+    @get:Query("SELECT a.*, b.numero, b.parrocchia FROM promemoria a, comunita b WHERE a.idComunita = b.id ORDER BY case when data is null then 1 else 0 end, data")
     val liveAllWithComunita: LiveData<List<PromemoriaComunita>>
 
     @get:Query("SELECT * FROM promemoria ORDER BY data asc")

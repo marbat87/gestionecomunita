@@ -175,6 +175,7 @@ open class AddNotificationDialogFragment : DialogFragment() {
     }
 
     private suspend fun fillComunitaList(view: View, mBuilder: Builder) {
+        viewModel.dataFilled.value = false
         lateinit var comunitaList: List<Comunita>
         lateinit var comunita: Comunita
         withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
@@ -211,6 +212,7 @@ open class AddNotificationDialogFragment : DialogFragment() {
                 view.findViewById<TextInputEditText>(R.id.comunita_text_field)
                     .setText(comunitaList[i].id.toString())
             }
+        viewModel.dataFilled.value = true
     }
 
     class DialogViewModel : ViewModel() {
@@ -222,6 +224,7 @@ open class AddNotificationDialogFragment : DialogFragment() {
 
         var handled = true
         val state = MutableLiveData<DialogState<AddNotificationDialogFragment>>()
+        val dataFilled = MutableLiveData<Boolean>()
     }
 
 }

@@ -38,8 +38,7 @@ val Resources.systemLocale: Locale
 fun Activity.setupNavBarColor() {
     if (OSUtils.hasO()) {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-//            if (!ThemeUtils.isDarkMode(context)) setLightNavigationBar(context)
-        setLightNavigationBar()
+        if (!isDarkMode) setLightNavigationBar()
         window.navigationBarColor = SurfaceColors.SURFACE_2.getColor(this)
     }
 }
@@ -101,3 +100,8 @@ fun CharSequence.capitalize(res: Resources): String {
         ) else it.toString()
     }
 }
+
+val Context.isDarkMode: Boolean
+    get() {
+        return (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+    }

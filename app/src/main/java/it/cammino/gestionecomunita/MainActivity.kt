@@ -111,7 +111,7 @@ class MainActivity : ThemeableActivity() {
     private fun subscribeUiChanges() {
         viewModel.itemsResult?.observe(this) { promemoria ->
             val ora = Date(System.currentTimeMillis())
-            val countScadute = promemoria.count { ora >= it.data }
+            val countScadute = promemoria.count { it.data != null && ora >= it.data }
             val badgeDrawable = binding.navView.getBadge(R.id.navigation_notifications)
             if (countScadute > 0) {
                 badgeDrawable?.let {

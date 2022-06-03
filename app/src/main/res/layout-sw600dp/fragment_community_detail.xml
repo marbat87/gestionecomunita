@@ -5,17 +5,37 @@
     android:id="@+id/community_detail_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".ui.comunita.detail.CommunityDetailHostActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
-        app:statusBarForeground="?colorSurface">
+        android:fitsSystemWindows="true">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/app_bar"
+            style="@style/Widget.Material3.Toolbar.OnSurface"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@drawable/arrow_back_24px"
+            app:title="@string/comunita">
+
+            <Button
+                android:id="@+id/salva_comunita"
+                style="@style/Widget.Material3.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/container_horizontal_margin"
+                android:text="@string/save" />
+
+        </com.google.android.material.appbar.MaterialToolbar>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/material_tabs"
+            style="@style/Widget.Material3.TabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -48,7 +68,7 @@
                 android:id="@+id/last_edit_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/text_field_space"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:paddingStart="@dimen/container_horizontal_margin"
                 android:paddingEnd="@dimen/container_horizontal_margin"
                 android:textAppearance="?textAppearanceBodyMedium"
@@ -58,9 +78,9 @@
                 android:id="@+id/diocesi_text_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/text_field_space"
-                android:layout_marginTop="@dimen/text_field_space"
-                android:layout_marginEnd="@dimen/text_field_space"
+                android:layout_marginStart="@dimen/container_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginEnd="@dimen/container_horizontal_margin"
                 android:enabled="false"
                 android:hint="@string/diocesi"
                 app:layout_constraintTop_toBottomOf="@id/last_edit_date">
@@ -75,9 +95,9 @@
                 android:id="@+id/numero_text_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/text_field_space"
+                android:layout_marginStart="@dimen/container_horizontal_margin"
                 android:layout_marginTop="@dimen/text_field_space_no_error"
-                android:layout_marginEnd="@dimen/text_field_space"
+                android:layout_marginEnd="@dimen/container_horizontal_margin"
                 android:enabled="false"
                 android:hint="@string/comunita"
                 app:errorEnabled="true"
@@ -93,9 +113,9 @@
                 android:id="@+id/parrocchia_text_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/text_field_space"
+                android:layout_marginStart="@dimen/container_horizontal_margin"
                 android:layout_marginTop="@dimen/text_field_space"
-                android:layout_marginEnd="@dimen/text_field_space"
+                android:layout_marginEnd="@dimen/container_horizontal_margin"
                 android:enabled="false"
                 android:hint="@string/parrocchia"
                 app:errorEnabled="true"
@@ -111,12 +131,11 @@
                 android:id="@+id/parrocco_text_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/text_field_space"
+                android:layout_marginStart="@dimen/container_horizontal_margin"
                 android:layout_marginTop="@dimen/text_field_space"
-                android:layout_marginEnd="@dimen/text_field_space"
+                android:layout_marginEnd="@dimen/container_horizontal_margin"
                 android:enabled="false"
                 android:hint="@string/parroco"
-                app:errorEnabled="true"
                 app:layout_constraintTop_toBottomOf="@id/parrocchia_text_field">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -129,9 +148,9 @@
                 android:id="@+id/email_text_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/text_field_space"
-                android:layout_marginTop="@dimen/text_field_space"
-                android:layout_marginEnd="@dimen/text_field_space"
+                android:layout_marginStart="@dimen/container_horizontal_margin"
+                android:layout_marginTop="@dimen/text_field_space_no_error"
+                android:layout_marginEnd="@dimen/container_horizontal_margin"
                 android:enabled="false"
                 android:hint="@string/e_mail"
                 app:errorEnabled="true"
@@ -148,9 +167,9 @@
                 android:id="@+id/responsabile_text_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/text_field_space"
+                android:layout_marginStart="@dimen/container_horizontal_margin"
                 android:layout_marginTop="@dimen/text_field_space"
-                android:layout_marginEnd="@dimen/text_field_space"
+                android:layout_marginEnd="@dimen/container_horizontal_margin"
                 android:enabled="false"
                 android:hint="@string/responsabile"
                 app:layout_constraintTop_toBottomOf="@id/email_text_field">
@@ -165,9 +184,9 @@
                 android:id="@+id/telefono_text_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/text_field_space"
+                android:layout_marginStart="@dimen/container_horizontal_margin"
                 android:layout_marginTop="@dimen/text_field_space_no_error"
-                android:layout_marginEnd="@dimen/text_field_space"
+                android:layout_marginEnd="@dimen/container_horizontal_margin"
                 android:enabled="false"
                 android:hint="@string/telefono"
                 app:layout_constraintTop_toBottomOf="@id/responsabile_text_field">
@@ -183,9 +202,9 @@
                 android:id="@+id/catechisti_text_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/text_field_space"
+                android:layout_marginStart="@dimen/container_horizontal_margin"
                 android:layout_marginTop="@dimen/text_field_space_no_error"
-                android:layout_marginEnd="@dimen/text_field_space"
+                android:layout_marginEnd="@dimen/container_horizontal_margin"
                 android:enabled="false"
                 android:hint="@string/catechisti"
                 app:layout_constraintTop_toBottomOf="@id/telefono_text_field">
@@ -201,11 +220,12 @@
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/text_field_space"
+                android:layout_marginStart="@dimen/container_horizontal_margin"
                 android:layout_marginTop="@dimen/text_field_space_no_error"
-                android:layout_marginEnd="@dimen/text_field_space"
+                android:layout_marginEnd="@dimen/container_horizontal_margin"
                 android:enabled="false"
                 android:hint="@string/tappa"
+                app:errorEnabled="true"
                 app:layout_constraintTop_toBottomOf="@id/catechisti_text_field">
 
                 <AutoCompleteTextView
@@ -222,9 +242,9 @@
                 android:id="@+id/data_convivenza_text_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/text_field_space"
-                android:layout_marginTop="@dimen/text_field_space_no_error"
-                android:layout_marginEnd="@dimen/text_field_space"
+                android:layout_marginStart="@dimen/container_horizontal_margin"
+                android:layout_marginTop="@dimen/text_field_space"
+                android:layout_marginEnd="@dimen/container_horizontal_margin"
                 android:enabled="false"
                 android:hint="@string/data_convivenza"
                 app:endIconMode="clear_text"
@@ -242,9 +262,9 @@
                 android:id="@+id/data_visita_text_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/text_field_space"
+                android:layout_marginStart="@dimen/container_horizontal_margin"
                 android:layout_marginTop="@dimen/text_field_space"
-                android:layout_marginEnd="@dimen/text_field_space"
+                android:layout_marginEnd="@dimen/container_horizontal_margin"
                 android:enabled="false"
                 android:hint="@string/data_ultima_visita"
                 app:endIconMode="clear_text"
@@ -262,12 +282,13 @@
                 android:id="@+id/note_text_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/text_field_space"
+                android:layout_marginStart="@dimen/container_horizontal_margin"
                 android:layout_marginTop="@dimen/text_field_space"
-                android:layout_marginEnd="@dimen/text_field_space"
+                android:layout_marginEnd="@dimen/container_horizontal_margin"
                 android:layout_marginBottom="@dimen/text_field_space"
                 android:enabled="false"
                 android:hint="@string/note"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/data_visita_text_field">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -337,6 +358,7 @@
                 style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:visibility="gone"
                 app:icon="@drawable/save_24px"
                 app:iconSize="24dp"

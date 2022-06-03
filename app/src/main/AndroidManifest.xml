@@ -4,6 +4,7 @@
     package="it.cammino.gestionecomunita">
 
     <application
+        android:name="it.cammino.gestionecomunita.GestioneComunitaApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"

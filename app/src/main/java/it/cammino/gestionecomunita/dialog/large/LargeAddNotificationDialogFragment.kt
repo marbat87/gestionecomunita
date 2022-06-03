@@ -67,9 +67,11 @@ class LargeAddNotificationDialogFragment : AddNotificationDialogFragment() {
 
         val alertDialog = dialog.create()
 
-        mView.findViewById<TextInputLayout>(R.id.comunita_text_field).editText?.doOnTextChanged { _, _, _, _ ->
-            alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).isEnabled = validateForm(mView)
-        }
+        if (mBuilder.mFreeMode)
+            mView.findViewById<TextInputLayout>(R.id.comunita_auto_text).editText?.doOnTextChanged { _, _, _, _ ->
+                alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).isEnabled =
+                    validateForm(mView)
+            }
 
         mView.findViewById<TextInputLayout>(R.id.data_text_field).editText?.doOnTextChanged { _, _, _, _ ->
             alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).isEnabled = validateForm(mView)

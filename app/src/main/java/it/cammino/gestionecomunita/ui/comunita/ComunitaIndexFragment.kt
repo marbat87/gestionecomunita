@@ -92,7 +92,7 @@ class ComunitaIndexFragment : Fragment() {
                         replace(
                             R.id.detail_fragment,
                             fragment,
-                            R.id.navigation_home.toString()
+                            R.id.community_detail_fragment.toString()
                         )
                     }
                 } else {

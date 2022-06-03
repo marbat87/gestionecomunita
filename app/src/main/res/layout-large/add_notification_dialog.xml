@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:colorBackground"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -20,9 +18,9 @@
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/text_field_space"
-                android:layout_marginTop="@dimen/text_field_space"
-                android:layout_marginEnd="@dimen/text_field_space"
+                android:layout_marginStart="@dimen/container_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginEnd="@dimen/container_horizontal_margin"
                 android:hint="@string/comunita"
                 app:errorEnabled="true"
                 app:layout_constraintTop_toTopOf="parent">
@@ -47,9 +45,9 @@
                 android:id="@+id/data_text_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/text_field_space"
+                android:layout_marginStart="@dimen/container_horizontal_margin"
                 android:layout_marginTop="@dimen/text_field_space"
-                android:layout_marginEnd="@dimen/text_field_space"
+                android:layout_marginEnd="@dimen/container_horizontal_margin"
                 android:hint="@string/data"
                 app:endIconMode="clear_text"
                 app:errorEnabled="true"
@@ -66,9 +64,9 @@
                 android:id="@+id/note_text_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/text_field_space"
+                android:layout_marginStart="@dimen/container_horizontal_margin"
                 android:layout_marginTop="@dimen/text_field_space"
-                android:layout_marginEnd="@dimen/text_field_space"
+                android:layout_marginEnd="@dimen/container_horizontal_margin"
                 android:layout_marginBottom="@dimen/text_field_space"
                 android:hint="@string/descrizione"
                 app:errorEnabled="true"
@@ -87,4 +85,4 @@
 
     </androidx.core.widget.NestedScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
