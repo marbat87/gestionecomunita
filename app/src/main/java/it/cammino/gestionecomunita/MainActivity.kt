@@ -11,6 +11,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.color.DynamicColors
 import it.cammino.gestionecomunita.databinding.ActivityMainBinding
 import it.cammino.gestionecomunita.dialog.AddNotificationDialogFragment
 import it.cammino.gestionecomunita.dialog.large.LargeAddNotificationDialogFragment
@@ -29,6 +30,7 @@ class MainActivity : ThemeableActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
+        DynamicColors.applyToActivityIfAvailable(this)
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
