@@ -2,17 +2,21 @@ package it.cammino.gestionecomunita.database
 
 import android.content.Context
 import android.util.Log
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
+import androidx.room.*
 import it.cammino.gestionecomunita.database.converter.Converters
 import it.cammino.gestionecomunita.database.dao.*
 import it.cammino.gestionecomunita.database.entity.*
 
 @Database(
-    entities = [(Comunita::class), (Fratello::class), (Promemoria::class), (Passaggio::class), (Vocazione::class)],
-    version = 1
+    entities = [(Comunita::class), (Fratello::class), (Promemoria::class), (Passaggio::class), (Vocazione::class), (Incontro::class)],
+    version = 2,
+    autoMigrations = [
+        AutoMigration(
+            from = 1,
+            to = 2
+        )
+    ],
+    exportSchema = true
 )
 @TypeConverters(Converters::class)
 abstract class ComunitaDatabase : RoomDatabase() {
@@ -22,6 +26,7 @@ abstract class ComunitaDatabase : RoomDatabase() {
     abstract fun passaggioDao(): PassaggioDao
     abstract fun promemoriaDao(): PromemoriaDao
     abstract fun vocazioneDao(): VocazioneDao
+    abstract fun incontroDao(): IncontroDao
 
     companion object {
 
