@@ -2,7 +2,6 @@ package it.cammino.gestionecomunita.ui.comunita
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +9,7 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.databinding.TabsLayoutBinding
@@ -21,20 +18,10 @@ import it.cammino.gestionecomunita.ui.comunita.detail.CommunityDetailHostActivit
 import it.cammino.gestionecomunita.ui.comunita.list.CommunityListFragment
 import it.cammino.gestionecomunita.ui.comunita.list.CommunityListViewModel
 import it.cammino.gestionecomunita.ui.comunita.list.CommunitySectionedListFragment
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class ComunitaIndexFragment : Fragment() {
 
     private val viewModel: ComunitaIndexViewModel by viewModels()
-
-    private val mPageChange: ViewPager2.OnPageChangeCallback =
-        object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                Log.d(TAG, "onPageSelected: $position")
-                viewModel.pageViewed = position
-            }
-        }
 
     private var _binding: TabsLayoutBinding? = null
 
@@ -52,17 +39,12 @@ class ComunitaIndexFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        binding.viewPager.unregisterOnPageChangeCallback(mPageChange)
         _binding = null
         super.onDestroyView()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-//        mMainActivity?.setTabVisible(true)
-//        mMainActivity?.enableFab(false)
-//        mMainActivity?.enableBottombar(false)
 
         binding.extendedFab?.let { fab ->
             fab.setOnClickListener {
@@ -119,12 +101,6 @@ class ComunitaIndexFragment : Fragment() {
                 }
             )
         }.attach()
-        binding.viewPager.registerOnPageChangeCallback(mPageChange)
-
-        lifecycleScope.launch {
-            delay(500)
-            binding.viewPager.currentItem = viewModel.pageViewed
-        }
 
     }
 
