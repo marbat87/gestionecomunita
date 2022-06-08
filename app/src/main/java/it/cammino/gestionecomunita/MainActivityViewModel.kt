@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import it.cammino.gestionecomunita.database.ComunitaDatabase
-import it.cammino.gestionecomunita.database.entity.Comunita
 import it.cammino.gestionecomunita.database.entity.Promemoria
 
 class MainActivityViewModel(application: Application) : AndroidViewModel(application) {

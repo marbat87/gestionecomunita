@@ -1,7 +1,5 @@
 package it.cammino.gestionecomunita.ui.comunita.detail
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import it.cammino.gestionecomunita.database.entity.Comunita

@@ -3,10 +3,7 @@ package it.cammino.gestionecomunita.ui.notifications
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import it.cammino.gestionecomunita.database.ComunitaDatabase
-import it.cammino.gestionecomunita.database.entity.Comunita
 import it.cammino.gestionecomunita.database.entity.Promemoria
 import it.cammino.gestionecomunita.database.item.PromemoriaComunita
 

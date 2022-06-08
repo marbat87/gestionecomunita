@@ -20,8 +20,6 @@ class SwipeableItem : AbstractBindingItem<SwipeableItemBinding>(), ISwipeable {
 
     var id: Long = 0
 
-    var swipedDirection: Int = 0
-
     override val type: Int
         get() = R.id.fastadapter_swipable_item_id
 

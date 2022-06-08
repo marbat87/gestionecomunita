@@ -16,9 +16,6 @@ interface ComunitaDao {
     @Query("SELECT * FROM comunita where id = :idComunita")
     fun getById(idComunita: Long): Comunita?
 
-    @Query("SELECT * FROM comunita where id = :idComunita")
-    fun liveById(idComunita: Long): LiveData<Comunita>
-
     @Insert
     fun insertComunita(comunita: Comunita): Long
 

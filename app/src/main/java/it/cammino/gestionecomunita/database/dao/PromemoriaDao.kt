@@ -1,9 +1,11 @@
 package it.cammino.gestionecomunita.database.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.Query
 import it.cammino.gestionecomunita.database.entity.Promemoria
-import it.cammino.gestionecomunita.database.item.ComunitaPromemoria
 import it.cammino.gestionecomunita.database.item.PromemoriaComunita
 
 @Dao
@@ -18,27 +20,10 @@ interface PromemoriaDao {
     @Query("SELECT * FROM promemoria where idPromemoria = :idPromemoria")
     fun getById(idPromemoria: Long): Promemoria?
 
-    @Query("DELETE FROM promemoria where idComunita = :idComunita")
-    fun truncateTableByComunita(idComunita: Long)
-
     @Delete
     fun deletePromemoria(promemoria: Promemoria)
 
     @Insert
     fun insertPromemoria(promemoria: Promemoria)
-
-    @Insert
-    fun insertPromemoria(promemoria: List<Promemoria>)
-
-    @Update
-    fun updatePromemoria(promemoria: Promemoria)
-
-    @Transaction
-    @Query("SELECT * FROM comunita where id = :idComunita")
-    fun getComunitaWithPromemoria(idComunita: Long): ComunitaPromemoria?
-
-    @Transaction
-    @Query("SELECT * FROM comunita where id = :idComunita")
-    fun liveComunitaWithPromemoria(idComunita: Long): LiveData<ComunitaPromemoria>?
 
 }

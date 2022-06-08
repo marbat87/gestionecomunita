@@ -27,8 +27,7 @@ class CommunityListItem : AbstractBindingItem<CommunityRowItemBinding>() {
             parrocchia = StringHolder(value)
         }
 
-    var responsabile: StringHolder? = null
-        private set
+    private var responsabile: StringHolder? = null
     var setResponsabile: String? = null
         set(value) {
             responsabile = StringHolder(value)
@@ -111,7 +110,6 @@ class CommunityListItem : AbstractBindingItem<CommunityRowItemBinding>() {
     }
 
     companion object {
-        //        private val TAG = CommunityListItem::class.java.canonicalName
         private const val ND = "N.D."
     }
 
