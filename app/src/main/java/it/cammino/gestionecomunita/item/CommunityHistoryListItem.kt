@@ -44,7 +44,7 @@ class CommunityHistoryListItem : AbstractBindingItem<HistoryRowItemBinding>() {
         } ?: run {
             binding.textDataPassaggio.text = ctx.getString(
                 R.string.data_passaggio_dots,
-                ND
+                Utility.ND
             )
         }
 
@@ -53,11 +53,6 @@ class CommunityHistoryListItem : AbstractBindingItem<HistoryRowItemBinding>() {
     override fun unbindView(binding: HistoryRowItemBinding) {
         binding.textNomePassaggio.text = null
         binding.textDataPassaggio.text = null
-    }
-
-    companion object {
-        //        private val TAG = CommunityListItem::class.java.canonicalName
-        private const val ND = "N.D."
     }
 
 }

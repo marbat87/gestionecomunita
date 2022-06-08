@@ -7,13 +7,18 @@
         android:title="@string/title_comunita" />
 
     <item
-        android:id="@+id/navigation_dashboard"
-        android:icon="@drawable/church_24px"
-        android:title="@string/title_centro_voc" />
+        android:id="@+id/navigation_incontri"
+        android:icon="@drawable/group_24px"
+        android:title="@string/title_incontri" />
 
     <item
         android:id="@+id/navigation_notifications"
         android:icon="@drawable/notifications_24px"
         android:title="@string/title_promemoria" />
+
+    <item
+        android:id="@+id/navigation_dashboard"
+        android:icon="@drawable/church_24px"
+        android:title="@string/title_centro_voc" />
 
 </menu>

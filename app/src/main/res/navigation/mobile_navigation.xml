@@ -12,14 +12,21 @@
         tools:layout="@layout/tabs_layout" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="it.cammino.gestionecomunita.ui.dashboard.DashboardFragment"
-        android:label="@string/title_centro_voc"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_incontri"
+        android:name="it.cammino.gestionecomunita.ui.incontri.IncontriFragment"
+        android:label="@string/title_incontri"
+        tools:layout="@layout/fragment_meetings" />
 
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="it.cammino.gestionecomunita.ui.notifications.NotificationsFragment"
         android:label="@string/title_promemoria"
         tools:layout="@layout/fragment_notifications" />
+
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="it.cammino.gestionecomunita.ui.dashboard.DashboardFragment"
+        android:label="@string/title_centro_voc"
+        tools:layout="@layout/fragment_dashboard" />
+
 </navigation>

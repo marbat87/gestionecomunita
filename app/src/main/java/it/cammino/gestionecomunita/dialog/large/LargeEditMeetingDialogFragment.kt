@@ -11,11 +11,11 @@ import androidx.fragment.app.FragmentManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import it.cammino.gestionecomunita.R
-import it.cammino.gestionecomunita.dialog.AddNotificationDialogFragment
 import it.cammino.gestionecomunita.dialog.DialogState
+import it.cammino.gestionecomunita.dialog.EditMeetingDialogFragment
 
 @Suppress("unused")
-class LargeAddNotificationDialogFragment : AddNotificationDialogFragment() {
+class LargeEditMeetingDialogFragment : EditMeetingDialogFragment() {
 
     private val builder: Builder?
         get() = if (arguments?.containsKey(BUILDER_TAG) != true) null else arguments?.getSerializable(
@@ -24,14 +24,14 @@ class LargeAddNotificationDialogFragment : AddNotificationDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val mBuilder = builder
-            ?: throw IllegalStateException("SimpleDialogFragment should be created using its Builder interface.")
+            ?: throw IllegalStateException("LargeEditMeetingDialogFragment should be created using its Builder interface.")
 
         val mView = prefill(mBuilder, null)
 
         val dialog = MaterialAlertDialogBuilder(requireContext())
         dialog.setView(mView)
 
-        dialog.setTitle(R.string.nuovo_promemoria)
+        dialog.setTitle(getString(if (mBuilder.mEditMode) R.string.modifica_incontro else R.string.nuovo_incontro))
 
         mBuilder.mPositiveButton?.let { it ->
             dialog.setPositiveButton(it) { _, _ ->
@@ -65,17 +65,11 @@ class LargeAddNotificationDialogFragment : AddNotificationDialogFragment() {
 
         val alertDialog = dialog.create()
 
-        if (mBuilder.mFreeMode)
-            mView.findViewById<TextInputLayout>(R.id.comunita_auto_text).editText?.doOnTextChanged { _, _, _, _ ->
-                alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).isEnabled =
-                    validateForm(mView)
-            }
-
-        mView.findViewById<TextInputLayout>(R.id.data_text_field).editText?.doOnTextChanged { _, _, _, _ ->
+        mView.findViewById<TextInputLayout>(R.id.nome_text_field).editText?.doOnTextChanged { _, _, _, _ ->
             alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).isEnabled = validateForm(mView)
         }
 
-        mView.findViewById<TextInputLayout>(R.id.note_text_field).editText?.doOnTextChanged { _, _, _, _ ->
+        mView.findViewById<TextInputLayout>(R.id.data_incontro_text_field).editText?.doOnTextChanged { _, _, _, _ ->
             alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).isEnabled = validateForm(mView)
         }
 
@@ -90,9 +84,9 @@ class LargeAddNotificationDialogFragment : AddNotificationDialogFragment() {
 
         private const val BUILDER_TAG = "bundle_builder"
 
-        private fun newInstance() = LargeAddNotificationDialogFragment()
+        private fun newInstance() = LargeEditMeetingDialogFragment()
 
-        private fun newInstance(builder: Builder): LargeAddNotificationDialogFragment {
+        private fun newInstance(builder: Builder): LargeEditMeetingDialogFragment {
             return newInstance().apply {
                 arguments = bundleOf(
                     Pair(BUILDER_TAG, builder)

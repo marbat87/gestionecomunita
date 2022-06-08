@@ -1,7 +1,6 @@
 package it.cammino.gestionecomunita.dialog.large
 
 
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import android.view.KeyEvent
@@ -19,7 +18,6 @@ class LargeCommunityHistoryDialogFragment : CommunityHistoryDialogFragment() {
             BUILDER_TAG
         ) as? Builder
 
-    @SuppressLint("CheckResult")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val mBuilder = builder
             ?: throw IllegalStateException("SimpleDialogFragment should be created using its Builder interface.")

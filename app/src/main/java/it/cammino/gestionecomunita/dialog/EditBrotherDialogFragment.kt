@@ -59,7 +59,7 @@ open class EditBrotherDialogFragment : DialogFragment() {
                                     inputDataNascita.text?.toString() ?: ""
                                 )?.time
                         )
-                        .setTitleText(R.string.data_ultima_visita)
+                        .setTitleText(R.string.data_nascita)
                         .build()
                 picker.show(requireActivity().supportFragmentManager, "datanascitaTextFieldPicker")
                 picker.addOnPositiveButtonClickListener {
@@ -98,7 +98,7 @@ open class EditBrotherDialogFragment : DialogFragment() {
                                     inputDataArrivo.text?.toString() ?: ""
                                 )?.time
                         )
-                        .setTitleText(R.string.data_ultima_visita)
+                        .setTitleText(R.string.data_arrivo)
                         .build()
                 picker.show(requireActivity().supportFragmentManager, "datanascitaTextFieldPicker")
                 picker.addOnPositiveButtonClickListener {
@@ -145,7 +145,7 @@ open class EditBrotherDialogFragment : DialogFragment() {
                                     inputDataInizio.text?.toString() ?: ""
                                 )?.time
                         )
-                        .setTitleText(R.string.data_ultima_visita)
+                        .setTitleText(R.string.data_inizio_cammino)
                         .build()
                 picker.show(requireActivity().supportFragmentManager, "dataVisitaTextFieldPicker")
                 picker.addOnPositiveButtonClickListener {

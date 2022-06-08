@@ -1,0 +1,112 @@
+package it.cammino.gestionecomunita.item
+
+import android.annotation.SuppressLint
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.core.view.ViewCompat
+import androidx.core.view.isVisible
+import com.mikepenz.fastadapter.binding.AbstractBindingItem
+import it.cammino.gestionecomunita.R
+import it.cammino.gestionecomunita.databinding.IncontroExpandableItemBinding
+import it.cammino.gestionecomunita.util.Utility
+import it.cammino.gestionecomunita.util.Utility.DASH
+import it.cammino.gestionecomunita.util.Utility.EMPTY_STRING
+import java.sql.Date
+
+fun expandableMeetingItem(block: ExpandableMeetingItem.() -> Unit): ExpandableMeetingItem =
+    ExpandableMeetingItem().apply(block)
+
+class ExpandableMeetingItem : AbstractBindingItem<IncontroExpandableItemBinding>() {
+
+    var nome: String = EMPTY_STRING
+    var cognome: String = EMPTY_STRING
+
+    var idComunita: Long = 0
+
+    var numeroComunita: String = EMPTY_STRING
+    var parrocchiaComunita: String = EMPTY_STRING
+
+    var dataIncontro: Date? = null
+    var luogoIncontro: String = EMPTY_STRING
+
+    var note: String = EMPTY_STRING
+
+    var deleteClickClickListener: OnClickListener? = null
+    var editClickClickListener: OnClickListener? = null
+    var expandClickClickListener: OnClickListener? = null
+
+    private var isExpanded: Boolean = false
+
+    var id: Long = 0
+
+    var position: Int = 0
+
+    override val type: Int
+        get() = R.id.fastadapter_incontro_item_id
+
+    override fun createBinding(
+        inflater: LayoutInflater,
+        parent: ViewGroup?
+    ): IncontroExpandableItemBinding {
+        return IncontroExpandableItemBinding.inflate(inflater, parent, false)
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun bindView(binding: IncontroExpandableItemBinding, payloads: List<Any>) {
+        val ctx = binding.root.context
+
+        binding.incontroTitle.text = "$nome $cognome"
+        binding.incontroLuogo.text =
+            ctx.getString(R.string.luogo_dots, luogoIncontro.ifBlank { Utility.ND })
+        binding.textNome.text = nome
+        binding.textCognome.text = cognome.ifBlank { DASH }
+        binding.textLuogo.text = luogoIncontro.ifBlank { DASH }
+        binding.textComunita.text = if (idComunita != (-1).toLong()) ctx.getString(
+            R.string.comunita_item_name,
+            numeroComunita,
+            parrocchiaComunita
+        ) else DASH
+        binding.textNote.text = note.ifBlank { DASH }
+        dataIncontro?.let {
+            binding.textData.text = Utility.getStringFromDate(ctx, it)
+            binding.incontroData.text = ctx.getString(
+                R.string.data_passaggio_dots,
+                Utility.getStringFromDate(ctx, it)
+            )
+        } ?: run {
+            binding.textData.text = DASH
+            binding.incontroData.text = ctx.getString(
+                R.string.data_passaggio_dots,
+                Utility.ND
+            )
+        }
+
+        ViewCompat.animate(binding.incontroIndicator).rotation(if (isExpanded) 0f else 180f).start()
+        binding.expansion.isVisible = isExpanded
+
+        binding.cancellaIncontro.setOnClickListener { deleteClickClickListener?.onClick(this) }
+        binding.modificaIncontro.setOnClickListener { editClickClickListener?.onClick(this) }
+        binding.titleSection.setOnClickListener {
+            ViewCompat.animate(binding.incontroIndicator).rotation(if (isExpanded) 180f else 0f)
+                .start()
+            isExpanded = !isExpanded
+            expandClickClickListener?.onClick(this)
+        }
+
+    }
+
+    override fun unbindView(binding: IncontroExpandableItemBinding) {
+        binding.incontroTitle.text = null
+        binding.textNome.text = null
+        binding.textCognome.text = null
+        binding.textComunita.text = null
+        binding.textNote.text = null
+        binding.textData.text = null
+        binding.textLuogo.text = null
+    }
+
+    interface OnClickListener {
+        fun onClick(it: ExpandableMeetingItem)
+    }
+
+}

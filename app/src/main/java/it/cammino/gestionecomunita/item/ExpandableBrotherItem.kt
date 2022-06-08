@@ -95,19 +95,14 @@ class ExpandableBrotherItem : AbstractBindingItem<FratelloDetailItemBinding>() {
             binding.textDataInizioCammino.text = DASH
         }
 
-        if (!isExpanded) {
-            ViewCompat.animate(binding.groupIndicator).rotation(180f).start()
-            binding.texts.isVisible = false
-            binding.buttons.isVisible = false
-        } else {
-            ViewCompat.animate(binding.groupIndicator).rotation(0f).start()
-            binding.texts.isVisible = true
-            binding.buttons.isVisible = editable
-        }
+        ViewCompat.animate(binding.groupIndicator).rotation(if (isExpanded) 0f else 180f).start()
+        binding.texts.isVisible = isExpanded
+        binding.buttons.isVisible = editable && isExpanded
 
         binding.cancellaFratello.setOnClickListener { deleteClickClickListener?.onClick(this) }
         binding.modificaFratello.setOnClickListener { editClickClickListener?.onClick(this) }
         binding.titleSection.setOnClickListener {
+            ViewCompat.animate(binding.groupIndicator).rotation(if (isExpanded) 180f else 0f).start()
             isExpanded = !isExpanded
             expandClickClickListener?.onClick(this)
         }

@@ -5,55 +5,42 @@
     android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/promemoria_recycler"
+        android:id="@+id/incontro_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="2" />
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     <androidx.constraintlayout.widget.Group
-        android:id="@+id/no_promemoria"
+        android:id="@+id/no_incontri"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="visible"
-        app:constraint_referenced_ids="no_promemoria_image,no_promemoria_text" />
+        app:constraint_referenced_ids="no_incontri_image,no_incontri_text" />
 
     <ImageView
-        android:id="@+id/no_promemoria_image"
+        android:id="@+id/no_incontri_image"
         android:layout_width="120dip"
         android:layout_height="120dip"
         android:layout_marginBottom="?actionBarSize"
         android:contentDescription="@string/nessun_promemoria"
-        android:src="@drawable/notifications_off_24px"
+        android:src="@drawable/group_off_24px"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/no_promemoria_text"
+        android:id="@+id/no_incontri_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:gravity="center_horizontal"
-        android:text="@string/nessun_promemoria"
+        android:text="@string/nessun_incontro"
         android:textAppearance="?textAppearanceBodyMedium"
         android:textColor="?android:textColorSecondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/no_promemoria_image" />
-
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/extended_fab_promemoria"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginBottom="@dimen/fab_margin"
-        android:contentDescription="@string/nuovo_promemoria"
-        android:text="@string/nuovo_promemoria"
-        app:icon="@drawable/add_24px"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/no_incontri_image" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

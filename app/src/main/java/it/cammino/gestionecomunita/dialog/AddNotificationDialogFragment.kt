@@ -63,7 +63,7 @@ open class AddNotificationDialogFragment : DialogFragment() {
                                     inputData.text?.toString() ?: ""
                                 )?.time
                         )
-                        .setTitleText(R.string.data_ultima_visita)
+                        .setTitleText(R.string.data)
                         .build()
                 picker.show(requireActivity().supportFragmentManager, "inputDataPicker")
                 picker.addOnPositiveButtonClickListener {

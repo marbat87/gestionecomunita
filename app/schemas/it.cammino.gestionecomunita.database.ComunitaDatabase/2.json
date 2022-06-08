@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "71ab2e9c2cbb0dad43d7d466b58d641c",
+    "identityHash": "cc23ad452bdc501e3e6a5ea8a0ef2ae7",
     "entities": [
       {
         "tableName": "Comunita",
@@ -376,7 +376,7 @@
       },
       {
         "tableName": "Incontro",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`idIncontro` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `nome` TEXT NOT NULL, `cognome` TEXT NOT NULL, `comunita` TEXT NOT NULL, `data` INTEGER, `luogo` TEXT NOT NULL, `note` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`idIncontro` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `nome` TEXT NOT NULL, `cognome` TEXT NOT NULL, `idComunita` INTEGER NOT NULL, `data` INTEGER, `luogo` TEXT NOT NULL, `note` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "idIncontro",
@@ -397,9 +397,9 @@
             "notNull": true
           },
           {
-            "fieldPath": "comunita",
-            "columnName": "comunita",
-            "affinity": "TEXT",
+            "fieldPath": "idComunita",
+            "columnName": "idComunita",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
@@ -434,7 +434,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '71ab2e9c2cbb0dad43d7d466b58d641c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'cc23ad452bdc501e3e6a5ea8a0ef2ae7')"
     ]
   }
 }

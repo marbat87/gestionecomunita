@@ -3,6 +3,7 @@ package it.cammino.gestionecomunita.database.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import it.cammino.gestionecomunita.database.entity.Incontro
+import it.cammino.gestionecomunita.database.item.IncontroComunita
 
 @Dao
 interface IncontroDao {
@@ -19,10 +20,7 @@ interface IncontroDao {
     @Query("SELECT * FROM incontro WHERE idIncontro = :idIncontro")
     fun getIncontroById(idIncontro: Long): Incontro?
 
-    @get:Query("SELECT * FROM incontro order by data")
-    val allByDate: List<Incontro>?
-
-    @get:Query("SELECT * FROM incontro order by data")
-    val liveByDate: LiveData<Incontro>?
+    @get:Query("SELECT a.*, COALESCE(b.numero,'') numero, COALESCE(b.parrocchia,'') parrocchia FROM incontro a LEFT JOIN comunita b ON a.idComunita = b.id order by a.data")
+    val liveByDate: LiveData<List<IncontroComunita>>?
 
 }

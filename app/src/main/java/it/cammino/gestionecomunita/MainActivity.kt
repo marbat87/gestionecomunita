@@ -2,6 +2,7 @@ package it.cammino.gestionecomunita
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -14,11 +15,15 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.color.DynamicColors
 import it.cammino.gestionecomunita.databinding.ActivityMainBinding
 import it.cammino.gestionecomunita.dialog.AddNotificationDialogFragment
+import it.cammino.gestionecomunita.dialog.EditMeetingDialogFragment
 import it.cammino.gestionecomunita.dialog.large.LargeAddNotificationDialogFragment
+import it.cammino.gestionecomunita.dialog.large.LargeEditMeetingDialogFragment
 import it.cammino.gestionecomunita.dialog.small.SmallAddNotificationDialogFragment
+import it.cammino.gestionecomunita.dialog.small.SmallEditMeetingDialogFragment
 import it.cammino.gestionecomunita.ui.ThemeableActivity
 import it.cammino.gestionecomunita.ui.comunita.detail.CommunityDetailFragment
 import it.cammino.gestionecomunita.ui.comunita.detail.CommunityDetailHostActivity
+import it.cammino.gestionecomunita.ui.incontri.IncontriFragment
 import java.sql.Date
 
 
@@ -47,7 +52,7 @@ class MainActivity : ThemeableActivity() {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
+                R.id.navigation_home, R.id.navigation_incontri, R.id.navigation_notifications, R.id.navigation_dashboard
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -56,18 +61,27 @@ class MainActivity : ThemeableActivity() {
         navView.getOrCreateBadge(R.id.navigation_notifications)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
+            Log.d(TAG, "destination.id ${destination.id}")
             when (destination.id) {
                 R.id.navigation_home -> {
                     binding.extendedFab?.isVisible = true
                     binding.extendedFabPromemoria?.isVisible = false
+                    binding.extendedFabIncontro?.isVisible = false
                 }
-                R.id.navigation_dashboard -> {
+                R.id.navigation_incontri -> {
                     binding.extendedFab?.isVisible = false
                     binding.extendedFabPromemoria?.isVisible = false
+                    binding.extendedFabIncontro?.isVisible = true
                 }
                 R.id.navigation_notifications -> {
                     binding.extendedFab?.isVisible = false
                     binding.extendedFabPromemoria?.isVisible = true
+                    binding.extendedFabIncontro?.isVisible = false
+                }
+                R.id.navigation_dashboard -> {
+                    binding.extendedFab?.isVisible = false
+                    binding.extendedFabPromemoria?.isVisible = false
+                    binding.extendedFabIncontro?.isVisible = false
                 }
                 else -> {}
             }
@@ -101,6 +115,27 @@ class MainActivity : ThemeableActivity() {
                     )
                 } else {
                     SmallAddNotificationDialogFragment.show(
+                        builder,
+                        supportFragmentManager
+                    )
+                }
+            }
+        }
+
+        binding.extendedFabIncontro?.let { fab ->
+            fab.setOnClickListener {
+                val builder = EditMeetingDialogFragment.Builder(
+                    this, IncontriFragment.ADD_INCONTRO
+                )
+                if (resources.getBoolean(R.bool.large_layout)) {
+                    builder.positiveButton(R.string.save)
+                        .negativeButton(android.R.string.cancel)
+                    LargeEditMeetingDialogFragment.show(
+                        builder,
+                        supportFragmentManager
+                    )
+                } else {
+                    SmallEditMeetingDialogFragment.show(
                         builder,
                         supportFragmentManager
                     )

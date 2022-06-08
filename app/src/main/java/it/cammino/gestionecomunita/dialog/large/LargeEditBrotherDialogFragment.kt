@@ -1,7 +1,6 @@
 package it.cammino.gestionecomunita.dialog.large
 
 
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
@@ -23,7 +22,6 @@ class LargeEditBrotherDialogFragment : EditBrotherDialogFragment() {
             BUILDER_TAG
         ) as? Builder
 
-    @SuppressLint("CheckResult")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val mBuilder = builder
             ?: throw IllegalStateException("SimpleDialogFragment should be created using its Builder interface.")
@@ -88,7 +86,8 @@ class LargeEditBrotherDialogFragment : EditBrotherDialogFragment() {
         }
 
         alertDialog.show()
-        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).isEnabled = validateForm(mView, false)
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).isEnabled =
+            validateForm(mView, false)
 
         return alertDialog
     }

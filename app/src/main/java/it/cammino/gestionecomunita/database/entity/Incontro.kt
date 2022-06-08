@@ -14,7 +14,7 @@ open class Incontro {
 
     var cognome: String = ""
 
-    var comunita: String = ""
+    var idComunita: Long = -1
 
     var data: Date? = null
 

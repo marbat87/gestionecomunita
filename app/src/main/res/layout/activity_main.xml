@@ -61,6 +61,18 @@
             android:text="@string/nuovo_promemoria"
             app:icon="@drawable/add_24px" />
 
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/extended_fab_incontro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:visibility="gone"
+            android:layout_marginBottom="@dimen/fab_margin"
+            android:contentDescription="@string/nuovo_incontro"
+            android:text="@string/nuovo_incontro"
+            app:icon="@drawable/add_24px" />
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

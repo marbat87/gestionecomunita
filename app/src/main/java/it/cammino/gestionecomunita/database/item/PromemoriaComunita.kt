@@ -1,9 +1,7 @@
 package it.cammino.gestionecomunita.database.item
 
-import androidx.room.Entity
 import java.sql.Date
 
-@Entity
 open class PromemoriaComunita {
 
     var idPromemoria: Long = 0
