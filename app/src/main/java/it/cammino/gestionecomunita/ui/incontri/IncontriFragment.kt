@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayout
 import com.mikepenz.fastadapter.adapters.FastItemAdapter
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.database.ComunitaDatabase
@@ -44,7 +45,8 @@ class IncontriFragment : Fragment() {
 
     private var mMainActivity: AppCompatActivity? = null
 
-    private var mAdapter: FastItemAdapter<ExpandableMeetingItem> = FastItemAdapter()
+    private var mAdapterTodo: FastItemAdapter<ExpandableMeetingItem> = FastItemAdapter()
+    private var mAdapterDone: FastItemAdapter<ExpandableMeetingItem> = FastItemAdapter()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -68,8 +70,21 @@ class IncontriFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.incontroRecycler.adapter = mAdapter
+        binding.incontroTodoRecycler.adapter = mAdapterTodo
+        binding.incontroDoneRecycler.adapter = mAdapterDone
         subscribeUiChanges()
+
+        binding.meetingTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                binding.todoView.isVisible = tab?.position == 0
+                binding.doneView.isVisible = tab?.position == 1
+                tab?.let { viewModel.selectedTabIndex = it.position }
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+        })
 
         binding.extendedFabIncontro?.let { fab ->
             mMainActivity?.let { mActivity ->
@@ -94,12 +109,14 @@ class IncontriFragment : Fragment() {
             }
         }
 
+        binding.meetingTabs.getTabAt(viewModel.selectedTabIndex)?.select()
+
     }
 
     private fun subscribeUiChanges() {
-        viewModel.itemsResult?.observe(viewLifecycleOwner) { incontroList ->
+        viewModel.itemsResultTodo?.observe(viewLifecycleOwner) { incontroList ->
             var lastPosition = 0
-            mAdapter.set(incontroList.map {
+            mAdapterTodo.set(incontroList.map {
                 expandableMeetingItem {
                     id = it.idIncontro
                     nome = it.nome
@@ -110,14 +127,39 @@ class IncontriFragment : Fragment() {
                     numeroComunita = it.numero
                     parrocchiaComunita = it.parrocchia
                     note = it.note
+                    done = it.done
                     position = lastPosition++
                     editClickClickListener = mEditClickClickListener
                     deleteClickClickListener = mDeleteClickClickListener
-                    expandClickClickListener = mExpandClickClickListener
+                    expandClickClickListener = mExpandClickClickListenerTodo
+                    doneClickListener = mDonelickClickListener
                 }
             })
+            binding.noIncontriTodo.isVisible = mAdapterTodo.adapterItemCount == 0
+        }
 
-            binding.noIncontri.isVisible = mAdapter.adapterItemCount == 0
+        viewModel.itemsResultDone?.observe(viewLifecycleOwner) { incontroList ->
+            var lastPosition = 0
+            mAdapterDone.set(incontroList.map {
+                expandableMeetingItem {
+                    id = it.idIncontro
+                    nome = it.nome
+                    cognome = it.cognome
+                    dataIncontro = it.data
+                    luogoIncontro = it.luogo
+                    idComunita = it.idComunita
+                    numeroComunita = it.numero
+                    parrocchiaComunita = it.parrocchia
+                    note = it.note
+                    done = it.done
+                    position = lastPosition++
+                    editClickClickListener = mEditClickClickListener
+                    deleteClickClickListener = mDeleteClickClickListener
+                    expandClickClickListener = mExpandClickClickListenerDone
+                    todoClickListener = mTodolickClickListener
+                }
+            })
+            binding.noIncontriDone.isVisible = mAdapterDone.adapterItemCount == 0
         }
 
         addNotificationViewModel.state.observe(viewLifecycleOwner) {
@@ -190,6 +232,22 @@ class IncontriFragment : Fragment() {
         }
     }
 
+    private val mTodolickClickListener = object : ExpandableMeetingItem.OnClickListener {
+        override fun onClick(it: ExpandableMeetingItem) {
+            lifecycleScope.launch {
+                updateIncontro(it.id, false)
+            }
+        }
+    }
+
+    private val mDonelickClickListener = object : ExpandableMeetingItem.OnClickListener {
+        override fun onClick(it: ExpandableMeetingItem) {
+            lifecycleScope.launch {
+                updateIncontro(it.id, true)
+            }
+        }
+    }
+
     private val mEditClickClickListener = object : ExpandableMeetingItem.OnClickListener {
         override fun onClick(it: ExpandableMeetingItem) {
             mMainActivity?.let { mActivity ->
@@ -221,9 +279,15 @@ class IncontriFragment : Fragment() {
         }
     }
 
-    private val mExpandClickClickListener = object : ExpandableMeetingItem.OnClickListener {
+    private val mExpandClickClickListenerTodo = object : ExpandableMeetingItem.OnClickListener {
         override fun onClick(it: ExpandableMeetingItem) {
-            mAdapter.notifyItemChanged(it.position)
+            mAdapterTodo.notifyItemChanged(it.position)
+        }
+    }
+
+    private val mExpandClickClickListenerDone = object : ExpandableMeetingItem.OnClickListener {
+        override fun onClick(it: ExpandableMeetingItem) {
+            mAdapterDone.notifyItemChanged(it.position)
         }
     }
 
@@ -284,6 +348,23 @@ class IncontriFragment : Fragment() {
                 }
             }
                 .show()
+    }
+
+    private suspend fun updateIncontro(idIncontro: Long, done: Boolean) {
+        withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+            val db = ComunitaDatabase.getInstance(requireContext())
+
+            val updatedIncontro = db.incontroDao().getIncontroById(idIncontro)
+            updatedIncontro?.let {
+                it.done = done
+                db.incontroDao().updateIncontro(updatedIncontro)
+            }
+        }
+        Snackbar.make(
+            requireActivity().findViewById(android.R.id.content),
+            getString(if (done) R.string.snackbar_done else R.string.snackbar_todo),
+            Snackbar.LENGTH_SHORT
+        ).show()
     }
 
     private suspend fun restoreIncontro(incontro: Incontro) {

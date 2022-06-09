@@ -90,11 +90,18 @@
     <string name="incontro_modificato">Incontro modificato</string>
     <string name="incontro_cancellato">Incontro cancellato</string>
     <string name="nessun_promemoria">Non hai ancora aggiunto nessun promemoria.</string>
-    <string name="nessun_incontro">Non hai ancora aggiunto nessun incontro.</string>
+    <string name="nessun_incontro_todo">Non hai nessun incontro da fare.</string>
+    <string name="nessun_incontro_done">Non hai nessun incontro completato.</string>
     <string name="promemoria_rimosso">Promemoria rimosso</string>
     <string name="nuovo_incontro">Nuovo incontro</string>
     <string name="modifica_incontro">Modifica incontro</string>
     <string name="delete_incontro">Cancella incontro</string>
     <string name="delete_incontro_dialog">Sei sicuro di voler cancellare l\'incontro?</string>
     <string name="luogo">Luogo</string>
+    <string name="meeting_da_completare">Da fare</string>
+    <string name="meeting_completati">Fatti</string>
+    <string name="meeting_done_button">Fatto</string>
+    <string name="meeting_todo_button">Da fare</string>
+    <string name="snackbar_done">Incontro segnato come Fatto</string>
+    <string name="snackbar_todo">Incontro segnato come da fare</string>
 </resources>

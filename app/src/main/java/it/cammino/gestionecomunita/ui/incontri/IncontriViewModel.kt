@@ -11,13 +11,17 @@ class IncontriViewModel(application: Application) : AndroidViewModel(application
 
     var removedIncontro: Incontro? = null
     var selectedIncontroId: Long = 0
+    var selectedTabIndex = 0
 
-    var itemsResult: LiveData<List<IncontroComunita>>? = null
+    var itemsResultTodo: LiveData<List<IncontroComunita>>? = null
+        private set
+    var itemsResultDone: LiveData<List<IncontroComunita>>? = null
         private set
 
     init {
         val mDb = ComunitaDatabase.getInstance(getApplication())
-        itemsResult = mDb.incontroDao().liveByDate
+        itemsResultTodo = mDb.incontroDao().liveByDate()
+        itemsResultDone = mDb.incontroDao().liveByDate(true)
     }
 
 }

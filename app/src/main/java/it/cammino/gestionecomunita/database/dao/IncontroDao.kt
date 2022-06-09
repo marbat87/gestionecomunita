@@ -21,6 +21,9 @@ interface IncontroDao {
     fun getIncontroById(idIncontro: Long): Incontro?
 
     @get:Query("SELECT a.*, COALESCE(b.numero,'') numero, COALESCE(b.parrocchia,'') parrocchia FROM incontro a LEFT JOIN comunita b ON a.idComunita = b.id order by a.data")
-    val liveByDate: LiveData<List<IncontroComunita>>?
+    val liveByDate: LiveData<List<IncontroComunita>>
+
+    @Query("SELECT a.*, COALESCE(b.numero,'') numero, COALESCE(b.parrocchia,'') parrocchia FROM incontro a LEFT JOIN comunita b ON a.idComunita = b.id WHERE a.done= :completati order by a.data")
+    fun liveByDate(completati: Boolean = false): LiveData<List<IncontroComunita>>
 
 }

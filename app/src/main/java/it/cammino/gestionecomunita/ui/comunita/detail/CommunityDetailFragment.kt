@@ -43,7 +43,6 @@ import it.cammino.gestionecomunita.util.Utility.EMPTY_STRING
 import it.cammino.gestionecomunita.util.systemLocale
 import it.cammino.gestionecomunita.util.validateMandatoryField
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.sql.Date
@@ -419,11 +418,11 @@ open class CommunityDetailFragment : Fragment() {
                 }
             }
         }
-
-        lifecycleScope.launch {
-            delay(500)
-            binding.materialTabs.getTabAt(viewModel.selectedTabIndex)?.select()
-        }
+        binding.materialTabs.getTabAt(viewModel.selectedTabIndex)?.select()
+//        lifecycleScope.launch {
+//            delay(500)
+//            binding.materialTabs.getTabAt(viewModel.selectedTabIndex)?.select()
+//        }
     }
 
     override fun onDestroyView() {

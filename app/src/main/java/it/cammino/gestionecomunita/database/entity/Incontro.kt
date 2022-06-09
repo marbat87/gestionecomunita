@@ -22,4 +22,6 @@ open class Incontro {
 
     var note: String = ""
 
+    var done: Boolean = false
+
 }
