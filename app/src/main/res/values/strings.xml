@@ -104,4 +104,7 @@
     <string name="meeting_todo_button">Da fare</string>
     <string name="snackbar_done">Incontro segnato come Fatto</string>
     <string name="snackbar_todo">Incontro segnato come da fare</string>
+    <string name="sort">Ordina per</string>
+    <string name="sort_by_alphabet">Ordine alfabetico</string>
+    <string name="sort_itineranti_before">Prima catechisti itineranti</string>
 </resources>

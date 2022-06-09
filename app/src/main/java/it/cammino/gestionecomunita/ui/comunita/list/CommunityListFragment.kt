@@ -4,13 +4,14 @@ import android.content.Context
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import com.mikepenz.fastadapter.IAdapter
 import com.mikepenz.fastadapter.adapters.FastItemAdapter
+import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.databinding.FragmentCommunityListBinding
 import it.cammino.gestionecomunita.item.CommunityListItem
 import it.cammino.gestionecomunita.item.communityListItem
@@ -72,6 +73,31 @@ open class CommunityListFragment : Fragment() {
                 consume
             }
 
+        if (viewModel.indexType == CommunityListViewModel.IndexType.TUTTE) {
+            activity?.addMenuProvider(object : MenuProvider {
+                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                    // Add menu items here
+                    menuInflater.inflate(R.menu.sort_community_menu, menu)
+                }
+
+                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                    // Handle the menu selection
+                    return when (menuItem.itemId) {
+                        R.id.sort_alphabet -> {
+                            mAdapter.set(mAdapter.adapterItems.sortedBy { it.parrocchia + it.numeroComunita })
+                            true
+                        }
+                        R.id.sort_itineranti -> {
+                            // loadTasks(true)
+                            mAdapter.set(mAdapter.adapterItems.sorted())
+                            true
+                        }
+                        else -> false
+                    }
+                }
+            }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+        }
+
     }
 
     private fun subscribeUiChanges() {
@@ -85,6 +111,7 @@ open class CommunityListFragment : Fragment() {
                         setNumeroComunita = it.numero
                         setParrocchia = it.parrocchia
                         setResponsabile = it.responsabile
+                        setCatechisti = it.catechisti
                         id = it.id
                         setDataUltimaVisita = it.dataUltimaVisita
                         setDateMode =

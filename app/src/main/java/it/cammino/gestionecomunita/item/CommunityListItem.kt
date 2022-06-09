@@ -6,25 +6,29 @@ import com.mikepenz.fastadapter.binding.AbstractBindingItem
 import com.mikepenz.fastadapter.ui.utils.StringHolder
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.databinding.CommunityRowItemBinding
+import it.cammino.gestionecomunita.util.StringUtils
 import it.cammino.gestionecomunita.util.Utility
 import java.sql.Date
 
 fun communityListItem(block: CommunityListItem.() -> Unit): CommunityListItem =
     CommunityListItem().apply(block)
 
-class CommunityListItem : AbstractBindingItem<CommunityRowItemBinding>() {
+class CommunityListItem : AbstractBindingItem<CommunityRowItemBinding>(),
+    Comparable<CommunityListItem> {
 
-    private lateinit var numeroComunita: StringHolder
-    var setNumeroComunita: String? = null
+    var numeroComunita: String = ""
+    var setNumeroComunita: String = ""
         set(value) {
-            numeroComunita = StringHolder(value)
+            numeroComunita = value
+            field = value
         }
 
-    lateinit var parrocchia: StringHolder
+    var parrocchia: String = ""
         private set
-    var setParrocchia: String? = null
+    var setParrocchia: String = ""
         set(value) {
-            parrocchia = StringHolder(value)
+            parrocchia = value
+            field = value
         }
 
     private var responsabile: StringHolder? = null
@@ -44,6 +48,13 @@ class CommunityListItem : AbstractBindingItem<CommunityRowItemBinding>() {
     var setDateMode: Boolean = false
         set(value) {
             dateMode = value
+            field = value
+        }
+
+    private var catechisti: String = ""
+    var setCatechisti: String = ""
+        set(value) {
+            catechisti = value
             field = value
         }
 
@@ -68,9 +79,7 @@ class CommunityListItem : AbstractBindingItem<CommunityRowItemBinding>() {
         val ctx = binding.root.context
 
         binding.textComunita.text = ctx.getString(
-            R.string.comunita_item_name,
-            numeroComunita.getText(ctx),
-            parrocchia.getText(ctx)
+            R.string.comunita_item_name, numeroComunita, parrocchia
         )
         if (dateMode)
             dataUltimaVisita?.let {
@@ -84,7 +93,7 @@ class CommunityListItem : AbstractBindingItem<CommunityRowItemBinding>() {
                 binding.textResponsabile.text =
                     ctx.getString(
                         R.string.ultima_visita_dots,
-                        ND
+                        StringUtils.ND
                     )
             }
         else
@@ -93,13 +102,13 @@ class CommunityListItem : AbstractBindingItem<CommunityRowItemBinding>() {
                 binding.textResponsabile.text =
                     ctx.getString(
                         R.string.responsabile_dots,
-                        if (!resp.isNullOrBlank()) resp else ND
+                        if (!resp.isNullOrBlank()) resp else StringUtils.ND
                     )
             } ?: run {
                 binding.textResponsabile.text =
                     ctx.getString(
                         R.string.responsabile_dots,
-                        ND
+                        StringUtils.ND
                     )
             }
     }
@@ -109,8 +118,25 @@ class CommunityListItem : AbstractBindingItem<CommunityRowItemBinding>() {
         binding.textResponsabile.text = null
     }
 
-    companion object {
-        private const val ND = "N.D."
+    override fun compareTo(other: CommunityListItem): Int {
+        if (catechisti.lowercase().trim() == StringUtils.ITINERANTI
+            && other.catechisti.lowercase().trim() != StringUtils.ITINERANTI
+        )
+            return -1
+        if (catechisti.lowercase().trim() != StringUtils.ITINERANTI
+            && other.catechisti.lowercase().trim() == StringUtils.ITINERANTI
+        )
+            return 1
+        if (parrocchia < other.parrocchia)
+            return -1
+        if (parrocchia > other.parrocchia)
+            return 1
+        if (numeroComunita < other.numeroComunita)
+            return -1
+        if (parrocchia > other.parrocchia)
+            return 1
+
+        return 0
     }
 
 }

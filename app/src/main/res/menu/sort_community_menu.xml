@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:risuscito="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/sort"
+        android:icon="@drawable/sort_24px"
+        android:orderInCategory="97"
+        android:title="@string/sort"
+        risuscito:showAsAction="always">
+
+        <menu>
+
+            <item
+                android:id="@+id/sort_alphabet"
+                android:icon="@drawable/sort_by_alpha_24px"
+                android:orderInCategory="98"
+                android:title="@string/sort_by_alphabet" />
+
+            <item
+                android:id="@+id/sort_itineranti"
+                android:icon="@drawable/star_24px"
+                android:orderInCategory="98"
+                android:title="@string/sort_itineranti_before" />
+
+        </menu>
+
+    </item>
+
+</menu>
