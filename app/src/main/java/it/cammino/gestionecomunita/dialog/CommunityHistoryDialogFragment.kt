@@ -31,7 +31,6 @@ open class CommunityHistoryDialogFragment : DialogFragment() {
 
         val recycler = mView.findViewById<RecyclerView>(R.id.history_recycler)
 
-        recycler.setHasFixedSize(true)
         recycler.adapter = mAdapter
 
         lifecycleScope.launch { getData(mView.context, mBuilder.idComunita) }
