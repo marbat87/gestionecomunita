@@ -52,13 +52,17 @@ class MainActivity : ThemeableActivity() {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_incontri, R.id.navigation_notifications, R.id.navigation_dashboard
+                R.id.navigation_home,
+                R.id.navigation_incontri,
+                R.id.navigation_notifications,
+                R.id.navigation_dashboard
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
         navView.getOrCreateBadge(R.id.navigation_notifications)
+        navView.getOrCreateBadge(R.id.navigation_incontri)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             Log.d(TAG, "destination.id ${destination.id}")
@@ -148,7 +152,7 @@ class MainActivity : ThemeableActivity() {
     }
 
     private fun subscribeUiChanges() {
-        viewModel.itemsResult?.observe(this) { promemoria ->
+        viewModel.livePromemoria?.observe(this) { promemoria ->
             val ora = Date(System.currentTimeMillis())
             val countScadute = promemoria.count { it.data != null && ora >= it.data }
             val badgeDrawable = binding.navView.getBadge(R.id.navigation_notifications)
@@ -164,21 +168,22 @@ class MainActivity : ThemeableActivity() {
                 }
             }
         }
+        viewModel.liveIncontri?.observe(this) { promemoria ->
+            val ora = Date(System.currentTimeMillis())
+            val countScadute = promemoria.count { (it.data != null && ora >= it.data) && !it.done }
+            val badgeDrawable = binding.navView.getBadge(R.id.navigation_incontri)
+            if (countScadute > 0) {
+                badgeDrawable?.let {
+                    it.isVisible = true
+                    it.number = countScadute
+                }
+            } else {
+                badgeDrawable?.let {
+                    it.isVisible = false
+                    it.clearNumber()
+                }
+            }
+        }
     }
 
-//    fun getFab(): ExtendedFloatingActionButton {
-//        return binding.extendedFab
-//    }
-
-//    fun setTabVisible(visible: Boolean) {
-//        binding.materialTabs.isVisible = visible
-//    }
-
-//    fun expandToolbar() {
-//        binding.appBarLayout.setExpanded(true, true)
-//    }
-
-//    fun getMaterialTabs(): TabLayout {
-//        return binding.materialTabs
-//    }
 }

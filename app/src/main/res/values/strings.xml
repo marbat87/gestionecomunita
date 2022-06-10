@@ -107,4 +107,5 @@
     <string name="sort">Ordina per</string>
     <string name="sort_by_alphabet">Ordine alfabetico</string>
     <string name="sort_itineranti_before">Prima catechisti itineranti</string>
+    <string name="no_fratelli">Non hai aggiunto nessun fratello alla comunità.</string>
 </resources>

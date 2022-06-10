@@ -16,5 +16,6 @@ class CommunityDetailViewModel: ViewModel(){
     var selectedTabIndex = 0
     var selectedFratello = 0
     var elementi: ArrayList<ExpandableBrotherItem>? = null
+    var fratelliPresenti = false
 
 }

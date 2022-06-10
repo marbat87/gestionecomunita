@@ -20,6 +20,9 @@ interface IncontroDao {
     @Query("SELECT * FROM incontro WHERE idIncontro = :idIncontro")
     fun getIncontroById(idIncontro: Long): Incontro?
 
+    @get:Query("SELECT * from incontro")
+    val liveAll: LiveData<List<Incontro>>
+
     @get:Query("SELECT a.*, COALESCE(b.numero,'') numero, COALESCE(b.parrocchia,'') parrocchia FROM incontro a LEFT JOIN comunita b ON a.idComunita = b.id order by a.data")
     val liveByDate: LiveData<List<IncontroComunita>>
 

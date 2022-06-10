@@ -4,16 +4,20 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import it.cammino.gestionecomunita.database.ComunitaDatabase
+import it.cammino.gestionecomunita.database.entity.Incontro
 import it.cammino.gestionecomunita.database.entity.Promemoria
 
 class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
 
-    var itemsResult: LiveData<List<Promemoria>>? = null
+    var livePromemoria: LiveData<List<Promemoria>>? = null
+        private set
+    var liveIncontri: LiveData<List<Incontro>>? = null
         private set
 
     init {
         val mDb = ComunitaDatabase.getInstance(getApplication())
-        itemsResult = mDb.promemoriaDao().liveAll
+        livePromemoria = mDb.promemoriaDao().liveAll
+        liveIncontri = mDb.incontroDao().liveAll
     }
 
 }

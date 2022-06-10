@@ -224,8 +224,8 @@ open class CommunityDetailFragment : Fragment() {
             false
         }
 
-        llm = binding.brothersList.layoutManager as? LinearLayoutManager
-        binding.brothersList.adapter = mAdapter
+        llm = binding.fratelliRecyclew.layoutManager as? LinearLayoutManager
+        binding.fratelliRecyclew.adapter = mAdapter
 
         binding.materialTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -358,6 +358,8 @@ open class CommunityDetailFragment : Fragment() {
                             ADD_BROTHER -> {
                                 fratello.position = mAdapter.itemAdapter.adapterItemCount
                                 mAdapter.add(fratello)
+                                viewModel.fratelliPresenti = true
+                                binding.noFratelliView.isVisible = !viewModel.fratelliPresenti
                             }
                             EDIT_BROTHER -> {
                                 mAdapter[viewModel.selectedFratello] = fratello
@@ -380,6 +382,9 @@ open class CommunityDetailFragment : Fragment() {
                             DELETE_BROTHER -> {
                                 simpleDialogViewModel.handled = true
                                 mAdapter.remove(viewModel.selectedFratello)
+                                viewModel.fratelliPresenti =
+                                    mAdapter.itemAdapter.adapterItemCount > 0
+                                binding.noFratelliView.isVisible = !viewModel.fratelliPresenti
                             }
                             DELETE_COMMUNITY -> {
                                 simpleDialogViewModel.handled = true
@@ -419,10 +424,6 @@ open class CommunityDetailFragment : Fragment() {
             }
         }
         binding.materialTabs.getTabAt(viewModel.selectedTabIndex)?.select()
-//        lifecycleScope.launch {
-//            delay(500)
-//            binding.materialTabs.getTabAt(viewModel.selectedTabIndex)?.select()
-//        }
     }
 
     override fun onDestroyView() {
@@ -583,7 +584,8 @@ open class CommunityDetailFragment : Fragment() {
     }
 
     private fun showGeneralOrBrothers(generalDetails: Boolean) {
-        binding.brothersList.isVisible = !generalDetails
+        binding.fratelliRecyclew.isVisible = !generalDetails
+        binding.noFratelliView.isVisible = !generalDetails && !viewModel.fratelliPresenti
         binding.fabAddBrother.isVisible = !generalDetails && viewModel.editMode.value == true
         binding.communityDetailScrollView.isVisible = generalDetails
         binding.bottomAppBar.performShow()
@@ -882,6 +884,8 @@ open class CommunityDetailFragment : Fragment() {
                 false
             )
         }
+        viewModel.fratelliPresenti = viewModel.elementi.orEmpty().isNotEmpty()
+        showGeneralOrBrothers(true)
     }
 
     private val mDeleteClickClickListener = object : ExpandableBrotherItem.OnClickListener {

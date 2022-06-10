@@ -232,7 +232,7 @@
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:text="@string/meeting_todo_button"
             android:visibility="gone"
-            app:icon="@drawable/undo_24px"
+            app:icon="@drawable/unpublished_24px"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
