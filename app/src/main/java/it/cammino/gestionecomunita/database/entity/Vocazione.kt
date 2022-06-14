@@ -1,5 +1,6 @@
 package it.cammino.gestionecomunita.database.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.sql.Date
@@ -12,8 +13,6 @@ open class Vocazione {
 
     var nome: String = ""
 
-    var comunita: String = ""
-
     var telefono: String = ""
 
     var citta: String = ""
@@ -22,7 +21,7 @@ open class Vocazione {
 
     var dataNascita: Date? = null
 
-    var idTappa: Int = 0
+    var idTappa: Int = -1
 
     var dataIngresso: Date? = null
 
@@ -31,6 +30,9 @@ open class Vocazione {
     var osservazioni: String = ""
 
     var sesso: Sesso? = null
+
+    @ColumnInfo(defaultValue = "-1")
+    var idComunita: Long = -1
 
     enum class Sesso {
         MASCHIO, FEMMINA

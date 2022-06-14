@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/list_view_item_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginBottom="4dp"
+    android:checkable="true"
+    android:transitionName="shared_element_container"
+    app:checkedIconTint="@android:color/transparent"
+    app:strokeWidth="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/listPreferredItemHeightSmall"
+        android:paddingStart="?listPreferredItemPaddingStart"
+        android:paddingTop="8dp"
+        android:paddingEnd="?listPreferredItemPaddingEnd"
+        android:paddingBottom="8dp">
+
+        <ImageView
+            android:id="@+id/vocazione_male_female_image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/oval_background"
+            android:contentDescription="@null"
+            android:padding="10dp"
+            android:src="@drawable/man_24px"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?android:textColorSecondary" />
+
+        <TextView
+            android:id="@+id/vocazione_nome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:textAppearance="?textAppearanceListItem"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/vocazione_male_female_image"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Marco Rossi" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

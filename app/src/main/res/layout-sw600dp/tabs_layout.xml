@@ -45,6 +45,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/half_guideline" />
 
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/extended_fab_vocazione"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:contentDescription="@string/vocazione_new_title"
+        android:text="@string/vocazione_new_title"
+        android:visibility="gone"
+        app:icon="@drawable/add_24px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/half_guideline" />
+
     <View
         android:id="@+id/divider"
         android:layout_width="1dp"

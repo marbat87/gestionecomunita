@@ -23,6 +23,9 @@ interface PromemoriaDao {
     @Delete
     fun deletePromemoria(promemoria: Promemoria)
 
+    @Query("DELETE FROM promemoria where idComunita = :idComunita")
+    fun truncateTableByComunita(idComunita: Long)
+
     @Insert
     fun insertPromemoria(promemoria: Promemoria)
 

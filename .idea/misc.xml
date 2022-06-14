@@ -17,6 +17,7 @@
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/drawable/edit_24px.xml" value="0.1935" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/drawable/error_24px.xml" value="0.1935" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/drawable/expand_less_24px.xml" value="0.1925" />
+        <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/drawable/filter_list_off_24px.xml" value="0.191" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/drawable/group_24px.xml" value="0.1935" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/drawable/group_off_24px.xml" value="0.1565" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/drawable/groups_24px.xml" value="0.1935" />
@@ -30,6 +31,7 @@
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.1935" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/drawable/notifications_24px.xml" value="0.1935" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/drawable/notifications_off_24px.xml" value="0.1925" />
+        <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/drawable/oval_background.xml" value="0.291" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/drawable/person_add_24px.xml" value="0.191" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/drawable/person_off_24px.xml" value="0.191" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/drawable/remove_done_24px.xml" value="0.191" />
@@ -38,6 +40,7 @@
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/drawable/thumb_up_24px.xml" value="0.191" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/drawable/undo_24px.xml" value="0.1935" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/drawable/unpublished_24px.xml" value="0.191" />
+        <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/drawable/woman_24px.xml" value="0.291" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout-large/add_notification_dialog.xml" value="0.1390625" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout-large/community_history_dialog.xml" value="0.1390625" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout-large/fratello_edit_dialog.xml" value="0.1" />
@@ -50,6 +53,7 @@
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout-sw600dp/tabs_layout.xml" value="0.1390625" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout/activity_community_detail.xml" value="0.184375" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout/activity_vocazione_detail.xml" value="0.1828125" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout/add_notification_dialog.xml" value="0.1" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout/community_history_dialog.xml" value="0.1" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout/community_list_content.xml" value="0.18541666666666667" />
@@ -63,6 +67,7 @@
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout/fragment_meetings.xml" value="0.1" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout/fragment_notifications.xml" value="0.1" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout/fragment_sectioned_community_host.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout/fragment_vocazione_detail.xml" value="0.1828125" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout/fratello_detail_item.xml" value="0.1" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout/fratello_edit_dialog.xml" value="0.1" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout/history_row_item.xml" value="0.18541666666666667" />
@@ -71,12 +76,14 @@
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout/list_group_item.xml" value="0.358695652173913" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout/swipeable_item.xml" value="0.18541666666666667" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout/tabs_layout.xml" value="0.184375" />
+        <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout/vocazione_row_item.xml" value="0.358695652173913" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/menu/bottom_app_bar.xml" value="0.18541666666666667" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/menu/bottom_app_bar_edit_menu.xml" value="0.18541666666666667" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/menu/bottom_app_bar_menu.xml" value="0.1" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/menu/bottom_nav_menu.xml" value="0.1" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/menu/edit_brother_menu.xml" value="0.3625" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/menu/filter_menu.xml" value="0.1" />
+        <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/menu/filter_vocation_menu.xml" value="0.1828125" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/menu/sort_community_menu.xml" value="0.1828125" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1935" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1935" />

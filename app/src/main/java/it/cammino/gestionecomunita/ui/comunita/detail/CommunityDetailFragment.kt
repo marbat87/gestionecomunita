@@ -763,6 +763,9 @@ open class CommunityDetailFragment : Fragment() {
         withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
             val db = ComunitaDatabase.getInstance(requireContext())
             db.fratelloDao().truncateTableByComunita(viewModel.listId)
+            db.incontroDao().truncateTableByComunita(viewModel.listId)
+            db.promemoriaDao().truncateTableByComunita(viewModel.listId)
+            db.vocazioneDao().truncateTableByComunita(viewModel.listId)
             db.comunitaDao().deleteComunita(Comunita().apply { id = viewModel.listId })
         }
 

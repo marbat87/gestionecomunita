@@ -29,6 +29,10 @@
             android:name=".ui.comunita.detail.CommunityDetailHostActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name=".ui.vocazione.detail.VocazioneDetailHostActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustNothing" />
     </application>
 
 </manifest>

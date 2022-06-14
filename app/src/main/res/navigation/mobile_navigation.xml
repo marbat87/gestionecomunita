@@ -25,8 +25,8 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="it.cammino.gestionecomunita.ui.dashboard.DashboardFragment"
+        android:name="it.cammino.gestionecomunita.ui.vocazione.CentroVocazionaleFragment"
         android:label="@string/title_centro_voc"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_community_list" />
 
 </navigation>

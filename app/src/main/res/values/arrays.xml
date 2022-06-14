@@ -25,4 +25,9 @@
         <item>@string/stato_deceduto</item>
     </string-array>
 
+    <string-array name="sesso_entries">
+        <item>@string/sesso_maschio</item>
+        <item>@string/sesso_femmina</item>
+    </string-array>
+
 </resources>

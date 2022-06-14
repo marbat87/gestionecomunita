@@ -88,7 +88,6 @@ open class CommunityListFragment : Fragment() {
                             true
                         }
                         R.id.sort_itineranti -> {
-                            // loadTasks(true)
                             mAdapter.set(mAdapter.adapterItems.sorted())
                             true
                         }

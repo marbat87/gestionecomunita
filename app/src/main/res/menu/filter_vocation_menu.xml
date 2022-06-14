@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:risuscito="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/filter"
+        android:icon="@drawable/filter_list_24px"
+        android:orderInCategory="96"
+        android:title="@string/vocazione_filter"
+        risuscito:showAsAction="always">
+
+        <menu>
+
+            <item
+                android:id="@+id/filter_male"
+                android:icon="@drawable/man_24px"
+                android:orderInCategory="97"
+                android:title="@string/vocazione_male" />
+
+            <item
+                android:id="@+id/filter_female"
+                android:icon="@drawable/woman_24px"
+                android:orderInCategory="98"
+                android:title="@string/vocazione_female" />
+
+            <item
+                android:id="@+id/filter_all"
+                android:icon="@drawable/filter_list_off_24px"
+                android:orderInCategory="99"
+                android:title="@string/vocazione_filter_all" />
+
+        </menu>
+
+    </item>
+
+</menu>

@@ -5,6 +5,9 @@ import android.util.Log
 import java.sql.Date
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
 
 object Utility {
 
@@ -48,6 +51,12 @@ object Utility {
         return date
     }
 
-
+    fun calculateAge(birthDate: String): Int {
+        val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        return Period.between(
+            LocalDate.parse(birthDate, formatter),
+            LocalDate.now()
+        ).years
+    }
 
 }

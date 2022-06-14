@@ -10,7 +10,7 @@ interface VocazioneDao {
     @get:Query("SELECT * FROM vocazione")
     val all: List<Vocazione>
 
-    @get:Query("SELECT * FROM vocazione")
+    @get:Query("SELECT * FROM vocazione order by nome")
     val liveAll: LiveData<List<Vocazione>>
 
     @Query("SELECT * FROM vocazione where idVocazione = :idVocazione")
@@ -24,5 +24,8 @@ interface VocazioneDao {
 
     @Delete
     fun deleteVocazione(vocazione: Vocazione)
+
+    @Query("DELETE FROM vocazione where idComunita = :idComunita")
+    fun truncateTableByComunita(idComunita: Long)
 
 }

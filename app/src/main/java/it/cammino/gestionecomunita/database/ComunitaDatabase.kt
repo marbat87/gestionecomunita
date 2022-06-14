@@ -3,17 +3,24 @@ package it.cammino.gestionecomunita.database
 import android.content.Context
 import android.util.Log
 import androidx.room.*
+import androidx.room.migration.AutoMigrationSpec
+import androidx.sqlite.db.SupportSQLiteDatabase
 import it.cammino.gestionecomunita.database.converter.Converters
 import it.cammino.gestionecomunita.database.dao.*
 import it.cammino.gestionecomunita.database.entity.*
 
 @Database(
     entities = [(Comunita::class), (Fratello::class), (Promemoria::class), (Passaggio::class), (Vocazione::class), (Incontro::class)],
-    version = 2,
+    version = 3,
     autoMigrations = [
         AutoMigration(
             from = 1,
             to = 2
+        ),
+        AutoMigration(
+            from = 2,
+            to = 3,
+            spec = ComunitaDatabase.AutoMigrationFrom2To3::class
         )
     ],
     exportSchema = true
@@ -63,5 +70,13 @@ abstract class ComunitaDatabase : RoomDatabase() {
             return sInstance as ComunitaDatabase
         }
 
+    }
+
+    @DeleteColumn(tableName = "Vocazione", columnName = "comunita")
+    class AutoMigrationFrom2To3 : AutoMigrationSpec {
+        @Override
+        override fun onPostMigrate(db: SupportSQLiteDatabase) {
+            // Invoked once auto migration is done
+        }
     }
 }

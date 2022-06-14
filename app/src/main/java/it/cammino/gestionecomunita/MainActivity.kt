@@ -24,6 +24,7 @@ import it.cammino.gestionecomunita.ui.ThemeableActivity
 import it.cammino.gestionecomunita.ui.comunita.detail.CommunityDetailFragment
 import it.cammino.gestionecomunita.ui.comunita.detail.CommunityDetailHostActivity
 import it.cammino.gestionecomunita.ui.incontri.IncontriFragment
+import it.cammino.gestionecomunita.ui.vocazione.detail.VocazioneDetailHostActivity
 import java.sql.Date
 
 
@@ -71,21 +72,25 @@ class MainActivity : ThemeableActivity() {
                     binding.extendedFab?.isVisible = true
                     binding.extendedFabPromemoria?.isVisible = false
                     binding.extendedFabIncontro?.isVisible = false
+                    binding.extendedFabVocazione?.isVisible = false
                 }
                 R.id.navigation_incontri -> {
                     binding.extendedFab?.isVisible = false
                     binding.extendedFabPromemoria?.isVisible = false
                     binding.extendedFabIncontro?.isVisible = true
+                    binding.extendedFabVocazione?.isVisible = false
                 }
                 R.id.navigation_notifications -> {
                     binding.extendedFab?.isVisible = false
                     binding.extendedFabPromemoria?.isVisible = true
                     binding.extendedFabIncontro?.isVisible = false
+                    binding.extendedFabVocazione?.isVisible = false
                 }
                 R.id.navigation_dashboard -> {
                     binding.extendedFab?.isVisible = false
                     binding.extendedFabPromemoria?.isVisible = false
                     binding.extendedFabIncontro?.isVisible = false
+                    binding.extendedFabVocazione?.isVisible = true
                 }
                 else -> {}
             }
@@ -144,6 +149,19 @@ class MainActivity : ThemeableActivity() {
                         supportFragmentManager
                     )
                 }
+            }
+        }
+
+        binding.extendedFabVocazione?.let { fab ->
+            fab.setOnClickListener {
+                it.transitionName = "shared_element_vocazione"
+                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    this,
+                    it,
+                    "shared_element_vocazione" // The transition name to be matched in Activity B.
+                )
+                val intent = Intent(this, VocazioneDetailHostActivity::class.java)
+                startActivity(intent, options.toBundle())
             }
         }
 

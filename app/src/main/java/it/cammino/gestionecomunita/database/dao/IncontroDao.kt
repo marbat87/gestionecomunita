@@ -17,6 +17,9 @@ interface IncontroDao {
     @Delete
     fun deleteIncontro(incontro: Incontro)
 
+    @Query("DELETE FROM incontro where idComunita = :idComunita")
+    fun truncateTableByComunita(idComunita: Long)
+
     @Query("SELECT * FROM incontro WHERE idIncontro = :idIncontro")
     fun getIncontroById(idIncontro: Long): Incontro?
 

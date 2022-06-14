@@ -108,4 +108,22 @@
     <string name="sort_by_alphabet">Ordine alfabetico</string>
     <string name="sort_itineranti_before">Prima catechisti itineranti</string>
     <string name="no_fratelli">Non hai aggiunto nessun fratello alla comunità.</string>
+    <string name="tutte_vocazioni">Tutte</string>
+    <string name="tappa_vocazioni">Elenco per tappa</string>
+    <string name="vocazione_filter">Filtra per</string>
+    <string name="vocazione_male">Maschio</string>
+    <string name="vocazione_female">Femmina</string>
+    <string name="vocazione_filter_all">Tutti</string>
+    <string name="vocazione_title">Vocazione</string>
+    <string name="vocazione_new_title">Nuova vocazione</string>
+    <string name="citta_label">Città</string>
+    <string name="eta_label">Età</string>
+    <string name="studi_label">Studi</string>
+    <string name="delete_vocazione">Cancella vocazione</string>
+    <string name="delete_vocazione_dialog">Sei sicuro di voler cancellare la vocazione?</string>
+    <string name="n_d">N.D.</string>
+    <string name="sesso_maschio">Maschio</string>
+    <string name="sesso_femmina">Femmina</string>
+    <string name="sesso_label">Sesso</string>
+    <string name="nessun_passaggio">N.D.</string>
 </resources>
