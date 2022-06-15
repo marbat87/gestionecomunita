@@ -557,6 +557,7 @@ open class VocazioneDetailFragment : Fragment() {
                 requireContext().resources.getTextArray(R.array.sesso_entries)[0],
                 false
             )
+            viewModel.vocazione.sesso = Vocazione.Sesso.MASCHIO
         }
     }
 
