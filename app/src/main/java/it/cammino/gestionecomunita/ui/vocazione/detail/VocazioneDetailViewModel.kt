@@ -4,10 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import it.cammino.gestionecomunita.database.entity.Comunita
 import it.cammino.gestionecomunita.database.entity.Vocazione
-import it.cammino.gestionecomunita.database.item.ComunitaFratello
-import it.cammino.gestionecomunita.item.ExpandableBrotherItem
 
-class VocazioneDetailViewModel: ViewModel(){
+class VocazioneDetailViewModel : ViewModel() {
 
     var listId: Long = -1
     val editMode = MutableLiveData(true)

@@ -5,7 +5,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.database.ComunitaDatabase
-import it.cammino.gestionecomunita.database.entity.Comunita
 import it.cammino.gestionecomunita.database.entity.Vocazione
 import it.cammino.gestionecomunita.item.VocazioneListItem
 
@@ -16,7 +15,6 @@ class VocazioneListViewModel(application: Application) : AndroidViewModel(applic
     var vocazioniList: List<VocazioneListItem> = ArrayList()
 
     var selectedFilter: Int = R.id.filter_all
-
 
     init {
         val mDb = ComunitaDatabase.getInstance(getApplication())
