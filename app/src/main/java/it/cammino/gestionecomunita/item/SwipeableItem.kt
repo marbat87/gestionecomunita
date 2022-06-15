@@ -6,6 +6,7 @@ import com.mikepenz.fastadapter.binding.AbstractBindingItem
 import com.mikepenz.fastadapter.swipe.ISwipeable
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.databinding.SwipeableItemBinding
+import it.cammino.gestionecomunita.util.StringUtils
 import it.cammino.gestionecomunita.util.Utility
 import java.sql.Date
 
@@ -38,11 +39,10 @@ class SwipeableItem : AbstractBindingItem<SwipeableItemBinding>(), ISwipeable {
         data?.let {
             binding.promemoriaData.text = Utility.getStringFromDate(ctx, it)
         } ?: run {
-            binding.promemoriaData.text = Utility.DASH
+            binding.promemoriaData.text = StringUtils.DASH
         }
 
         binding.promemoriaDescrizione.text = descrizione
-
 
     }
 

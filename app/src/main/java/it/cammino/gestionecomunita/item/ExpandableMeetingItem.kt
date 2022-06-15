@@ -8,9 +8,8 @@ import androidx.core.view.isVisible
 import com.mikepenz.fastadapter.binding.AbstractBindingItem
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.databinding.IncontroExpandableItemBinding
+import it.cammino.gestionecomunita.util.StringUtils
 import it.cammino.gestionecomunita.util.Utility
-import it.cammino.gestionecomunita.util.Utility.DASH
-import it.cammino.gestionecomunita.util.Utility.EMPTY_STRING
 import java.sql.Date
 
 fun expandableMeetingItem(block: ExpandableMeetingItem.() -> Unit): ExpandableMeetingItem =
@@ -18,18 +17,18 @@ fun expandableMeetingItem(block: ExpandableMeetingItem.() -> Unit): ExpandableMe
 
 class ExpandableMeetingItem : AbstractBindingItem<IncontroExpandableItemBinding>() {
 
-    var nome: String = EMPTY_STRING
-    var cognome: String = EMPTY_STRING
+    var nome: String = StringUtils.EMPTY_STRING
+    var cognome: String = StringUtils.EMPTY_STRING
 
     var idComunita: Long = 0
 
-    var numeroComunita: String = EMPTY_STRING
-    var parrocchiaComunita: String = EMPTY_STRING
+    var numeroComunita: String = StringUtils.EMPTY_STRING
+    var parrocchiaComunita: String = StringUtils.EMPTY_STRING
 
     var dataIncontro: Date? = null
-    var luogoIncontro: String = EMPTY_STRING
+    var luogoIncontro: String = StringUtils.EMPTY_STRING
 
-    var note: String = EMPTY_STRING
+    var note: String = StringUtils.EMPTY_STRING
 
     var done: Boolean = false
 
@@ -61,16 +60,16 @@ class ExpandableMeetingItem : AbstractBindingItem<IncontroExpandableItemBinding>
 
         binding.incontroTitle.text = "$nome $cognome"
         binding.incontroLuogo.text =
-            ctx.getString(R.string.luogo_dots, luogoIncontro.ifBlank { Utility.ND })
+            ctx.getString(R.string.luogo_dots, luogoIncontro.ifBlank { StringUtils.ND })
         binding.textNome.text = nome
-        binding.textCognome.text = cognome.ifBlank { DASH }
-        binding.textLuogo.text = luogoIncontro.ifBlank { DASH }
+        binding.textCognome.text = cognome.ifBlank { StringUtils.DASH }
+        binding.textLuogo.text = luogoIncontro.ifBlank { StringUtils.DASH }
         binding.textComunita.text = if (idComunita != (-1).toLong()) ctx.getString(
             R.string.comunita_item_name,
             numeroComunita,
             parrocchiaComunita
-        ) else DASH
-        binding.textNote.text = note.ifBlank { DASH }
+        ) else StringUtils.DASH
+        binding.textNote.text = note.ifBlank { StringUtils.DASH }
         dataIncontro?.let {
             binding.textData.text = Utility.getStringFromDate(ctx, it)
             binding.incontroData.text = ctx.getString(
@@ -78,10 +77,10 @@ class ExpandableMeetingItem : AbstractBindingItem<IncontroExpandableItemBinding>
                 Utility.getStringFromDate(ctx, it)
             )
         } ?: run {
-            binding.textData.text = DASH
+            binding.textData.text = StringUtils.DASH
             binding.incontroData.text = ctx.getString(
                 R.string.data_passaggio_dots,
-                Utility.ND
+                StringUtils.ND
             )
         }
 

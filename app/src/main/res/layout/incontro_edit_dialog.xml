@@ -89,7 +89,8 @@
                 android:hint="@string/data"
                 app:endIconMode="clear_text"
                 app:errorEnabled="true"
-                app:layout_constraintTop_toBottomOf="@id/cognome_text_field">
+                app:layout_constraintTop_toBottomOf="@id/cognome_text_field"
+                app:startIconDrawable="@drawable/calendar_today_24px">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"

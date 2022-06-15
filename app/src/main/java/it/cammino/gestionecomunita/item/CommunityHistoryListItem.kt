@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import com.mikepenz.fastadapter.binding.AbstractBindingItem
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.databinding.HistoryRowItemBinding
+import it.cammino.gestionecomunita.util.StringUtils
 import it.cammino.gestionecomunita.util.Utility
 import java.sql.Date
 
@@ -35,7 +36,10 @@ class CommunityHistoryListItem : AbstractBindingItem<HistoryRowItemBinding>() {
     override fun bindView(binding: HistoryRowItemBinding, payloads: List<Any>) {
         val ctx = binding.root.context
 
-        binding.textNomePassaggio.text = ctx.getString(R.string.passaggio_dots, ctx.resources.getStringArray(R.array.passaggi_entries)[indicePassaggio])
+        binding.textNomePassaggio.text = ctx.getString(
+            R.string.passaggio_dots,
+            ctx.resources.getStringArray(R.array.passaggi_entries)[indicePassaggio]
+        )
         dataPassaggio?.let {
             binding.textDataPassaggio.text = ctx.getString(
                 R.string.data_passaggio_dots,
@@ -44,7 +48,7 @@ class CommunityHistoryListItem : AbstractBindingItem<HistoryRowItemBinding>() {
         } ?: run {
             binding.textDataPassaggio.text = ctx.getString(
                 R.string.data_passaggio_dots,
-                Utility.ND
+                StringUtils.ND
             )
         }
 

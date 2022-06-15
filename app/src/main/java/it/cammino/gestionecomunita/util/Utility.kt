@@ -12,9 +12,6 @@ import java.time.format.DateTimeFormatter
 object Utility {
 
     const val CLICK_DELAY: Long = 2000
-    const val EMPTY_STRING = ""
-    const val DASH = "-"
-    const val ND = "N.D."
     private val TAG = Utility::class.java.canonicalName
 
     fun getDateFromString(ctx: Context, inputString: String): Date? {

@@ -172,7 +172,8 @@
                 android:hint="@string/data_nascita"
                 app:endIconMode="clear_text"
                 app:errorEnabled="true"
-                app:layout_constraintTop_toBottomOf="@id/tribu_text_field">
+                app:layout_constraintTop_toBottomOf="@id/tribu_text_field"
+                app:startIconDrawable="@drawable/calendar_today_24px">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -233,7 +234,8 @@
                 android:hint="@string/data_arrivo"
                 app:endIconMode="clear_text"
                 app:errorEnabled="true"
-                app:layout_constraintTop_toBottomOf="@id/comunita_origine_text_field">
+                app:layout_constraintTop_toBottomOf="@id/comunita_origine_text_field"
+                app:startIconDrawable="@drawable/calendar_today_24px">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -261,7 +263,8 @@
                 android:hint="@string/data_inizio_cammino"
                 app:endIconMode="clear_text"
                 app:errorEnabled="true"
-                app:layout_constraintTop_toBottomOf="@id/origine_divier">
+                app:layout_constraintTop_toBottomOf="@id/origine_divier"
+                app:startIconDrawable="@drawable/calendar_today_24px">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"

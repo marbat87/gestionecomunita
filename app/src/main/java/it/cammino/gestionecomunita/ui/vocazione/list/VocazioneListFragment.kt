@@ -5,6 +5,7 @@ import android.os.SystemClock
 import android.util.Log
 import android.view.*
 import androidx.core.view.MenuProvider
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -110,6 +111,7 @@ open class VocazioneListFragment : Fragment() {
                         id = it.idVocazione
                     }
                 }
+            binding.noVocazioniView.isVisible = viewModel.vocazioniList.isEmpty()
             filterList()
         }
     }

@@ -21,8 +21,8 @@ import com.google.android.material.textfield.TextInputLayout
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.database.ComunitaDatabase
 import it.cammino.gestionecomunita.database.entity.Comunita
+import it.cammino.gestionecomunita.util.StringUtils
 import it.cammino.gestionecomunita.util.Utility
-import it.cammino.gestionecomunita.util.Utility.EMPTY_STRING
 import it.cammino.gestionecomunita.util.capitalize
 import it.cammino.gestionecomunita.util.validateMandatoryField
 import kotlinx.coroutines.Dispatchers
@@ -201,12 +201,12 @@ open class EditMeetingDialogFragment : DialogFragment() {
         var mPositiveButton: CharSequence? = null
         var mNegativeButton: CharSequence? = null
         var mCanceable = false
-        var mNomePrefill: CharSequence = EMPTY_STRING
-        var mCognomePrefill: CharSequence = EMPTY_STRING
+        var mNomePrefill: CharSequence = StringUtils.EMPTY_STRING
+        var mCognomePrefill: CharSequence = StringUtils.EMPTY_STRING
         var mComunitaPrefill: Long = -1
         var mDataIncontroPrefill: Date? = null
-        var mLuogoPrefill: CharSequence = EMPTY_STRING
-        var mNotePrefill: CharSequence = EMPTY_STRING
+        var mLuogoPrefill: CharSequence = StringUtils.EMPTY_STRING
+        var mNotePrefill: CharSequence = StringUtils.EMPTY_STRING
         var mEditMode: Boolean = false
 
         fun nomePrefill(text: String): Builder {

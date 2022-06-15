@@ -85,7 +85,7 @@
                 android:layout_marginEnd="@dimen/container_horizontal_margin"
                 android:enabled="false"
                 android:hint="@string/sesso_label"
-                app:layout_constraintEnd_toStartOf="@id/half_guideline"
+                app:layout_constraintEnd_toStartOf="@id/vocazione_male_female_image"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/nome_text_field">
 
@@ -103,14 +103,13 @@
                 android:id="@+id/vocazione_male_female_image"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginStart="@dimen/container_horizontal_margin"
+                android:layout_marginEnd="@dimen/container_horizontal_margin"
                 android:background="@drawable/oval_background"
                 android:contentDescription="@null"
                 android:padding="10dp"
                 android:src="@drawable/man_24px"
                 app:layout_constraintBottom_toBottomOf="@id/sesso_text_field"
-                app:layout_constraintStart_toEndOf="@id/half_guideline"
-                app:layout_constraintTop_toBottomOf="@id/nome_text_field"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/sesso_text_field"
                 app:tint="?android:textColorSecondary" />
 
@@ -180,9 +179,10 @@
                 android:hint="@string/data_nascita"
                 app:endIconMode="clear_text"
                 app:errorEnabled="true"
-                app:layout_constraintEnd_toStartOf="@id/half_guideline"
+                app:layout_constraintEnd_toStartOf="@id/eta_container"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/citta_text_field">
+                app:layout_constraintTop_toBottomOf="@id/citta_text_field"
+                app:startIconDrawable="@drawable/calendar_today_24px">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -191,22 +191,14 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/half_guideline"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/eta_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.7" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/container_horizontal_margin"
                 android:layout_marginEnd="@dimen/container_horizontal_margin"
                 android:layout_marginBottom="@dimen/text_field_space_no_error"
                 app:layout_constraintBottom_toBottomOf="@id/data_nascita_text_field"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/half_guideline"
                 app:layout_constraintTop_toTopOf="@id/data_nascita_text_field">
 
                 <TextView
@@ -283,7 +275,8 @@
                 android:hint="@string/data_inizio_cammino"
                 app:endIconMode="clear_text"
                 app:errorEnabled="true"
-                app:layout_constraintTop_toBottomOf="@id/tappa_text_field">
+                app:layout_constraintTop_toBottomOf="@id/tappa_text_field"
+                app:startIconDrawable="@drawable/calendar_today_24px">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -373,7 +366,7 @@
 
             <Button
                 android:id="@+id/cancel_change"
-                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly"
+                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly.OnPrimary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
@@ -386,7 +379,7 @@
 
             <Button
                 android:id="@+id/confirm_changes"
-                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly"
+                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly.OnPrimary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -406,7 +399,7 @@
 
             <Button
                 android:id="@+id/edit_vocazione"
-                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly"
+                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly.OnPrimary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:icon="@drawable/edit_24px"
@@ -418,7 +411,7 @@
 
             <Button
                 android:id="@+id/delete_vocazione"
-                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly"
+                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly.OnPrimary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:icon="@drawable/delete_24px"

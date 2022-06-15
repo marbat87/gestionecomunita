@@ -126,4 +126,6 @@
     <string name="sesso_femmina">Femmina</string>
     <string name="sesso_label">Sesso</string>
     <string name="nessun_passaggio">N.D.</string>
+    <string name="num_anni_label">Anni di cammino</string>
+    <string name="no_vocazioni">Non hai aggiunto nessuna vocazione.</string>
 </resources>

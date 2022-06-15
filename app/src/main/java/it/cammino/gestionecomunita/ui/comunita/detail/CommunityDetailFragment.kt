@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import androidx.core.text.isDigitsOnly
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -38,8 +39,8 @@ import it.cammino.gestionecomunita.dialog.small.SmallCommunityHistoryDialogFragm
 import it.cammino.gestionecomunita.dialog.small.SmallEditBrotherDialogFragment
 import it.cammino.gestionecomunita.item.ExpandableBrotherItem
 import it.cammino.gestionecomunita.item.expandableBrotherItem
+import it.cammino.gestionecomunita.util.StringUtils
 import it.cammino.gestionecomunita.util.Utility
-import it.cammino.gestionecomunita.util.Utility.EMPTY_STRING
 import it.cammino.gestionecomunita.util.systemLocale
 import it.cammino.gestionecomunita.util.validateMandatoryField
 import kotlinx.coroutines.Dispatchers
@@ -222,6 +223,15 @@ open class CommunityDetailFragment : Fragment() {
                 }
             }
             false
+        }
+
+        binding.calendarToday.setOnClickListener {
+            binding.dataVisitaTextField.editText?.setText(
+                Utility.getStringFromDate(
+                    requireContext(),
+                    Date(Calendar.getInstance().time.time)
+                )
+            )
         }
 
         llm = binding.fratelliRecyclew.layoutManager as? LinearLayoutManager
@@ -451,6 +461,7 @@ open class CommunityDetailFragment : Fragment() {
         )
         outState.putCharSequence("dataVisitaTextField", binding.dataVisitaTextField.editText?.text)
         outState.putCharSequence("noteTextField", binding.noteTextField.editText?.text)
+        outState.putCharSequence("anniTextField", binding.anniTextField.editText?.text)
 
         viewModel.elementi =
             mAdapter.itemAdapter.adapterItems as? ArrayList<ExpandableBrotherItem>
@@ -481,6 +492,7 @@ open class CommunityDetailFragment : Fragment() {
             binding.dataConvivenzaTextField.editText?.setText(instance.getCharSequence("dataConvivenzaTextField"))
             binding.dataVisitaTextField.editText?.setText(instance.getCharSequence("dataVisitaTextField"))
             binding.noteTextField.editText?.setText(instance.getCharSequence("noteTextField"))
+            binding.anniTextField.editText?.setText(instance.getCharSequence("anniTextField"))
             viewModel.elementi?.forEach {
                 it.deleteClickClickListener = mDeleteClickClickListener
                 it.expandClickClickListener = mExpandClickClickListener
@@ -493,32 +505,33 @@ open class CommunityDetailFragment : Fragment() {
     private fun confirmChanges() {
         if (validateForm()) {
             viewModel.comunita.diocesi =
-                binding.diocesiTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
+                binding.diocesiTextField.editText?.text?.toString().orEmpty().trim()
             viewModel.comunita.numero =
-                binding.numeroTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
+                binding.numeroTextField.editText?.text?.toString().orEmpty().trim()
             viewModel.comunita.parrocchia =
-                binding.parrocchiaTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
+                binding.parrocchiaTextField.editText?.text?.toString().orEmpty().trim()
             viewModel.comunita.parroco =
-                binding.parroccoTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
+                binding.parroccoTextField.editText?.text?.toString().orEmpty().trim()
             viewModel.comunita.catechisti =
-                binding.catechistiTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
+                binding.catechistiTextField.editText?.text?.toString().orEmpty().trim()
             viewModel.comunita.email =
-                binding.emailTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
+                binding.emailTextField.editText?.text?.toString().orEmpty().trim()
             viewModel.comunita.responsabile =
-                binding.responsabileTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
+                binding.responsabileTextField.editText?.text?.toString().orEmpty().trim()
+            val numAnni = binding.anniTextField.editText?.text?.toString()?.ifEmpty { "0" } ?: "0"
+            viewModel.comunita.numAnni = if (numAnni.isDigitsOnly()) numAnni.toInt() else 0
             viewModel.comunita.telefono =
-                binding.telefonoTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
+                binding.telefonoTextField.editText?.text?.toString().orEmpty().trim()
             viewModel.comunita.dataConvivenza = Utility.getDateFromString(
                 requireContext(),
-                binding.dataConvivenzaTextField.editText?.text?.toString()?.trim()
-                    ?: EMPTY_STRING
+                binding.dataConvivenzaTextField.editText?.text?.toString().orEmpty().trim()
             )
             viewModel.comunita.dataUltimaVisita = Utility.getDateFromString(
                 requireContext(),
-                binding.dataVisitaTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
+                binding.dataVisitaTextField.editText?.text?.toString().orEmpty().trim()
             )
             viewModel.comunita.note =
-                binding.noteTextField.editText?.text?.toString()?.trim() ?: EMPTY_STRING
+                binding.noteTextField.editText?.text?.toString().orEmpty().trim()
             viewModel.comunita.dataUltimaModifica =
                 Date(Calendar.getInstance().time.time)
 
@@ -604,9 +617,11 @@ open class CommunityDetailFragment : Fragment() {
         binding.dataConvivenzaTextField.isEnabled = editMode
         binding.dataVisitaTextField.isEnabled = editMode
         binding.noteTextField.isEnabled = editMode
+        binding.anniTextField.isEnabled = editMode
         binding.fabAddBrother.isVisible = editMode && viewModel.selectedTabIndex == 1
         binding.editMenu.isVisible = editMode
         binding.communityMenu.isVisible = !editMode
+        binding.calendarToday.isEnabled = editMode
         if (!editMode) {
             binding.numeroTextField.error = null
             binding.parrocchiaTextField.error = null
@@ -844,6 +859,7 @@ open class CommunityDetailFragment : Fragment() {
                 )
             }
             binding.noteTextField.editText?.setText(viewModel.comunita.note)
+            binding.anniTextField.editText?.setText(if (viewModel.comunita.numAnni > 0) viewModel.comunita.numAnni.toString() else StringUtils.EMPTY_STRING)
 
             viewModel.elementi?.let {
                 Log.d(TAG, "Lista già valorizzata")

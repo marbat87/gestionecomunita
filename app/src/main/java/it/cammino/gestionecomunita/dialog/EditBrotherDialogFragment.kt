@@ -17,8 +17,8 @@ import androidx.lifecycle.ViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputLayout
 import it.cammino.gestionecomunita.R
+import it.cammino.gestionecomunita.util.StringUtils
 import it.cammino.gestionecomunita.util.Utility
-import it.cammino.gestionecomunita.util.Utility.EMPTY_STRING
 import it.cammino.gestionecomunita.util.capitalize
 import it.cammino.gestionecomunita.util.validateMandatoryField
 import java.io.Serializable
@@ -221,7 +221,11 @@ open class EditBrotherDialogFragment : DialogFragment() {
     protected fun validateForm(mView: View, showError: Boolean = true): Boolean {
         var valid = true
 
-        if (!requireContext().validateMandatoryField(mView.findViewById(R.id.nome_text_field), showError))
+        if (!requireContext().validateMandatoryField(
+                mView.findViewById(R.id.nome_text_field),
+                showError
+            )
+        )
             valid = false
 
         val inputNome = mView.findViewById<TextInputLayout>(R.id.numero_figli_text_field)
@@ -291,18 +295,18 @@ open class EditBrotherDialogFragment : DialogFragment() {
         var mPositiveButton: CharSequence? = null
         var mNegativeButton: CharSequence? = null
         var mCanceable = false
-        var mNomePrefill: CharSequence = EMPTY_STRING
-        var mCognomePrefill: CharSequence = EMPTY_STRING
-        var mStatoCivilePrefill: CharSequence = EMPTY_STRING
-        var mConiugePrefill: CharSequence = EMPTY_STRING
+        var mNomePrefill: CharSequence = StringUtils.EMPTY_STRING
+        var mCognomePrefill: CharSequence = StringUtils.EMPTY_STRING
+        var mStatoCivilePrefill: CharSequence = StringUtils.EMPTY_STRING
+        var mConiugePrefill: CharSequence = StringUtils.EMPTY_STRING
         var mNumeroFigliPrefill: Int = 0
         var mDataNascitaPrefill: Date? = null
-        var mCarismaPrefill: CharSequence = EMPTY_STRING
-        var mTribuPrefill: CharSequence = EMPTY_STRING
-        var mComunitaOriginePrefill: CharSequence = EMPTY_STRING
+        var mCarismaPrefill: CharSequence = StringUtils.EMPTY_STRING
+        var mTribuPrefill: CharSequence = StringUtils.EMPTY_STRING
+        var mComunitaOriginePrefill: CharSequence = StringUtils.EMPTY_STRING
         var mDataArrivoPrefill: Date? = null
         var mStatoPrefill: Int = 0
-        var mNotePrefill: CharSequence = EMPTY_STRING
+        var mNotePrefill: CharSequence = StringUtils.EMPTY_STRING
         var mDataInizioCamminoPrefill: Date? = null
         var mEditMode: Boolean = false
 

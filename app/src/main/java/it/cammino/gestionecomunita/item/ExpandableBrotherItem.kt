@@ -8,9 +8,8 @@ import androidx.core.view.isVisible
 import com.mikepenz.fastadapter.binding.AbstractBindingItem
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.databinding.FratelloDetailItemBinding
+import it.cammino.gestionecomunita.util.StringUtils
 import it.cammino.gestionecomunita.util.Utility
-import it.cammino.gestionecomunita.util.Utility.DASH
-import it.cammino.gestionecomunita.util.Utility.EMPTY_STRING
 import java.sql.Date
 
 fun expandableBrotherItem(block: ExpandableBrotherItem.() -> Unit): ExpandableBrotherItem =
@@ -18,28 +17,28 @@ fun expandableBrotherItem(block: ExpandableBrotherItem.() -> Unit): ExpandableBr
 
 class ExpandableBrotherItem : AbstractBindingItem<FratelloDetailItemBinding>() {
 
-    var nome: String = EMPTY_STRING
-    var cognome: String = EMPTY_STRING
+    var nome: String = StringUtils.EMPTY_STRING
+    var cognome: String = StringUtils.EMPTY_STRING
 
-    var statoCivile: String = EMPTY_STRING
-    var coniuge: String = EMPTY_STRING
+    var statoCivile: String = StringUtils.EMPTY_STRING
+    var coniuge: String = StringUtils.EMPTY_STRING
 
-    var tribu: String = EMPTY_STRING
+    var tribu: String = StringUtils.EMPTY_STRING
 
     var annoNascita: Date? = null
 
-    var carisma: String = EMPTY_STRING
+    var carisma: String = StringUtils.EMPTY_STRING
 
     var numFigli: Int = 0
 
     var dataInizioCammino: Date? = null
 
-    var comunitaOrigine: String = EMPTY_STRING
+    var comunitaOrigine: String = StringUtils.EMPTY_STRING
     var dataArrivo: Date? = null
 
     var stato: Int = 0
 
-    var note: String = EMPTY_STRING
+    var note: String = StringUtils.EMPTY_STRING
 
     var editable: Boolean = false
 
@@ -67,32 +66,32 @@ class ExpandableBrotherItem : AbstractBindingItem<FratelloDetailItemBinding>() {
 
         binding.groupTitle.text = "$nome $cognome"
         binding.textNome.text = nome
-        binding.textCognome.text = cognome.ifBlank { DASH }
-        binding.textStatoCivile.text = statoCivile.ifBlank { DASH }
-        binding.textConiuge.text = coniuge.ifBlank { DASH }
+        binding.textCognome.text = cognome.ifBlank { StringUtils.DASH }
+        binding.textStatoCivile.text = statoCivile.ifBlank { StringUtils.DASH }
+        binding.textConiuge.text = coniuge.ifBlank { StringUtils.DASH }
         binding.textNumFigli.text = numFigli.toString()
-        binding.textTribu.text = tribu.ifBlank { DASH }
+        binding.textTribu.text = tribu.ifBlank { StringUtils.DASH }
         annoNascita?.let {
             binding.textAnnoNascita.text = Utility.getStringFromDate(ctx, it)
         } ?: run {
-            binding.textAnnoNascita.text = DASH
+            binding.textAnnoNascita.text = StringUtils.DASH
         }
-        binding.textCarisma.text = carisma.ifBlank { DASH }
-        binding.textComunitaProvenienza.text = comunitaOrigine.ifBlank { DASH }
+        binding.textCarisma.text = carisma.ifBlank { StringUtils.DASH }
+        binding.textComunitaProvenienza.text = comunitaOrigine.ifBlank { StringUtils.DASH }
         dataArrivo?.let {
             binding.textDataArrivo.text = Utility.getStringFromDate(ctx, it)
         } ?: run {
-            binding.textDataArrivo.text = DASH
+            binding.textDataArrivo.text = StringUtils.DASH
         }
 
         binding.textStato.text = ctx.resources.getStringArray(R.array.stati)[stato]
         binding.textStatoInt.text = stato.toString()
 
-        binding.textNote.text = note.ifBlank { DASH }
+        binding.textNote.text = note.ifBlank { StringUtils.DASH }
         dataInizioCammino?.let {
             binding.textDataInizioCammino.text = Utility.getStringFromDate(ctx, it)
         } ?: run {
-            binding.textDataInizioCammino.text = DASH
+            binding.textDataInizioCammino.text = StringUtils.DASH
         }
 
         ViewCompat.animate(binding.groupIndicator).rotation(if (isExpanded) 0f else 180f).start()
@@ -102,7 +101,8 @@ class ExpandableBrotherItem : AbstractBindingItem<FratelloDetailItemBinding>() {
         binding.cancellaFratello.setOnClickListener { deleteClickClickListener?.onClick(this) }
         binding.modificaFratello.setOnClickListener { editClickClickListener?.onClick(this) }
         binding.titleSection.setOnClickListener {
-            ViewCompat.animate(binding.groupIndicator).rotation(if (isExpanded) 180f else 0f).start()
+            ViewCompat.animate(binding.groupIndicator).rotation(if (isExpanded) 180f else 0f)
+                .start()
             isExpanded = !isExpanded
             expandClickClickListener?.onClick(this)
         }

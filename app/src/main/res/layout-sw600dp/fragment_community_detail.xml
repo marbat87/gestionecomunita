@@ -128,15 +128,33 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/parrocco_text_field"
+                android:id="@+id/anni_text_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/container_horizontal_margin"
                 android:layout_marginTop="@dimen/text_field_space"
                 android:layout_marginEnd="@dimen/container_horizontal_margin"
                 android:enabled="false"
-                android:hint="@string/parroco"
+                android:hint="@string/num_anni_label"
                 app:layout_constraintTop_toBottomOf="@id/parrocchia_text_field">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/parrocco_text_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/container_horizontal_margin"
+                android:layout_marginTop="@dimen/text_field_space_no_error"
+                android:layout_marginEnd="@dimen/container_horizontal_margin"
+                android:enabled="false"
+                android:hint="@string/parroco"
+                app:layout_constraintTop_toBottomOf="@id/anni_text_field">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -249,7 +267,8 @@
                 android:hint="@string/data_convivenza"
                 app:endIconMode="clear_text"
                 app:errorEnabled="true"
-                app:layout_constraintTop_toBottomOf="@id/tappa_text_field">
+                app:layout_constraintTop_toBottomOf="@id/tappa_text_field"
+                app:startIconDrawable="@drawable/calendar_today_24px">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -260,7 +279,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/data_visita_text_field"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/container_horizontal_margin"
                 android:layout_marginTop="@dimen/text_field_space"
@@ -269,7 +288,10 @@
                 android:hint="@string/data_ultima_visita"
                 app:endIconMode="clear_text"
                 app:errorEnabled="true"
-                app:layout_constraintTop_toBottomOf="@id/data_convivenza_text_field">
+                app:layout_constraintEnd_toStartOf="@id/calendar_today"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/data_convivenza_text_field"
+                app:startIconDrawable="@drawable/calendar_today_24px">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -277,6 +299,21 @@
                     android:inputType="date" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/calendar_today"
+                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/container_horizontal_margin"
+                android:layout_marginEnd="@dimen/container_horizontal_margin"
+                android:layout_marginBottom="@dimen/text_field_space_no_error"
+                app:icon="@drawable/today_24px"
+                app:iconSize="24dp"
+                app:layout_constraintBottom_toBottomOf="@id/data_visita_text_field"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/data_visita_text_field"
+                tools:ignore="SpeakableTextPresentCheck" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/note_text_field"
@@ -378,7 +415,7 @@
 
             <Button
                 android:id="@+id/cancel_change"
-                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly"
+                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly.OnPrimary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
@@ -391,7 +428,7 @@
 
             <Button
                 android:id="@+id/confirm_changes"
-                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly"
+                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly.OnPrimary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -411,7 +448,7 @@
 
             <Button
                 android:id="@+id/edit_community"
-                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly"
+                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly.OnPrimary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:icon="@drawable/edit_24px"
@@ -423,7 +460,7 @@
 
             <Button
                 android:id="@+id/history_community"
-                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly"
+                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly.OnPrimary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:icon="@drawable/history_24px"
@@ -435,7 +472,7 @@
 
             <Button
                 android:id="@+id/add_notification"
-                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly"
+                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly.OnPrimary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:icon="@drawable/add_alert_24px"
@@ -447,7 +484,7 @@
 
             <Button
                 android:id="@+id/delete_community"
-                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly"
+                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly.OnPrimary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:icon="@drawable/delete_24px"
