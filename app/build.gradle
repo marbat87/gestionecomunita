@@ -13,8 +13,8 @@ android {
         applicationId "it.cammino.gestionecomunita"
         minSdk 21
         targetSdk 32
-        versionCode 5
-        versionName "1.2.1"
+        versionCode 6
+        versionName "1.2.2"
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -76,4 +76,5 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:30.1.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'joda-time:joda-time:2.10.14'
 }
