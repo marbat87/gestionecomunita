@@ -51,8 +51,6 @@ open class VocazioneListFragment : Fragment() {
         binding.communityList.setHasFixedSize(true)
         binding.communityList.adapter = mAdapter
 
-        subscribeUiChanges()
-
         mAdapter.onClickListener =
             { _: View?, _: IAdapter<VocazioneListItem>, item: VocazioneListItem, _: Int ->
                 var consume = false
@@ -70,21 +68,18 @@ open class VocazioneListFragment : Fragment() {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 // Add menu items here
                 menuInflater.inflate(R.menu.filter_vocation_menu, menu)
+                menu.findItem(viewModel.selectedFilter).isChecked = true
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 // Handle the menu selection
                 return when (menuItem.itemId) {
-                    R.id.filter_male -> {
-                        mAdapter.set(viewModel.vocazioniList.filter { it.sesso == Vocazione.Sesso.MASCHIO })
-                        true
-                    }
-                    R.id.filter_female -> {
-                        mAdapter.set(viewModel.vocazioniList.filter { it.sesso == Vocazione.Sesso.FEMMINA })
-                        true
-                    }
+                    R.id.filter_male,
+                    R.id.filter_female,
                     R.id.filter_all -> {
-                        mAdapter.set(viewModel.vocazioniList)
+                        menuItem.isChecked = true
+                        viewModel.selectedFilter = menuItem.itemId
+                        filterList()
                         true
                     }
                     else -> false
@@ -92,6 +87,16 @@ open class VocazioneListFragment : Fragment() {
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
+        subscribeUiChanges()
+
+    }
+
+    private fun filterList() {
+        when (viewModel.selectedFilter) {
+            R.id.filter_male -> mAdapter.set(viewModel.vocazioniList.filter { it.sesso == Vocazione.Sesso.MASCHIO })
+            R.id.filter_female -> mAdapter.set(viewModel.vocazioniList.filter { it.sesso == Vocazione.Sesso.FEMMINA })
+            R.id.filter_all -> mAdapter.set(viewModel.vocazioniList)
+        }
     }
 
     private fun subscribeUiChanges() {
@@ -105,7 +110,7 @@ open class VocazioneListFragment : Fragment() {
                         id = it.idVocazione
                     }
                 }
-            mAdapter.set(viewModel.vocazioniList)
+            filterList()
         }
     }
 

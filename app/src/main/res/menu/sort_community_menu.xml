@@ -11,17 +11,21 @@
 
         <menu>
 
-            <item
-                android:id="@+id/sort_alphabet"
-                android:icon="@drawable/sort_by_alpha_24px"
-                android:orderInCategory="98"
-                android:title="@string/sort_by_alphabet" />
+            <group android:checkableBehavior="single">
 
-            <item
-                android:id="@+id/sort_itineranti"
-                android:icon="@drawable/star_24px"
-                android:orderInCategory="98"
-                android:title="@string/sort_itineranti_before" />
+                <item
+                    android:id="@+id/sort_alphabet"
+                    android:icon="@drawable/sort_by_alpha_24px"
+                    android:orderInCategory="98"
+                    android:title="@string/sort_by_alphabet" />
+
+                <item
+                    android:id="@+id/sort_itineranti"
+                    android:icon="@drawable/star_24px"
+                    android:orderInCategory="98"
+                    android:title="@string/sort_itineranti_before" />
+
+            </group>
 
         </menu>
 

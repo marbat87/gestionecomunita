@@ -58,8 +58,6 @@ open class CommunityListFragment : Fragment() {
         binding.communityList.setHasFixedSize(true)
         binding.communityList.adapter = mAdapter
 
-        subscribeUiChanges()
-
         mAdapter.onClickListener =
             { _: View?, _: IAdapter<CommunityListItem>, item: CommunityListItem, _: Int ->
                 var consume = false
@@ -78,17 +76,17 @@ open class CommunityListFragment : Fragment() {
                 override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                     // Add menu items here
                     menuInflater.inflate(R.menu.sort_community_menu, menu)
+                    menu.findItem(viewModel.selectedSort).isChecked = true
                 }
 
                 override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                     // Handle the menu selection
                     return when (menuItem.itemId) {
-                        R.id.sort_alphabet -> {
-                            mAdapter.set(mAdapter.adapterItems.sortedBy { it.parrocchia + it.numeroComunita })
-                            true
-                        }
+                        R.id.sort_alphabet,
                         R.id.sort_itineranti -> {
-                            mAdapter.set(mAdapter.adapterItems.sorted())
+                            menuItem.isChecked = true
+                            viewModel.selectedSort = menuItem.itemId
+                            sortList()
                             true
                         }
                         else -> false
@@ -97,6 +95,15 @@ open class CommunityListFragment : Fragment() {
             }, viewLifecycleOwner, Lifecycle.State.RESUMED)
         }
 
+        subscribeUiChanges()
+
+    }
+
+    private fun sortList() {
+        when (viewModel.selectedSort) {
+            R.id.sort_alphabet -> mAdapter.set(mAdapter.adapterItems.sortedBy { it.parrocchia + it.numeroComunita })
+            R.id.sort_itineranti -> mAdapter.set(mAdapter.adapterItems.sorted())
+        }
     }
 
     private fun subscribeUiChanges() {
@@ -117,6 +124,8 @@ open class CommunityListFragment : Fragment() {
                             viewModel.indexType == CommunityListViewModel.IndexType.VISITATE_OLTRE_ANNO
                     }
                 })
+            if (viewModel.indexType == CommunityListViewModel.IndexType.TUTTE)
+                sortList()
         }
     }
 

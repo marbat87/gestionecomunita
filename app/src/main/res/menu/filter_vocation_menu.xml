@@ -10,24 +10,27 @@
         risuscito:showAsAction="always">
 
         <menu>
+            <group android:checkableBehavior="single">
 
-            <item
-                android:id="@+id/filter_male"
-                android:icon="@drawable/man_24px"
-                android:orderInCategory="97"
-                android:title="@string/vocazione_male" />
+                <item
+                    android:id="@+id/filter_male"
+                    android:icon="@drawable/man_24px"
+                    android:orderInCategory="97"
+                    android:title="@string/vocazione_male" />
 
-            <item
-                android:id="@+id/filter_female"
-                android:icon="@drawable/woman_24px"
-                android:orderInCategory="98"
-                android:title="@string/vocazione_female" />
+                <item
+                    android:id="@+id/filter_female"
+                    android:icon="@drawable/woman_24px"
+                    android:orderInCategory="98"
+                    android:title="@string/vocazione_female" />
 
-            <item
-                android:id="@+id/filter_all"
-                android:icon="@drawable/filter_list_off_24px"
-                android:orderInCategory="99"
-                android:title="@string/vocazione_filter_all" />
+                <item
+                    android:id="@+id/filter_all"
+                    android:icon="@drawable/filter_list_off_24px"
+                    android:orderInCategory="99"
+                    android:title="@string/vocazione_filter_all" />
+
+            </group>
 
         </menu>
 

@@ -3,6 +3,7 @@ package it.cammino.gestionecomunita.ui.vocazione.list
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.database.ComunitaDatabase
 import it.cammino.gestionecomunita.database.entity.Comunita
 import it.cammino.gestionecomunita.database.entity.Vocazione
@@ -13,6 +14,8 @@ class VocazioneListViewModel(application: Application) : AndroidViewModel(applic
     var vocazioniLiveList: LiveData<List<Vocazione>>? = null
         private set
     var vocazioniList: List<VocazioneListItem> = ArrayList()
+
+    var selectedFilter: Int = R.id.filter_all
 
 
     init {
