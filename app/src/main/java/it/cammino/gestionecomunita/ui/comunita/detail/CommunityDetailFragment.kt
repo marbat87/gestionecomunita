@@ -980,6 +980,7 @@ open class CommunityDetailFragment : Fragment() {
         const val ADD_BROTHER = "add_brother"
         const val EDIT_BROTHER = "edit_brother"
         const val ADD_NOTIFICATION = "add_notification"
+        const val EDIT_NOTIFICATION = "edit_notification"
         const val HISTORY = "history"
         const val DELETE_BROTHER = "delete_brother"
         const val DELETE_COMMUNITY = "delete_community"

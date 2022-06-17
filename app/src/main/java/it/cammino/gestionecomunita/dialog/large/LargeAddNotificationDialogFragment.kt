@@ -31,7 +31,7 @@ class LargeAddNotificationDialogFragment : AddNotificationDialogFragment() {
         val dialog = MaterialAlertDialogBuilder(requireContext())
         dialog.setView(mView)
 
-        dialog.setTitle(R.string.nuovo_promemoria)
+        dialog.setTitle(getString(if (mBuilder.mEditMode) R.string.modifica_promemoria else R.string.nuovo_promemoria))
 
         mBuilder.mPositiveButton?.let { it ->
             dialog.setPositiveButton(it) { _, _ ->

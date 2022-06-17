@@ -43,9 +43,23 @@ open class AddNotificationDialogFragment : DialogFragment() {
 
         lifecycleScope.launch { fillComunitaList(mView, mBuilder) }
 
-        if (!mBuilder.mFreeMode)
+        if (!mBuilder.mFreeMode || mBuilder.mEditMode)
             mView.findViewById<TextInputEditText>(R.id.comunita_text_field)
                 .setText(mBuilder.mIdComunitaPrefill.toString())
+
+        if (mBuilder.mEditMode) {
+            mView.findViewById<TextInputEditText>(R.id.promemoria_text_field)
+                .setText(mBuilder.mIdPromemoria.toString())
+            mBuilder.mDataPrefill?.let {
+                mView.findViewById<TextInputLayout>(R.id.data_text_field).editText?.setText(
+                    Utility.getStringFromDate(
+                        mView.context,
+                        it
+                    )
+                )
+            }
+            mView.findViewById<TextInputLayout>(R.id.note_text_field).editText?.setText(mBuilder.mNotaPrefill)
+        }
 
         val inputData =
             mView.findViewById<TextInputLayout>(R.id.data_text_field).editText
@@ -82,6 +96,10 @@ open class AddNotificationDialogFragment : DialogFragment() {
     }
 
     protected fun fillreturnText(mView: View) {
+        viewModel.idPromemoria =
+            mView.findViewById<TextInputEditText>(R.id.promemoria_text_field).text.toString()
+                .ifEmpty { "0" }.toLong()
+
         viewModel.idComunita =
             mView.findViewById<TextInputEditText>(R.id.comunita_text_field).text.toString()
                 .toLong()
@@ -144,11 +162,30 @@ open class AddNotificationDialogFragment : DialogFragment() {
         var mPositiveButton: CharSequence? = null
         var mNegativeButton: CharSequence? = null
         var mCanceable = false
+        var mIdPromemoria: Long = 0
         var mIdComunitaPrefill: Long = 0
+        var mDataPrefill: Date? = null
+        var mNotaPrefill: String = ""
         var mFreeMode: Boolean = false
+        var mEditMode: Boolean = false
+
+        fun idPromemoria(id: Long): Builder {
+            mIdPromemoria = id
+            return this
+        }
 
         fun idComunitaPrefill(id: Long): Builder {
             mIdComunitaPrefill = id
+            return this
+        }
+
+        fun datePrefill(data: Date?): Builder {
+            mDataPrefill = data
+            return this
+        }
+
+        fun notaPrefill(nota: String): Builder {
+            mNotaPrefill = nota
             return this
         }
 
@@ -167,6 +204,11 @@ open class AddNotificationDialogFragment : DialogFragment() {
             return this
         }
 
+        fun setEditMode(freeMode: Boolean): Builder {
+            mEditMode = freeMode
+            return this
+        }
+
         fun setCanceable(canceable: Boolean): Builder {
             mCanceable = canceable
             return this
@@ -181,7 +223,7 @@ open class AddNotificationDialogFragment : DialogFragment() {
         withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
             comunitaList =
                 ComunitaDatabase.getInstance(requireContext()).comunitaDao().allByName
-            if (!mBuilder.mFreeMode)
+            if (!mBuilder.mFreeMode || mBuilder.mEditMode)
                 comunita = ComunitaDatabase.getInstance(requireContext()).comunitaDao()
                     .getById(mBuilder.mIdComunitaPrefill) ?: Comunita()
         }
@@ -196,7 +238,7 @@ open class AddNotificationDialogFragment : DialogFragment() {
         val textView = view.findViewById<AutoCompleteTextView>(R.id.comunita_autcomplete)
         textView.setAdapter(adapter)
 
-        if (!mBuilder.mFreeMode) {
+        if (!mBuilder.mFreeMode || mBuilder.mEditMode) {
             textView.setText(
                 resources.getString(
                     R.string.comunita_item_name,
@@ -218,6 +260,7 @@ open class AddNotificationDialogFragment : DialogFragment() {
     class DialogViewModel : ViewModel() {
         var mTag: String = ""
 
+        var idPromemoria: Long = 0
         var idComunita: Long = 0
         var data: Date? = null
         var descrizioneText: String = ""

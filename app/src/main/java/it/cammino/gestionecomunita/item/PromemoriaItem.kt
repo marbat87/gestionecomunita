@@ -3,34 +3,38 @@ package it.cammino.gestionecomunita.item
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.mikepenz.fastadapter.binding.AbstractBindingItem
-import com.mikepenz.fastadapter.swipe.ISwipeable
 import it.cammino.gestionecomunita.R
-import it.cammino.gestionecomunita.databinding.SwipeableItemBinding
+import it.cammino.gestionecomunita.databinding.PromemoriaRowItemBinding
 import it.cammino.gestionecomunita.util.StringUtils
 import it.cammino.gestionecomunita.util.Utility
 import java.sql.Date
 
-fun swipeableItem(block: SwipeableItem.() -> Unit): SwipeableItem = SwipeableItem().apply(block)
+fun promemoriaItem(block: PromemoriaItem.() -> Unit): PromemoriaItem = PromemoriaItem().apply(block)
 
-class SwipeableItem : AbstractBindingItem<SwipeableItemBinding>(), ISwipeable {
+class PromemoriaItem : AbstractBindingItem<PromemoriaRowItemBinding>() {
 
     var numeroComunita: String = ""
     var parrocchiaComunita: String = ""
     var data: Date? = null
     var descrizione: String = ""
+    var idComunita: Long = -1
+
+    var deleteClickClickListener: OnClickListener? = null
+    var editClickClickListener: OnClickListener? = null
 
     var id: Long = 0
 
     override val type: Int
-        get() = R.id.fastadapter_swipable_item_id
+        get() = R.id.fastadapter_promemoria_item_id
 
-    override var isSwipeable = true
-
-    override fun createBinding(inflater: LayoutInflater, parent: ViewGroup?): SwipeableItemBinding {
-        return SwipeableItemBinding.inflate(inflater, parent, false)
+    override fun createBinding(
+        inflater: LayoutInflater,
+        parent: ViewGroup?
+    ): PromemoriaRowItemBinding {
+        return PromemoriaRowItemBinding.inflate(inflater, parent, false)
     }
 
-    override fun bindView(binding: SwipeableItemBinding, payloads: List<Any>) {
+    override fun bindView(binding: PromemoriaRowItemBinding, payloads: List<Any>) {
         val ctx = binding.root.context
 
         binding.promemoriaComunita.text =
@@ -44,12 +48,19 @@ class SwipeableItem : AbstractBindingItem<SwipeableItemBinding>(), ISwipeable {
 
         binding.promemoriaDescrizione.text = descrizione
 
+        binding.cancellaPromemoria.setOnClickListener { deleteClickClickListener?.onClick(this) }
+        binding.modificaPromemoria.setOnClickListener { editClickClickListener?.onClick(this) }
+
     }
 
-    override fun unbindView(binding: SwipeableItemBinding) {
+    override fun unbindView(binding: PromemoriaRowItemBinding) {
         binding.promemoriaComunita.text = null
         binding.promemoriaData.text = null
         binding.promemoriaDescrizione.text = null
+    }
+
+    interface OnClickListener {
+        fun onClick(it: PromemoriaItem)
     }
 
 }

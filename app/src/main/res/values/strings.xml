@@ -72,8 +72,10 @@
     <string name="modifica_fratello">Modifica fratello</string>
     <string name="save">Salva</string>
     <string name="delete_fratello">Cancella fratello</string>
+    <string name="delete_promemoria">Cancella promemoria</string>
     <string name="delete_confirm">elimina</string>
     <string name="delete_fratello_dialog">Sei sicuro di voler cancellare il fratello dalla comunità?</string>
+    <string name="delete_promemoria_dialog">Sei sicuro di voler cancellare il promemoria?</string>
     <string name="delete_community">Cancella comunità</string>
     <string name="delete_community_dialog">Sei sicuro di voler cancellare la comunità?</string>
     <string name="error">Errore</string>
@@ -83,9 +85,11 @@
     <string name="data_passaggio_dots">Data: %1$s</string>
     <string name="history">Storia</string>
     <string name="nuovo_promemoria">Nuovo promemoria</string>
+    <string name="modifica_promemoria">Modifica promemoria</string>
     <string name="data">Data</string>
     <string name="descrizione">Descrizione</string>
     <string name="promemoria_aggiunto">Promemoria aggiunto</string>
+    <string name="promemoria_modificato">Promemoria modificato</string>
     <string name="incontro_aggiunto">Incontro aggiunto</string>
     <string name="incontro_modificato">Incontro modificato</string>
     <string name="incontro_cancellato">Incontro cancellato</string>

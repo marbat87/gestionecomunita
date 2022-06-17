@@ -1,10 +1,7 @@
 package it.cammino.gestionecomunita.database.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import it.cammino.gestionecomunita.database.entity.Promemoria
 import it.cammino.gestionecomunita.database.item.PromemoriaComunita
 
@@ -28,5 +25,8 @@ interface PromemoriaDao {
 
     @Insert
     fun insertPromemoria(promemoria: Promemoria)
+
+    @Update
+    fun updatePromemoria(promemoria: Promemoria)
 
 }

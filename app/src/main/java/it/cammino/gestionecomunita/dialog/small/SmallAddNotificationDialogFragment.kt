@@ -37,6 +37,10 @@ class SmallAddNotificationDialogFragment : AddNotificationDialogFragment() {
 
         val view = prefill(mBuilder, container)
 
+        view.findViewById<MaterialToolbar>(R.id.promemoria_toolbar)?.title = getString(
+            if (mBuilder.mEditMode) R.string.modifica_promemoria else R.string.nuovo_promemoria
+        )
+
         view.findViewById<MaterialToolbar>(R.id.promemoria_toolbar).setNavigationOnClickListener {
             viewModel.mTag = mBuilder.mTag
             viewModel.handled = false
