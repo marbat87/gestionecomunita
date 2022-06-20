@@ -15,7 +15,6 @@ import androidx.fragment.app.commit
 import com.google.android.material.appbar.MaterialToolbar
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.dialog.CommunityHistoryDialogFragment
-import it.cammino.gestionecomunita.dialog.DialogState
 
 @Suppress("unused")
 class SmallCommunityHistoryDialogFragment : CommunityHistoryDialogFragment() {

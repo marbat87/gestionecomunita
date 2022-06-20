@@ -95,8 +95,4 @@ class ExpandableMeetingItem : AbstractBindingItem<IncontroExpandableItemBinding>
         binding.textLuogo.text = null
     }
 
-    interface OnClickListener {
-        fun onClick(it: ExpandableMeetingItem)
-    }
-
 }

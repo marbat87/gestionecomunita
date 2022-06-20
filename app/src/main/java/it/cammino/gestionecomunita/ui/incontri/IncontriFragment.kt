@@ -27,7 +27,6 @@ import it.cammino.gestionecomunita.dialog.EditMeetingDialogFragment
 import it.cammino.gestionecomunita.dialog.SimpleDialogFragment
 import it.cammino.gestionecomunita.dialog.large.LargeEditMeetingDialogFragment
 import it.cammino.gestionecomunita.dialog.small.SmallEditMeetingDialogFragment
-import it.cammino.gestionecomunita.item.ExpandableBrotherItem
 import it.cammino.gestionecomunita.item.ExpandableMeetingItem
 import it.cammino.gestionecomunita.item.expandableMeetingItem
 import it.cammino.gestionecomunita.util.systemLocale
