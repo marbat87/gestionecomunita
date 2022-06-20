@@ -10,6 +10,7 @@ import it.cammino.gestionecomunita.database.item.PromemoriaComunita
 class NotificationsViewModel(application: Application) : AndroidViewModel(application) {
 
     var removedPromemoria: Promemoria? = null
+    var idComunita: Long = 0
 
     var itemsResult: LiveData<List<PromemoriaComunita>>? = null
         private set

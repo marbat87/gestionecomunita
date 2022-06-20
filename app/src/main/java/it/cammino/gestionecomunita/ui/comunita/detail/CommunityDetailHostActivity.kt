@@ -53,7 +53,7 @@ class CommunityDetailHostActivity : ThemeableActivity() {
             fragment.arguments = args
             supportFragmentManager.commit {
                 replace(
-                    R.id.nav_host_fragment_community_detail,
+                    R.id.detail_fragment,
                     fragment,
                     R.id.community_detail_fragment.toString()
                 )

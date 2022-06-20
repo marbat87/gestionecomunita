@@ -48,6 +48,7 @@
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout-large/fratello_edit_dialog.xml" value="0.1" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout-large/incontro_edit_dialog.xml" value="0.1390625" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout-sw600dp/activity_main.xml" value="0.1390625" />
+        <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout-sw600dp/community_fragment_notifications.xml" value="0.137109375" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout-sw600dp/fragment_community_detail.xml" value="0.1390625" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout-sw600dp/fragment_community_list.xml" value="0.1390625" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout-sw600dp/fragment_meetings.xml" value="0.1" />
@@ -57,6 +58,7 @@
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout/activity_vocazione_detail.xml" value="0.1828125" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout/add_notification_dialog.xml" value="0.1" />
+        <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout/community_fragment_notifications.xml" value="0.1828125" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout/community_history_dialog.xml" value="0.1" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout/community_list_content.xml" value="0.18541666666666667" />
         <entry key="..\:/Users/m.battain/AndroidStudioProjects/gestionecomunita/app/src/main/res/layout/community_row_item.xml" value="0.184375" />

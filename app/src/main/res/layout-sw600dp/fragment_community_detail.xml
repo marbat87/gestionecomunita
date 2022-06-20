@@ -418,7 +418,6 @@
                 style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly.OnPrimary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 app:icon="@drawable/undo_24px"
                 app:iconSize="24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -432,7 +431,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:visibility="gone"
                 app:icon="@drawable/save_24px"
                 app:iconSize="24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -444,7 +442,8 @@
                 android:id="@+id/community_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:constraint_referenced_ids="edit_community, delete_community, history_community, add_notification" />
+                android:visibility="gone"
+                app:constraint_referenced_ids="edit_community, delete_community, history_community, notification_community" />
 
             <Button
                 android:id="@+id/edit_community"
@@ -471,11 +470,12 @@
                 tools:ignore="SpeakableTextPresentCheck" />
 
             <Button
-                android:id="@+id/add_notification"
+                android:id="@+id/notification_community"
                 style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly.OnPrimary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:icon="@drawable/add_alert_24px"
+                android:transitionName="shared_element_notifications"
+                app:icon="@drawable/notifications_24px"
                 app:iconSize="24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/history_community"
@@ -490,7 +490,7 @@
                 app:icon="@drawable/delete_24px"
                 app:iconSize="24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/add_notification"
+                app:layout_constraintStart_toEndOf="@id/notification_community"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="SpeakableTextPresentCheck" />
 

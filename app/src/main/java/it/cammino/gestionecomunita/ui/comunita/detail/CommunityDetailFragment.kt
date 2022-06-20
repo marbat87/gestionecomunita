@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.text.isDigitsOnly
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,14 +32,13 @@ import it.cammino.gestionecomunita.database.entity.Passaggio
 import it.cammino.gestionecomunita.database.entity.Promemoria
 import it.cammino.gestionecomunita.databinding.FragmentCommunityDetailBinding
 import it.cammino.gestionecomunita.dialog.*
-import it.cammino.gestionecomunita.dialog.large.LargeAddNotificationDialogFragment
 import it.cammino.gestionecomunita.dialog.large.LargeCommunityHistoryDialogFragment
 import it.cammino.gestionecomunita.dialog.large.LargeEditBrotherDialogFragment
-import it.cammino.gestionecomunita.dialog.small.SmallAddNotificationDialogFragment
 import it.cammino.gestionecomunita.dialog.small.SmallCommunityHistoryDialogFragment
 import it.cammino.gestionecomunita.dialog.small.SmallEditBrotherDialogFragment
 import it.cammino.gestionecomunita.item.ExpandableBrotherItem
 import it.cammino.gestionecomunita.item.expandableBrotherItem
+import it.cammino.gestionecomunita.ui.notifications.CommunityNotificationsFragment
 import it.cammino.gestionecomunita.util.StringUtils
 import it.cammino.gestionecomunita.util.Utility
 import it.cammino.gestionecomunita.util.systemLocale
@@ -301,25 +301,14 @@ open class CommunityDetailFragment : Fragment() {
             }
         }
 
-        binding.addNotification.setOnClickListener {
-            mMainActivity?.let { mActivity ->
-                val builder = AddNotificationDialogFragment.Builder(
-                    mActivity, ADD_NOTIFICATION
-                )
-                    .idComunitaPrefill(viewModel.listId)
-                if (mActivity.resources.getBoolean(R.bool.large_layout)) {
-                    builder.positiveButton(R.string.save)
-                        .negativeButton(android.R.string.cancel)
-                    LargeAddNotificationDialogFragment.show(
-                        builder,
-                        mActivity.supportFragmentManager
-                    )
-                } else {
-                    SmallAddNotificationDialogFragment.show(
-                        builder,
-                        mActivity.supportFragmentManager
-                    )
-                }
+        binding.notificationCommunity.setOnClickListener {
+            parentFragmentManager.commit {
+                replace(
+                    R.id.detail_fragment,
+                    CommunityNotificationsFragment.newInstance(viewModel.listId),
+                    R.id.community_detail_history_fragment.toString()
+                ).addSharedElement(it, "shared_element_notifications")
+                    .addToBackStack(R.id.community_detail_history_fragment.toString())
             }
         }
 
@@ -904,7 +893,7 @@ open class CommunityDetailFragment : Fragment() {
             )
         }
         viewModel.fratelliPresenti = viewModel.elementi.orEmpty().isNotEmpty()
-        showGeneralOrBrothers(true)
+        showGeneralOrBrothers(viewModel.selectedTabIndex == 0)
     }
 
     private val mDeleteClickClickListener = object : ExpandableBrotherItem.OnClickListener {

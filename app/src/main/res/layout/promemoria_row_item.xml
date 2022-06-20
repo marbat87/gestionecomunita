@@ -52,12 +52,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:textAppearance="?attr/textAppearanceBodyMedium"
             android:textColor="?android:attr/textColorSecondary"
+            app:layout_constraintBottom_toTopOf="@id/modifica_promemoria"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/promemoria_divider"
-            app:layout_constraintBottom_toTopOf="@id/modifica_promemoria"
             tools:text="descrizione della nota" />
 
         <Button
@@ -65,7 +64,6 @@
             style="@style/Widget.Material3.Button.TextButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:text="@string/modifica"
             app:icon="@drawable/edit_24px"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -76,7 +74,6 @@
             style="@style/Widget.Material3.Button.TextButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:text="@string/cancella"
             app:icon="@drawable/delete_24px"
             app:layout_constraintBottom_toBottomOf="parent"

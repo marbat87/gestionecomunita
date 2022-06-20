@@ -45,7 +45,7 @@ class SmallAddNotificationDialogFragment : AddNotificationDialogFragment() {
             viewModel.mTag = mBuilder.mTag
             viewModel.handled = false
             viewModel.state.value = DialogState.Negative(this)
-            dismiss()
+            parentFragmentManager.popBackStack()
         }
 
         view.findViewById<Button>(R.id.salva_promemoria).setOnClickListener {
@@ -54,7 +54,7 @@ class SmallAddNotificationDialogFragment : AddNotificationDialogFragment() {
                 fillreturnText(view)
                 viewModel.handled = false
                 viewModel.state.value = DialogState.Positive(this)
-                dismiss()
+                parentFragmentManager.popBackStack()
             } else {
                 (activity as? AppCompatActivity)?.let { mActivity ->
                     SimpleDialogFragment.show(
