@@ -19,7 +19,10 @@ import com.mikepenz.fastadapter.adapters.GenericFastItemAdapter
 import com.mikepenz.fastadapter.expandable.getExpandableExtension
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.databinding.FragmentCommunityListBinding
-import it.cammino.gestionecomunita.item.*
+import it.cammino.gestionecomunita.item.ExpandableItem
+import it.cammino.gestionecomunita.item.VocazioneSubItem
+import it.cammino.gestionecomunita.item.expandableItem
+import it.cammino.gestionecomunita.item.vocazioneSubItem
 import it.cammino.gestionecomunita.ui.vocazione.CentroVocazionaleViewModel
 import it.cammino.gestionecomunita.util.Utility
 import java.util.*
@@ -59,7 +62,7 @@ class VocazioneSectionedListFragment : Fragment() {
         itemExpandableExtension.isOnlyOneExpandedItem = true
 
         mAdapter.onClickListener =
-            { _: View?, _: IAdapter<IItem<out RecyclerView.ViewHolder>>, item: IItem<out RecyclerView.ViewHolder>, _: Int ->
+            { _, _, item, _ ->
                 var consume = false
                 if (item is VocazioneSubItem) {
                     if (SystemClock.elapsedRealtime() - mLastClickTime >= Utility.CLICK_DELAY) {

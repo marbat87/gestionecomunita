@@ -7,13 +7,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
+import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.FastItemAdapter
+import com.mikepenz.fastadapter.listeners.ClickEventHook
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.database.ComunitaDatabase
 import it.cammino.gestionecomunita.database.entity.Incontro
@@ -23,6 +27,7 @@ import it.cammino.gestionecomunita.dialog.EditMeetingDialogFragment
 import it.cammino.gestionecomunita.dialog.SimpleDialogFragment
 import it.cammino.gestionecomunita.dialog.large.LargeEditMeetingDialogFragment
 import it.cammino.gestionecomunita.dialog.small.SmallEditMeetingDialogFragment
+import it.cammino.gestionecomunita.item.ExpandableBrotherItem
 import it.cammino.gestionecomunita.item.ExpandableMeetingItem
 import it.cammino.gestionecomunita.item.expandableMeetingItem
 import it.cammino.gestionecomunita.util.systemLocale
@@ -109,6 +114,24 @@ class IncontriFragment : Fragment() {
             }
         }
 
+        mAdapterTodo.addEventHooks(
+            listOf(
+                cancellaIncontroHook,
+                modificaIncontroHook,
+                expandCollapeHook,
+                doneHook
+            )
+        )
+
+        mAdapterDone.addEventHooks(
+            listOf(
+                cancellaIncontroHook,
+                modificaIncontroHook,
+                expandCollapeHook,
+                toDoHook
+            )
+        )
+
         binding.meetingTabs.getTabAt(viewModel.selectedTabIndex)?.select()
 
     }
@@ -129,10 +152,6 @@ class IncontriFragment : Fragment() {
                     note = it.note
                     done = it.done
                     position = lastPosition++
-                    editClickClickListener = mEditClickClickListener
-                    deleteClickClickListener = mDeleteClickClickListener
-                    expandClickClickListener = mExpandClickClickListenerTodo
-                    doneClickListener = mDonelickClickListener
                 }
             })
             binding.noIncontriTodo.isVisible = mAdapterTodo.adapterItemCount == 0
@@ -153,10 +172,6 @@ class IncontriFragment : Fragment() {
                     note = it.note
                     done = it.done
                     position = lastPosition++
-                    editClickClickListener = mEditClickClickListener
-                    deleteClickClickListener = mDeleteClickClickListener
-                    expandClickClickListener = mExpandClickClickListenerDone
-                    todoClickListener = mTodolickClickListener
                 }
             })
             binding.noIncontriDone.isVisible = mAdapterDone.adapterItemCount == 0
@@ -212,10 +227,20 @@ class IncontriFragment : Fragment() {
         }
     }
 
-    private val mDeleteClickClickListener = object : ExpandableMeetingItem.OnClickListener {
-        override fun onClick(it: ExpandableMeetingItem) {
+    private var cancellaIncontroHook = object : ClickEventHook<ExpandableMeetingItem>() {
+        override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
+            //return the views on which you want to bind this event
+            return viewHolder.itemView.findViewById(R.id.cancella_incontro)
+        }
+
+        override fun onClick(
+            v: View,
+            position: Int,
+            fastAdapter: FastAdapter<ExpandableMeetingItem>,
+            item: ExpandableMeetingItem
+        ) {
             mMainActivity?.let { mActivity ->
-                viewModel.selectedIncontroId = it.id
+                viewModel.selectedIncontroId = item.id
                 SimpleDialogFragment.show(
                     SimpleDialogFragment.Builder(
                         mActivity,
@@ -232,35 +257,29 @@ class IncontriFragment : Fragment() {
         }
     }
 
-    private val mTodolickClickListener = object : ExpandableMeetingItem.OnClickListener {
-        override fun onClick(it: ExpandableMeetingItem) {
-            lifecycleScope.launch {
-                updateIncontro(it.id, false)
-            }
+    private var modificaIncontroHook = object : ClickEventHook<ExpandableMeetingItem>() {
+        override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
+            //return the views on which you want to bind this event
+            return viewHolder.itemView.findViewById(R.id.modifica_incontro)
         }
-    }
 
-    private val mDonelickClickListener = object : ExpandableMeetingItem.OnClickListener {
-        override fun onClick(it: ExpandableMeetingItem) {
-            lifecycleScope.launch {
-                updateIncontro(it.id, true)
-            }
-        }
-    }
-
-    private val mEditClickClickListener = object : ExpandableMeetingItem.OnClickListener {
-        override fun onClick(it: ExpandableMeetingItem) {
+        override fun onClick(
+            v: View,
+            position: Int,
+            fastAdapter: FastAdapter<ExpandableMeetingItem>,
+            item: ExpandableMeetingItem
+        ) {
             mMainActivity?.let { mActivity ->
-                viewModel.selectedIncontroId = it.id
+                viewModel.selectedIncontroId = item.id
                 val builder = EditMeetingDialogFragment.Builder(
                     mActivity, EDIT_INCONTRO
                 )
-                    .nomePrefill(it.nome)
-                    .cognomePrefill(it.cognome)
-                    .dataIncontroPrefill(it.dataIncontro)
-                    .luogoPrefill(it.luogoIncontro)
-                    .comunitaPrefill(it.idComunita)
-                    .notePrefill(it.note)
+                    .nomePrefill(item.nome)
+                    .cognomePrefill(item.cognome)
+                    .dataIncontroPrefill(item.dataIncontro)
+                    .luogoPrefill(item.luogoIncontro)
+                    .comunitaPrefill(item.idComunita)
+                    .notePrefill(item.note)
                     .setEditMode(true)
                 if (mActivity.resources.getBoolean(R.bool.large_layout)) {
                     builder.positiveButton(R.string.save)
@@ -279,15 +298,59 @@ class IncontriFragment : Fragment() {
         }
     }
 
-    private val mExpandClickClickListenerTodo = object : ExpandableMeetingItem.OnClickListener {
-        override fun onClick(it: ExpandableMeetingItem) {
-            mAdapterTodo.notifyItemChanged(it.position)
+    private val expandCollapeHook = object : ClickEventHook<ExpandableMeetingItem>() {
+        override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
+            //return the views on which you want to bind this event
+            return viewHolder.itemView.findViewById(R.id.title_section)
+        }
+
+        override fun onClick(
+            v: View,
+            position: Int,
+            fastAdapter: FastAdapter<ExpandableMeetingItem>,
+            item: ExpandableMeetingItem
+        ) {
+            ViewCompat.animate(v.findViewById(R.id.group_indicator))
+                .rotation(if (item.isExpanded) 180f else 0f)
+                .start()
+            item.isExpanded = !item.isExpanded
+            fastAdapter.notifyItemChanged(item.position)
         }
     }
 
-    private val mExpandClickClickListenerDone = object : ExpandableMeetingItem.OnClickListener {
-        override fun onClick(it: ExpandableMeetingItem) {
-            mAdapterDone.notifyItemChanged(it.position)
+    private val toDoHook = object : ClickEventHook<ExpandableMeetingItem>() {
+        override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
+            //return the views on which you want to bind this event
+            return viewHolder.itemView.findViewById(R.id.todo_incontro)
+        }
+
+        override fun onClick(
+            v: View,
+            position: Int,
+            fastAdapter: FastAdapter<ExpandableMeetingItem>,
+            item: ExpandableMeetingItem
+        ) {
+            lifecycleScope.launch {
+                updateIncontro(item.id, false)
+            }
+        }
+    }
+
+    private val doneHook = object : ClickEventHook<ExpandableMeetingItem>() {
+        override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
+            //return the views on which you want to bind this event
+            return viewHolder.itemView.findViewById(R.id.done_incontro)
+        }
+
+        override fun onClick(
+            v: View,
+            position: Int,
+            fastAdapter: FastAdapter<ExpandableMeetingItem>,
+            item: ExpandableMeetingItem
+        ) {
+            lifecycleScope.launch {
+                updateIncontro(item.id, true)
+            }
         }
     }
 

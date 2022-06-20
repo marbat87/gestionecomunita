@@ -7,12 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import androidx.activity.addCallback
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.commit
 import com.google.android.material.appbar.MaterialToolbar
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.dialog.CommunityHistoryDialogFragment
+import it.cammino.gestionecomunita.dialog.DialogState
 
 @Suppress("unused")
 class SmallCommunityHistoryDialogFragment : CommunityHistoryDialogFragment() {
@@ -31,9 +34,13 @@ class SmallCommunityHistoryDialogFragment : CommunityHistoryDialogFragment() {
         val mBuilder = builder
             ?: throw IllegalStateException("SimpleDialogFragment should be created using its Builder interface.")
 
-        val mView =  prefill(mBuilder, container)
+        val mView = prefill(mBuilder, container)
 
         mView.findViewById<MaterialToolbar>(R.id.history_toolbar).setNavigationOnClickListener {
+            dismiss()
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
             dismiss()
         }
 
@@ -62,17 +69,13 @@ class SmallCommunityHistoryDialogFragment : CommunityHistoryDialogFragment() {
         }
 
         fun show(builder: Builder, fragmentManager: FragmentManager) {
-            val transaction = fragmentManager.beginTransaction()
-            // For a little polish, specify a transition animation
-            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-            // To make it fullscreen, use the 'content' root view as the container
-            // for the fragment, which is always the root view for the activity
-            transaction
-                .add(android.R.id.content, newInstance(builder))
-                .addToBackStack(null)
-                .commit()
+            fragmentManager.commit {
+                replace(
+                    android.R.id.content,
+                    newInstance(builder)
+                ).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            }
         }
     }
-
 
 }

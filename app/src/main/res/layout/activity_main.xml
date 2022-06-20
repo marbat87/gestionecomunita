@@ -55,10 +55,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_marginEnd="@dimen/fab_margin"
-            android:visibility="gone"
             android:layout_marginBottom="@dimen/fab_margin"
             android:contentDescription="@string/nuovo_promemoria"
             android:text="@string/nuovo_promemoria"
+            android:visibility="gone"
             app:icon="@drawable/add_24px" />
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -67,10 +67,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_marginEnd="@dimen/fab_margin"
-            android:visibility="gone"
             android:layout_marginBottom="@dimen/fab_margin"
             android:contentDescription="@string/nuovo_incontro"
             android:text="@string/nuovo_incontro"
+            android:visibility="gone"
             app:icon="@drawable/add_24px" />
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -79,10 +79,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_marginEnd="@dimen/fab_margin"
-            android:visibility="gone"
             android:layout_marginBottom="@dimen/fab_margin"
             android:contentDescription="@string/vocazione_new_title"
             android:text="@string/vocazione_new_title"
+            android:visibility="gone"
             app:icon="@drawable/add_24px" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

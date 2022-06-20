@@ -42,10 +42,6 @@ class ExpandableBrotherItem : AbstractBindingItem<FratelloDetailItemBinding>() {
 
     var editable: Boolean = false
 
-    var deleteClickClickListener: OnClickListener? = null
-    var editClickClickListener: OnClickListener? = null
-    var expandClickClickListener: OnClickListener? = null
-
     var isExpanded: Boolean = false
 
     var position: Int = 0
@@ -98,15 +94,6 @@ class ExpandableBrotherItem : AbstractBindingItem<FratelloDetailItemBinding>() {
         binding.texts.isVisible = isExpanded
         binding.buttons.isVisible = editable && isExpanded
 
-        binding.cancellaFratello.setOnClickListener { deleteClickClickListener?.onClick(this) }
-        binding.modificaFratello.setOnClickListener { editClickClickListener?.onClick(this) }
-        binding.titleSection.setOnClickListener {
-            ViewCompat.animate(binding.groupIndicator).rotation(if (isExpanded) 180f else 0f)
-                .start()
-            isExpanded = !isExpanded
-            expandClickClickListener?.onClick(this)
-        }
-
     }
 
     override fun unbindView(binding: FratelloDetailItemBinding) {
@@ -124,10 +111,6 @@ class ExpandableBrotherItem : AbstractBindingItem<FratelloDetailItemBinding>() {
         binding.textStato.text = null
         binding.textNote.text = null
         binding.textDataInizioCammino.text = null
-    }
-
-    interface OnClickListener {
-        fun onClick(it: ExpandableBrotherItem)
     }
 
 }

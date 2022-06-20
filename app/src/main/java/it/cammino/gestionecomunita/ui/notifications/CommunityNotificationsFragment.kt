@@ -11,9 +11,13 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.MaterialContainerTransform
+import com.google.android.material.transition.MaterialSharedAxis
+import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.FastItemAdapter
+import com.mikepenz.fastadapter.listeners.ClickEventHook
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.database.ComunitaDatabase
 import it.cammino.gestionecomunita.database.entity.Promemoria
@@ -49,9 +53,11 @@ class CommunityNotificationsFragment : Fragment() {
 
     private var mAdapter: FastItemAdapter<PromemoriaItem> = FastItemAdapter()
 
-    override fun onCreate(savedInstanceState: Bundle?)  {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedElementEnterTransition = MaterialContainerTransform()
+        exitTransition = MaterialSharedAxis(MaterialSharedAxis.Y, /* forward= */ true)
+        reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Y, /* forward= */ false)
     }
 
     override fun onAttach(context: Context) {
@@ -143,8 +149,69 @@ class CommunityNotificationsFragment : Fragment() {
             }
         }
 
+        mAdapter.addEventHooks(
+            listOf(
+                cancellaPromemoriaHook,
+                modificaPromemoriaHook
+            )
+        )
+
         subscribeUiChanges()
 
+    }
+
+    private var cancellaPromemoriaHook = object : ClickEventHook<PromemoriaItem>() {
+        override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
+            //return the views on which you want to bind this event
+            return viewHolder.itemView.findViewById(R.id.cancella_promemoria)
+        }
+
+        override fun onClick(
+            v: View,
+            position: Int,
+            fastAdapter: FastAdapter<PromemoriaItem>,
+            item: PromemoriaItem
+        ) {
+            lifecycleScope.launch { rimuoviPromemoria(item.id) }
+        }
+    }
+
+    private var modificaPromemoriaHook = object : ClickEventHook<PromemoriaItem>() {
+        override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
+            //return the views on which you want to bind this event
+            return viewHolder.itemView.findViewById(R.id.modifica_promemoria)
+        }
+
+        override fun onClick(
+            v: View,
+            position: Int,
+            fastAdapter: FastAdapter<PromemoriaItem>,
+            item: PromemoriaItem
+        ) {
+            mMainActivity?.let { mActivity ->
+                val builder = AddNotificationDialogFragment.Builder(
+                    mActivity, CommunityDetailFragment.EDIT_NOTIFICATION
+                )
+                    .setEditMode(true)
+                    .idComunitaPrefill(item.idComunita)
+                    .idPromemoria(item.id)
+                    .datePrefill(item.data)
+                    .notaPrefill(item.descrizione)
+                if (resources.getBoolean(R.bool.large_layout)) {
+                    builder.positiveButton(R.string.save)
+                        .negativeButton(android.R.string.cancel)
+                    LargeAddNotificationDialogFragment.show(
+                        builder,
+                        parentFragmentManager
+                    )
+                } else {
+                    SmallAddNotificationDialogFragment.show(
+                        builder,
+                        mActivity.supportFragmentManager
+                    )
+                }
+            }
+        }
     }
 
     private fun subscribeUiChanges() {
@@ -158,8 +225,6 @@ class CommunityNotificationsFragment : Fragment() {
                     data = it.data
                     descrizione = it.note
                     idComunita = it.idComunita
-                    editClickClickListener = mEditClickClickListener
-                    deleteClickClickListener = mDeleteClickClickListener
                 }
             })
 
@@ -181,40 +246,6 @@ class CommunityNotificationsFragment : Fragment() {
                     is DialogState.Negative -> {
                         simpleDialogViewModel.handled = true
                     }
-                }
-            }
-        }
-    }
-
-    private val mDeleteClickClickListener = object : PromemoriaItem.OnClickListener {
-        override fun onClick(it: PromemoriaItem) {
-            lifecycleScope.launch { rimuoviPromemoria(it.id) }
-        }
-    }
-
-    private val mEditClickClickListener = object : PromemoriaItem.OnClickListener {
-        override fun onClick(it: PromemoriaItem) {
-            mMainActivity?.let { mActivity ->
-                val builder = AddNotificationDialogFragment.Builder(
-                    mActivity, CommunityDetailFragment.EDIT_NOTIFICATION
-                )
-                    .setEditMode(true)
-                    .idComunitaPrefill(it.idComunita)
-                    .idPromemoria(it.id)
-                    .datePrefill(it.data)
-                    .notaPrefill(it.descrizione)
-                if (resources.getBoolean(R.bool.large_layout)) {
-                    builder.positiveButton(R.string.save)
-                        .negativeButton(android.R.string.cancel)
-                    LargeAddNotificationDialogFragment.show(
-                        builder,
-                        mActivity.supportFragmentManager
-                    )
-                } else {
-                    SmallAddNotificationDialogFragment.show(
-                        builder,
-                        mActivity.supportFragmentManager
-                    )
                 }
             }
         }

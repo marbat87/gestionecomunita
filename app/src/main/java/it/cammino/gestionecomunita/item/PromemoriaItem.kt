@@ -19,9 +19,6 @@ class PromemoriaItem : AbstractBindingItem<PromemoriaRowItemBinding>() {
     var descrizione: String = ""
     var idComunita: Long = -1
 
-    var deleteClickClickListener: OnClickListener? = null
-    var editClickClickListener: OnClickListener? = null
-
     var id: Long = 0
 
     override val type: Int
@@ -48,19 +45,12 @@ class PromemoriaItem : AbstractBindingItem<PromemoriaRowItemBinding>() {
 
         binding.promemoriaDescrizione.text = descrizione
 
-        binding.cancellaPromemoria.setOnClickListener { deleteClickClickListener?.onClick(this) }
-        binding.modificaPromemoria.setOnClickListener { editClickClickListener?.onClick(this) }
-
     }
 
     override fun unbindView(binding: PromemoriaRowItemBinding) {
         binding.promemoriaComunita.text = null
         binding.promemoriaData.text = null
         binding.promemoriaDescrizione.text = null
-    }
-
-    interface OnClickListener {
-        fun onClick(it: PromemoriaItem)
     }
 
 }

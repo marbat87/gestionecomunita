@@ -14,16 +14,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.text.isDigitsOnly
+import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
+import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.FastItemAdapter
+import com.mikepenz.fastadapter.listeners.ClickEventHook
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.database.ComunitaDatabase
 import it.cammino.gestionecomunita.database.entity.Comunita
@@ -329,6 +333,14 @@ open class CommunityDetailFragment : Fragment() {
             confirmChanges()
         }
 
+        mAdapter.addEventHooks(
+            listOf(
+                cancellaFratelloHook,
+                expandCollapeHook,
+                modificaFratelloHook
+            )
+        )
+
         inputdialogViewModel.state.observe(viewLifecycleOwner) {
             Log.d(TAG, "inputDialogViewModel state $it")
             if (!inputdialogViewModel.handled) {
@@ -482,12 +494,106 @@ open class CommunityDetailFragment : Fragment() {
             binding.dataVisitaTextField.editText?.setText(instance.getCharSequence("dataVisitaTextField"))
             binding.noteTextField.editText?.setText(instance.getCharSequence("noteTextField"))
             binding.anniTextField.editText?.setText(instance.getCharSequence("anniTextField"))
-            viewModel.elementi?.forEach {
-                it.deleteClickClickListener = mDeleteClickClickListener
-                it.expandClickClickListener = mExpandClickClickListener
-                it.editClickClickListener = mEditClickClickListener
-            }
             viewModel.elementi?.let { mAdapter.itemAdapter.set(it) }
+        }
+    }
+
+    private val cancellaFratelloHook = object : ClickEventHook<ExpandableBrotherItem>() {
+        override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
+            //return the views on which you want to bind this event
+            return viewHolder.itemView.findViewById(R.id.cancella_fratello)
+        }
+
+        override fun onClick(
+            v: View,
+            position: Int,
+            fastAdapter: FastAdapter<ExpandableBrotherItem>,
+            item: ExpandableBrotherItem
+        ) {
+            mMainActivity?.let { mActivity ->
+                viewModel.selectedFratello = item.position
+                SimpleDialogFragment.show(
+                    SimpleDialogFragment.Builder(
+                        mActivity,
+                        DELETE_BROTHER
+                    )
+                        .title(R.string.delete_fratello)
+                        .icon(R.drawable.delete_24px)
+                        .content(R.string.delete_fratello_dialog)
+                        .positiveButton(R.string.delete_confirm)
+                        .negativeButton(android.R.string.cancel),
+                    mActivity.supportFragmentManager
+                )
+            }
+        }
+    }
+
+    private val expandCollapeHook = object : ClickEventHook<ExpandableBrotherItem>() {
+        override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
+            //return the views on which you want to bind this event
+            return viewHolder.itemView.findViewById(R.id.title_section)
+        }
+
+        override fun onClick(
+            v: View,
+            position: Int,
+            fastAdapter: FastAdapter<ExpandableBrotherItem>,
+            item: ExpandableBrotherItem
+        ) {
+            ViewCompat.animate(v.findViewById(R.id.group_indicator))
+                .rotation(if (item.isExpanded) 180f else 0f)
+                .start()
+            item.isExpanded = !item.isExpanded
+            fastAdapter.notifyItemChanged(item.position)
+        }
+    }
+
+    private val modificaFratelloHook = object : ClickEventHook<ExpandableBrotherItem>() {
+        override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
+            //return the views on which you want to bind this event
+            return viewHolder.itemView.findViewById(R.id.modifica_fratello)
+        }
+
+        override fun onClick(
+            v: View,
+            position: Int,
+            fastAdapter: FastAdapter<ExpandableBrotherItem>,
+            item: ExpandableBrotherItem
+        ) {
+            mMainActivity?.let { mActivity ->
+
+                viewModel.selectedFratello = item.position
+                val builder = EditBrotherDialogFragment.Builder(
+                    mActivity, EDIT_BROTHER
+                )
+                    .nomePrefill(item.nome)
+                    .cognomePrefill(item.cognome)
+                    .statoCivilePrefill(item.statoCivile)
+                    .setConiugePrefill(item.coniuge)
+                    .numeroFigliPrefill(item.numFigli)
+                    .setDataNascitaPrefill(item.annoNascita)
+                    .setCarismaPrefill(item.carisma)
+                    .setTribuPrefill(item.tribu)
+                    .setComunitaOriginePrefill(item.comunitaOrigine)
+                    .setDataArrivoPrefill(item.dataArrivo)
+                    .setStatoPrefill(item.stato)
+                    .setNotePrefill(item.note)
+                    .dataInizioCamminoPrefill(item.dataInizioCammino)
+                    .setEditMode(true)
+                if (mActivity.resources.getBoolean(R.bool.large_layout)) {
+                    builder.positiveButton(R.string.save)
+                        .negativeButton(android.R.string.cancel)
+                    LargeEditBrotherDialogFragment.show(
+                        builder,
+                        mActivity.supportFragmentManager
+                    )
+                } else {
+                    SmallEditBrotherDialogFragment.show(
+                        builder,
+                        mActivity.supportFragmentManager
+                    )
+                }
+            }
         }
     }
 
@@ -579,9 +685,6 @@ open class CommunityDetailFragment : Fragment() {
             this.numFigli = numFigli
             this.dataInizioCammino = dataInizio
             this.position = position
-            deleteClickClickListener = mDeleteClickClickListener
-            expandClickClickListener = mExpandClickClickListener
-            editClickClickListener = mEditClickClickListener
         }
     }
 
@@ -894,71 +997,6 @@ open class CommunityDetailFragment : Fragment() {
         }
         viewModel.fratelliPresenti = viewModel.elementi.orEmpty().isNotEmpty()
         showGeneralOrBrothers(viewModel.selectedTabIndex == 0)
-    }
-
-    private val mDeleteClickClickListener = object : ExpandableBrotherItem.OnClickListener {
-        override fun onClick(it: ExpandableBrotherItem) {
-            mMainActivity?.let { mActivity ->
-                viewModel.selectedFratello = it.position
-                SimpleDialogFragment.show(
-                    SimpleDialogFragment.Builder(
-                        mActivity,
-                        DELETE_BROTHER
-                    )
-                        .title(R.string.delete_fratello)
-                        .icon(R.drawable.delete_24px)
-                        .content(R.string.delete_fratello_dialog)
-                        .positiveButton(R.string.delete_confirm)
-                        .negativeButton(android.R.string.cancel),
-                    mActivity.supportFragmentManager
-                )
-            }
-        }
-    }
-
-    private val mExpandClickClickListener = object : ExpandableBrotherItem.OnClickListener {
-        override fun onClick(it: ExpandableBrotherItem) {
-            mAdapter.notifyItemChanged(it.position)
-        }
-    }
-
-    private val mEditClickClickListener = object : ExpandableBrotherItem.OnClickListener {
-        override fun onClick(it: ExpandableBrotherItem) {
-            mMainActivity?.let { mActivity ->
-
-                viewModel.selectedFratello = it.position
-                val builder = EditBrotherDialogFragment.Builder(
-                    mActivity, EDIT_BROTHER
-                )
-                    .nomePrefill(it.nome)
-                    .cognomePrefill(it.cognome)
-                    .statoCivilePrefill(it.statoCivile)
-                    .setConiugePrefill(it.coniuge)
-                    .numeroFigliPrefill(it.numFigli)
-                    .setDataNascitaPrefill(it.annoNascita)
-                    .setCarismaPrefill(it.carisma)
-                    .setTribuPrefill(it.tribu)
-                    .setComunitaOriginePrefill(it.comunitaOrigine)
-                    .setDataArrivoPrefill(it.dataArrivo)
-                    .setStatoPrefill(it.stato)
-                    .setNotePrefill(it.note)
-                    .dataInizioCamminoPrefill(it.dataInizioCammino)
-                    .setEditMode(true)
-                if (mActivity.resources.getBoolean(R.bool.large_layout)) {
-                    builder.positiveButton(R.string.save)
-                        .negativeButton(android.R.string.cancel)
-                    LargeEditBrotherDialogFragment.show(
-                        builder,
-                        mActivity.supportFragmentManager
-                    )
-                } else {
-                    SmallEditBrotherDialogFragment.show(
-                        builder,
-                        mActivity.supportFragmentManager
-                    )
-                }
-            }
-        }
     }
 
     companion object {

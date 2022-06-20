@@ -79,4 +79,5 @@ abstract class ComunitaDatabase : RoomDatabase() {
             // Invoked once auto migration is done
         }
     }
+
 }

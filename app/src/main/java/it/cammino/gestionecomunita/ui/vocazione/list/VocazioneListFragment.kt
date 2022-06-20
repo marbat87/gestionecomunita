@@ -9,7 +9,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import com.mikepenz.fastadapter.IAdapter
 import com.mikepenz.fastadapter.adapters.FastItemAdapter
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.database.entity.Vocazione
@@ -53,7 +52,7 @@ open class VocazioneListFragment : Fragment() {
         binding.communityList.adapter = mAdapter
 
         mAdapter.onClickListener =
-            { _: View?, _: IAdapter<VocazioneListItem>, item: VocazioneListItem, _: Int ->
+            { _, _, item, _ ->
                 var consume = false
                 if (SystemClock.elapsedRealtime() - mLastClickTime >= Utility.CLICK_DELAY) {
                     mLastClickTime = SystemClock.elapsedRealtime()

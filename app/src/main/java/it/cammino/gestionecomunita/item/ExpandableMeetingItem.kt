@@ -32,13 +32,7 @@ class ExpandableMeetingItem : AbstractBindingItem<IncontroExpandableItemBinding>
 
     var done: Boolean = false
 
-    var deleteClickClickListener: OnClickListener? = null
-    var editClickClickListener: OnClickListener? = null
-    var todoClickListener: OnClickListener? = null
-    var doneClickListener: OnClickListener? = null
-    var expandClickClickListener: OnClickListener? = null
-
-    private var isExpanded: Boolean = false
+    var isExpanded: Boolean = false
 
     var id: Long = 0
 
@@ -88,17 +82,6 @@ class ExpandableMeetingItem : AbstractBindingItem<IncontroExpandableItemBinding>
         binding.expansion.isVisible = isExpanded
         binding.todoIncontro.isVisible = isExpanded && done
         binding.doneIncontro.isVisible = isExpanded && !done
-
-        binding.cancellaIncontro.setOnClickListener { deleteClickClickListener?.onClick(this) }
-        binding.modificaIncontro.setOnClickListener { editClickClickListener?.onClick(this) }
-        binding.todoIncontro.setOnClickListener { todoClickListener?.onClick(this) }
-        binding.doneIncontro.setOnClickListener { doneClickListener?.onClick(this) }
-        binding.titleSection.setOnClickListener {
-            ViewCompat.animate(binding.incontroIndicator).rotation(if (isExpanded) 180f else 0f)
-                .start()
-            isExpanded = !isExpanded
-            expandClickClickListener?.onClick(this)
-        }
 
     }
 

@@ -71,7 +71,7 @@ class CommunitySectionedListFragment : Fragment() {
         itemExpandableExtension.isOnlyOneExpandedItem = true
 
         mAdapter.onClickListener =
-            { _: View?, _: IAdapter<IItem<out RecyclerView.ViewHolder>>, item: IItem<out RecyclerView.ViewHolder>, _: Int ->
+            { _, _, item, _ ->
                 var consume = false
                 if (item is CommunitySubItem) {
                     if (SystemClock.elapsedRealtime() - mLastClickTime >= Utility.CLICK_DELAY) {
@@ -110,7 +110,9 @@ class CommunitySectionedListFragment : Fragment() {
         viewModel.itemsResult?.observe(viewLifecycleOwner) { comunita ->
             val titoliList: ArrayList<IItem<*>> = ArrayList()
             val orderedComunita =
-                if (viewModel.indexType == CommunityListViewModel.IndexType.TAPPA) comunita.sortedBy { it.idTappa } else comunita.sortedBy { it.diocesi.trim().lowercase() }
+                if (viewModel.indexType == CommunityListViewModel.IndexType.TAPPA) comunita.sortedBy { it.idTappa } else comunita.sortedBy {
+                    it.diocesi.trim().lowercase()
+                }
             var mSubItems = LinkedList<ISubItem<*>>()
             var totCanti = 0
             var totListe = 0
@@ -124,14 +126,15 @@ class CommunitySectionedListFragment : Fragment() {
                         setParrocchia = orderedComunita[i].parrocchia
                         setResponsabile = orderedComunita[i].responsabile
                         id = orderedComunita[i].id
-                        identifier = ((i+1) * 100).toLong()
+                        identifier = ((i + 1) * 100).toLong()
                     }
                 )
                 totCanti++
 
                 if ((i == (orderedComunita.size - 1)
                             || (viewModel.indexType == CommunityListViewModel.IndexType.TAPPA && orderedComunita[i].idTappa != orderedComunita[i + 1].idTappa))
-                    || (viewModel.indexType == CommunityListViewModel.IndexType.DIOCESI && orderedComunita[i].diocesi.trim().lowercase() != orderedComunita[i + 1].diocesi.trim().lowercase())
+                    || (viewModel.indexType == CommunityListViewModel.IndexType.DIOCESI && orderedComunita[i].diocesi.trim()
+                        .lowercase() != orderedComunita[i + 1].diocesi.trim().lowercase())
                 ) {
                     // serve a non mettere il divisore sull'ultimo elemento della lista
                     titoliList.add(

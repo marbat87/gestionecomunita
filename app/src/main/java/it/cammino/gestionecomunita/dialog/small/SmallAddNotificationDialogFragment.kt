@@ -8,18 +8,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.commit
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.transition.MaterialSharedAxis
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.dialog.AddNotificationDialogFragment
 import it.cammino.gestionecomunita.dialog.DialogState
 import it.cammino.gestionecomunita.dialog.SimpleDialogFragment
 
-@Suppress("unused")
 class SmallAddNotificationDialogFragment : AddNotificationDialogFragment() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enterTransition = MaterialSharedAxis(MaterialSharedAxis.Y, /* forward= */ true)
+        returnTransition = MaterialSharedAxis(MaterialSharedAxis.Y, /* forward= */ false)
+    }
 
     private val builder: Builder?
         get() = if (arguments?.containsKey(BUILDER_TAG) != true) null else arguments?.getSerializable(
@@ -45,7 +52,14 @@ class SmallAddNotificationDialogFragment : AddNotificationDialogFragment() {
             viewModel.mTag = mBuilder.mTag
             viewModel.handled = false
             viewModel.state.value = DialogState.Negative(this)
-            parentFragmentManager.popBackStack()
+            dismiss()
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            viewModel.mTag = mBuilder.mTag
+            viewModel.handled = false
+            viewModel.state.value = DialogState.Negative(this@SmallAddNotificationDialogFragment)
+            dismiss()
         }
 
         view.findViewById<Button>(R.id.salva_promemoria).setOnClickListener {
@@ -54,7 +68,7 @@ class SmallAddNotificationDialogFragment : AddNotificationDialogFragment() {
                 fillreturnText(view)
                 viewModel.handled = false
                 viewModel.state.value = DialogState.Positive(this)
-                parentFragmentManager.popBackStack()
+                dismiss()
             } else {
                 (activity as? AppCompatActivity)?.let { mActivity ->
                     SimpleDialogFragment.show(
@@ -66,7 +80,7 @@ class SmallAddNotificationDialogFragment : AddNotificationDialogFragment() {
                             .icon(R.drawable.error_24px)
                             .content(R.string.campi_non_compilati)
                             .positiveButton(android.R.string.ok),
-                        mActivity.supportFragmentManager
+                        parentFragmentManager
                     )
                 }
             }
@@ -98,17 +112,14 @@ class SmallAddNotificationDialogFragment : AddNotificationDialogFragment() {
         }
 
         fun show(builder: Builder, fragmentManager: FragmentManager) {
-            val transaction = fragmentManager.beginTransaction()
-            // For a little polish, specify a transition animation
-            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-            // To make it fullscreen, use the 'content' root view as the container
-            // for the fragment, which is always the root view for the activity
-            transaction
-                .add(android.R.id.content, newInstance(builder))
-                .addToBackStack(null)
-                .commit()
+            fragmentManager.commit {
+                replace(
+                    android.R.id.content,
+                    newInstance(builder)
+                )
+            }
         }
-    }
 
+    }
 
 }
