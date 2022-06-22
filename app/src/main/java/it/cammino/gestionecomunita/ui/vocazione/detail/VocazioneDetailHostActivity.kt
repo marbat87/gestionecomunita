@@ -8,28 +8,31 @@ import com.google.android.material.transition.platform.MaterialContainerTransfor
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.databinding.ActivityVocazioneDetailBinding
 import it.cammino.gestionecomunita.ui.ThemeableActivity
+import it.cammino.gestionecomunita.util.OSUtils
 
 class VocazioneDetailHostActivity : ThemeableActivity() {
 
     private lateinit var binding: ActivityVocazioneDetailBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Set the transition name, which matches Activity A’s start view transition name, on
-        // the root view.
-        findViewById<View>(android.R.id.content).transitionName = "shared_element_vocazione"
+        if (!OSUtils.isObySamsung()) {
+            // Set the transition name, which matches Activity A’s start view transition name, on
+            // the root view.
+            findViewById<View>(android.R.id.content).transitionName = "shared_element_vocazione"
 
-        // Attach a callback used to receive the shared elements from Activity A to be
-        // used by the container transform transition.
-        setEnterSharedElementCallback(MaterialContainerTransformSharedElementCallback())
+            // Attach a callback used to receive the shared elements from Activity A to be
+            // used by the container transform transition.
+            setEnterSharedElementCallback(MaterialContainerTransformSharedElementCallback())
 
-        // Set this Activity’s enter and return transition to a MaterialContainerTransform
-        window.sharedElementEnterTransition = MaterialContainerTransform().apply {
-            addTarget(android.R.id.content)
-            duration = 700L
+            // Set this Activity’s enter and return transition to a MaterialContainerTransform
+            window.sharedElementEnterTransition = MaterialContainerTransform().apply {
+                addTarget(android.R.id.content)
+                duration = 700L
+            }
+
+            // Keep system bars (status bar, navigation bar) persistent throughout the transition.
+            window.sharedElementsUseOverlay = false
         }
-
-        // Keep system bars (status bar, navigation bar) persistent throughout the transition.
-        window.sharedElementsUseOverlay = false
         super.onCreate(savedInstanceState)
 
         binding = ActivityVocazioneDetailBinding.inflate(layoutInflater)

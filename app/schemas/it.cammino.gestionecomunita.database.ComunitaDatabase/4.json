@@ -1,0 +1,733 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 4,
+    "identityHash": "ae29e8115606203adc4e38e091d6e2f1",
+    "entities": [
+      {
+        "tableName": "Comunita",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `diocesi` TEXT NOT NULL, `numero` TEXT NOT NULL, `parrocchia` TEXT NOT NULL, `parroco` TEXT NOT NULL, `responsabile` TEXT NOT NULL, `catechisti` TEXT NOT NULL, `numAnni` INTEGER NOT NULL, `email` TEXT NOT NULL, `telefono` TEXT NOT NULL, `idTappa` INTEGER NOT NULL, `dataUltimaModifica` INTEGER NOT NULL, `dataUltimaVisita` INTEGER, `dataConvivenza` INTEGER, `note` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "diocesi",
+            "columnName": "diocesi",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "numero",
+            "columnName": "numero",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "parrocchia",
+            "columnName": "parrocchia",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "parroco",
+            "columnName": "parroco",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "responsabile",
+            "columnName": "responsabile",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "catechisti",
+            "columnName": "catechisti",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "numAnni",
+            "columnName": "numAnni",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "telefono",
+            "columnName": "telefono",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "idTappa",
+            "columnName": "idTappa",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataUltimaModifica",
+            "columnName": "dataUltimaModifica",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataUltimaVisita",
+            "columnName": "dataUltimaVisita",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dataConvivenza",
+            "columnName": "dataConvivenza",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Fratello",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`idFratello` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `idComunita` INTEGER NOT NULL, `nome` TEXT NOT NULL, `cognome` TEXT NOT NULL, `statoCivile` TEXT NOT NULL, `coniuge` TEXT NOT NULL, `tribu` TEXT NOT NULL, `annoNascita` INTEGER, `carisma` TEXT NOT NULL, `numFigli` INTEGER NOT NULL, `dataInizioCammino` INTEGER, `comunitaOrigine` TEXT NOT NULL, `dataArrivo` INTEGER, `note` TEXT NOT NULL, `statoAttuale` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "idFratello",
+            "columnName": "idFratello",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "idComunita",
+            "columnName": "idComunita",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nome",
+            "columnName": "nome",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cognome",
+            "columnName": "cognome",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "statoCivile",
+            "columnName": "statoCivile",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "coniuge",
+            "columnName": "coniuge",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tribu",
+            "columnName": "tribu",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "annoNascita",
+            "columnName": "annoNascita",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "carisma",
+            "columnName": "carisma",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "numFigli",
+            "columnName": "numFigli",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataInizioCammino",
+            "columnName": "dataInizioCammino",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "comunitaOrigine",
+            "columnName": "comunitaOrigine",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataArrivo",
+            "columnName": "dataArrivo",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "statoAttuale",
+            "columnName": "statoAttuale",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "idFratello"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Promemoria",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`idPromemoria` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `idComunita` INTEGER NOT NULL, `data` INTEGER, `note` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "idPromemoria",
+            "columnName": "idPromemoria",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "idComunita",
+            "columnName": "idComunita",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "data",
+            "columnName": "data",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "idPromemoria"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Passaggio",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`idPassaggio` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `idComunita` INTEGER NOT NULL, `data` INTEGER, `passaggio` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "idPassaggio",
+            "columnName": "idPassaggio",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "idComunita",
+            "columnName": "idComunita",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "data",
+            "columnName": "data",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "passaggio",
+            "columnName": "passaggio",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "idPassaggio"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Vocazione",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`idVocazione` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `nome` TEXT NOT NULL, `telefono` TEXT NOT NULL, `citta` TEXT NOT NULL, `studi` TEXT NOT NULL, `dataNascita` INTEGER, `idTappa` INTEGER NOT NULL, `dataIngresso` INTEGER, `dataUltimaModifica` INTEGER NOT NULL, `osservazioni` TEXT NOT NULL, `sesso` TEXT, `idComunita` INTEGER NOT NULL DEFAULT -1)",
+        "fields": [
+          {
+            "fieldPath": "idVocazione",
+            "columnName": "idVocazione",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nome",
+            "columnName": "nome",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "telefono",
+            "columnName": "telefono",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "citta",
+            "columnName": "citta",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "studi",
+            "columnName": "studi",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataNascita",
+            "columnName": "dataNascita",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "idTappa",
+            "columnName": "idTappa",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataIngresso",
+            "columnName": "dataIngresso",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dataUltimaModifica",
+            "columnName": "dataUltimaModifica",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "osservazioni",
+            "columnName": "osservazioni",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sesso",
+            "columnName": "sesso",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "idComunita",
+            "columnName": "idComunita",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "-1"
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "idVocazione"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Incontro",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`idIncontro` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `nome` TEXT NOT NULL, `cognome` TEXT NOT NULL, `idComunita` INTEGER NOT NULL, `data` INTEGER, `luogo` TEXT NOT NULL, `note` TEXT NOT NULL, `done` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "idIncontro",
+            "columnName": "idIncontro",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nome",
+            "columnName": "nome",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cognome",
+            "columnName": "cognome",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "idComunita",
+            "columnName": "idComunita",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "data",
+            "columnName": "data",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "luogo",
+            "columnName": "luogo",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "done",
+            "columnName": "done",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "idIncontro"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Seminario",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `nome` TEXT NOT NULL, `dataInizio` INTEGER, `dataDecreto` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nome",
+            "columnName": "nome",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataInizio",
+            "columnName": "dataInizio",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dataDecreto",
+            "columnName": "dataDecreto",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "VisitaSeminario",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`idVisita` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `idSeminario` INTEGER NOT NULL, `formatoriPresenti` TEXT NOT NULL, `seminaristiPresenti` TEXT NOT NULL, `note` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "idVisita",
+            "columnName": "idVisita",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "idSeminario",
+            "columnName": "idSeminario",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "formatoriPresenti",
+            "columnName": "formatoriPresenti",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "seminaristiPresenti",
+            "columnName": "seminaristiPresenti",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "idVisita"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "ResponsabileSeminario",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`idResponsabile` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `idSeminario` INTEGER NOT NULL, `nome` TEXT NOT NULL, `dataInizioIncarico` INTEGER, `dataFineIncarico` INTEGER, `incarico` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "idResponsabile",
+            "columnName": "idResponsabile",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "idSeminario",
+            "columnName": "idSeminario",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nome",
+            "columnName": "nome",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataInizioIncarico",
+            "columnName": "dataInizioIncarico",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dataFineIncarico",
+            "columnName": "dataFineIncarico",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "incarico",
+            "columnName": "incarico",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "idResponsabile"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Seminarista",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`idSeminarista` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `idSeminario` INTEGER NOT NULL, `nome` TEXT NOT NULL, `dataNascita` INTEGER, `nazione` TEXT NOT NULL, `comuntiaProvenienza` TEXT NOT NULL, `catechistiProvenienza` TEXT NOT NULL, `idTappaProvenienza` INTEGER NOT NULL, `dataEntrata` INTEGER, `dataUscita` INTEGER, `motivoUscita` TEXT NOT NULL, `dataAdmissio` INTEGER, `dataAccolitato` INTEGER, `dataLettorato` INTEGER, `dataDiaconato` INTEGER, `dataPresbiterato` INTEGER, `note` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "idSeminarista",
+            "columnName": "idSeminarista",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "idSeminario",
+            "columnName": "idSeminario",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nome",
+            "columnName": "nome",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataNascita",
+            "columnName": "dataNascita",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nazione",
+            "columnName": "nazione",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "comuntiaProvenienza",
+            "columnName": "comuntiaProvenienza",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "catechistiProvenienza",
+            "columnName": "catechistiProvenienza",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "idTappaProvenienza",
+            "columnName": "idTappaProvenienza",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataEntrata",
+            "columnName": "dataEntrata",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dataUscita",
+            "columnName": "dataUscita",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "motivoUscita",
+            "columnName": "motivoUscita",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataAdmissio",
+            "columnName": "dataAdmissio",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dataAccolitato",
+            "columnName": "dataAccolitato",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dataLettorato",
+            "columnName": "dataLettorato",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dataDiaconato",
+            "columnName": "dataDiaconato",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dataPresbiterato",
+            "columnName": "dataPresbiterato",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "idSeminarista"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "ComunitaSeminarista",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`idComunitaSeminarista` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `idSeminarista` INTEGER NOT NULL, `dataAssegnazione` INTEGER, `idTappaAssegnazione` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "idComunitaSeminarista",
+            "columnName": "idComunitaSeminarista",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "idSeminarista",
+            "columnName": "idSeminarista",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataAssegnazione",
+            "columnName": "dataAssegnazione",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "idTappaAssegnazione",
+            "columnName": "idTappaAssegnazione",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "idComunitaSeminarista"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ae29e8115606203adc4e38e091d6e2f1')"
+    ]
+  }
+}

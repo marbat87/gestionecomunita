@@ -10,8 +10,18 @@ import it.cammino.gestionecomunita.database.dao.*
 import it.cammino.gestionecomunita.database.entity.*
 
 @Database(
-    entities = [(Comunita::class), (Fratello::class), (Promemoria::class), (Passaggio::class), (Vocazione::class), (Incontro::class)],
-    version = 3,
+    entities = [(Comunita::class),
+        (Fratello::class),
+        (Promemoria::class),
+        (Passaggio::class),
+        (Vocazione::class),
+        (Incontro::class),
+        (Seminario::class),
+        (VisitaSeminario::class),
+        (ResponsabileSeminario::class),
+        (Seminarista::class),
+        (ComunitaSeminarista::class)],
+    version = 4,
     autoMigrations = [
         AutoMigration(
             from = 1,
@@ -21,6 +31,10 @@ import it.cammino.gestionecomunita.database.entity.*
             from = 2,
             to = 3,
             spec = ComunitaDatabase.AutoMigrationFrom2To3::class
+        ),
+        AutoMigration(
+            from = 3,
+            to = 4
         )
     ],
     exportSchema = true
@@ -34,6 +48,11 @@ abstract class ComunitaDatabase : RoomDatabase() {
     abstract fun promemoriaDao(): PromemoriaDao
     abstract fun vocazioneDao(): VocazioneDao
     abstract fun incontroDao(): IncontroDao
+    abstract fun comunitaSeminaristaDao(): ComunitaSeminaristaDao
+    abstract fun responsabileSeminarioDao(): ResponsabileSeminarioDao
+    abstract fun seminarioDao(): SeminarioDao
+    abstract fun seminaristaDao(): SeminaristaDao
+    abstract fun visitaSeminarioDao(): VisitaSeminarioDao
 
     companion object {
 

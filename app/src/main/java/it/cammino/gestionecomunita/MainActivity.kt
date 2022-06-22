@@ -3,6 +3,7 @@ package it.cammino.gestionecomunita
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.activity.viewModels
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -14,6 +15,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.color.DynamicColors
+import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import it.cammino.gestionecomunita.databinding.ActivityMainBinding
 import it.cammino.gestionecomunita.dialog.AddNotificationDialogFragment
 import it.cammino.gestionecomunita.dialog.EditMeetingDialogFragment
@@ -25,7 +27,9 @@ import it.cammino.gestionecomunita.ui.ThemeableActivity
 import it.cammino.gestionecomunita.ui.comunita.detail.CommunityDetailFragment
 import it.cammino.gestionecomunita.ui.comunita.detail.CommunityDetailHostActivity
 import it.cammino.gestionecomunita.ui.incontri.IncontriFragment
+import it.cammino.gestionecomunita.ui.seminario.detail.SeminarioDetailHostActivity
 import it.cammino.gestionecomunita.ui.vocazione.detail.VocazioneDetailHostActivity
+import it.cammino.gestionecomunita.util.OSUtils
 import java.sql.Date
 
 
@@ -40,6 +44,29 @@ class MainActivity : ThemeableActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         DynamicColors.applyToActivityIfAvailable(this)
+        if (!OSUtils.isObySamsung()) {
+            // Attach a callback used to capture the shared elements from this Activity to be used
+            // by the container transform transition
+            setExitSharedElementCallback(object :
+                MaterialContainerTransformSharedElementCallback() {
+                override fun onSharedElementEnd(
+                    sharedElementNames: MutableList<String>,
+                    sharedElements: MutableList<View>,
+                    sharedElementSnapshots: MutableList<View>
+                ) {
+                    super.onSharedElementEnd(
+                        sharedElementNames,
+                        sharedElements,
+                        sharedElementSnapshots
+                    )
+                    Log.d(TAG, "onTransitionEnd")
+                    if (!resources.getBoolean(R.bool.tablet_layout)) updateStatusBarLightMode(true)
+                }
+            })
+
+            // Keep system bars (status bar, navigation bar) persistent throughout the transition.
+            window.sharedElementsUseOverlay = false
+        }
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -59,7 +86,8 @@ class MainActivity : ThemeableActivity() {
                 R.id.navigation_home,
                 R.id.navigation_incontri,
                 R.id.navigation_notifications,
-                R.id.navigation_dashboard
+                R.id.navigation_dashboard,
+                R.id.navigation_seminari
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -76,24 +104,35 @@ class MainActivity : ThemeableActivity() {
                     binding.extendedFabPromemoria?.isVisible = false
                     binding.extendedFabIncontro?.isVisible = false
                     binding.extendedFabVocazione?.isVisible = false
+                    binding.extendedFabSeminari?.isVisible = false
                 }
                 R.id.navigation_incontri -> {
                     binding.extendedFab?.isVisible = false
                     binding.extendedFabPromemoria?.isVisible = false
                     binding.extendedFabIncontro?.isVisible = true
                     binding.extendedFabVocazione?.isVisible = false
+                    binding.extendedFabSeminari?.isVisible = false
                 }
                 R.id.navigation_notifications -> {
                     binding.extendedFab?.isVisible = false
                     binding.extendedFabPromemoria?.isVisible = true
                     binding.extendedFabIncontro?.isVisible = false
                     binding.extendedFabVocazione?.isVisible = false
+                    binding.extendedFabSeminari?.isVisible = false
                 }
                 R.id.navigation_dashboard -> {
                     binding.extendedFab?.isVisible = false
                     binding.extendedFabPromemoria?.isVisible = false
                     binding.extendedFabIncontro?.isVisible = false
                     binding.extendedFabVocazione?.isVisible = true
+                    binding.extendedFabSeminari?.isVisible = false
+                }
+                R.id.navigation_seminari -> {
+                    binding.extendedFab?.isVisible = false
+                    binding.extendedFabPromemoria?.isVisible = false
+                    binding.extendedFabIncontro?.isVisible = false
+                    binding.extendedFabVocazione?.isVisible = false
+                    binding.extendedFabSeminari?.isVisible = true
                 }
                 else -> {}
             }
@@ -157,14 +196,45 @@ class MainActivity : ThemeableActivity() {
 
         binding.extendedFabVocazione?.let { fab ->
             fab.setOnClickListener {
-                it.transitionName = "shared_element_vocazione"
-                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    this,
-                    it,
-                    "shared_element_vocazione" // The transition name to be matched in Activity B.
-                )
-                val intent = Intent(this, VocazioneDetailHostActivity::class.java)
-                startActivity(intent, options.toBundle())
+                if (OSUtils.isObySamsung()) {
+                    startActivity(
+                        Intent(
+                            this,
+                            VocazioneDetailHostActivity::class.java
+                        )
+                    )
+                } else {
+                    it.transitionName = "shared_element_vocazione"
+                    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        this,
+                        it,
+                        "shared_element_vocazione" // The transition name to be matched in Activity B.
+                    )
+                    val intent = Intent(this, VocazioneDetailHostActivity::class.java)
+                    startActivity(intent, options.toBundle())
+                }
+            }
+        }
+
+        binding.extendedFabSeminari?.let { fab ->
+            fab.setOnClickListener {
+                if (OSUtils.isObySamsung()) {
+                    startActivity(
+                        Intent(
+                            this,
+                            SeminarioDetailHostActivity::class.java
+                        )
+                    )
+                } else {
+                    it.transitionName = "shared_element_seminario"
+                    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        this,
+                        it,
+                        "shared_element_seminario" // The transition name to be matched in Activity B.
+                    )
+                    val intent = Intent(this, SeminarioDetailHostActivity::class.java)
+                    startActivity(intent, options.toBundle())
+                }
             }
         }
 

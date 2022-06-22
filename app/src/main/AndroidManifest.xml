@@ -33,6 +33,10 @@
             android:name=".ui.vocazione.detail.VocazioneDetailHostActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.seminario.detail.SeminarioDetailHostActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
     </application>
 
 </manifest>

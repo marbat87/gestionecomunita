@@ -36,7 +36,7 @@
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/material_tabs"
-            style="@style/Widget.Material3.TabLayout.OnSurface"
+            style="@style/Widget.Material3.TabLayout.DetailPage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -208,7 +208,8 @@
                 android:layout_marginEnd="@dimen/container_horizontal_margin"
                 android:enabled="false"
                 android:hint="@string/telefono"
-                app:layout_constraintTop_toBottomOf="@id/responsabile_text_field">
+                app:layout_constraintTop_toBottomOf="@id/responsabile_text_field"
+                app:startIconDrawable="@drawable/call_24px">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -475,9 +476,9 @@
                 style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly.OnPrimary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:transitionName="shared_element_notifications"
                 app:icon="@drawable/notifications_24px"
                 app:iconSize="24dp"
-                android:transitionName="shared_element_notifications"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/history_community"
                 app:layout_constraintTop_toTopOf="parent"

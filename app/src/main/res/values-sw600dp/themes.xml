@@ -1,0 +1,5 @@
+<resources>
+
+    <style name="Widget.Material3.TabLayout.DetailPage" parent="Widget.Material3.TabLayout" />
+
+</resources>

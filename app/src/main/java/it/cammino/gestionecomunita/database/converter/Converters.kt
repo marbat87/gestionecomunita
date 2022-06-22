@@ -1,6 +1,7 @@
 package it.cammino.gestionecomunita.database.converter
 
 import androidx.room.TypeConverter
+import it.cammino.gestionecomunita.database.entity.ResponsabileSeminario
 import it.cammino.gestionecomunita.database.entity.Vocazione
 import java.sql.Date
 
@@ -21,6 +22,12 @@ class Converters {
     fun toSesso(value: String) = enumValueOf<Vocazione.Sesso>(value)
 
     @TypeConverter
-    fun fromHealth(value: Vocazione.Sesso) = value.name
+    fun fromSesso(value: Vocazione.Sesso) = value.name
+
+    @TypeConverter
+    fun toIncarico(value: String) = enumValueOf<ResponsabileSeminario.Incarico>(value)
+
+    @TypeConverter
+    fun fromIncarico(value: ResponsabileSeminario.Incarico) = value.name
 
 }

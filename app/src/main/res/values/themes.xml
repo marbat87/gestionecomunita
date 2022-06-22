@@ -192,4 +192,7 @@
     <style name="Widget.GestioneComunita.Button.TextButton.IconOnly.OnPrimary">
         <item name="iconTint">?attr/colorOnPrimaryContainer</item>
     </style>
+
+    <style name="Widget.Material3.TabLayout.DetailPage" parent="Widget.Material3.TabLayout.OnSurface" />
+
 </resources>

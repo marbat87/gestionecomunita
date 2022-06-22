@@ -18,6 +18,7 @@ import it.cammino.gestionecomunita.ui.vocazione.detail.VocazioneDetailFragment
 import it.cammino.gestionecomunita.ui.vocazione.detail.VocazioneDetailHostActivity
 import it.cammino.gestionecomunita.ui.vocazione.list.VocazioneListFragment
 import it.cammino.gestionecomunita.ui.vocazione.list.VocazioneSectionedListFragment
+import it.cammino.gestionecomunita.util.OSUtils
 
 class CentroVocazionaleFragment : Fragment() {
 
@@ -50,14 +51,23 @@ class CentroVocazionaleFragment : Fragment() {
         binding.extendedFabVocazione?.isVisible = true
         binding.extendedFabVocazione?.let { fab ->
             fab.setOnClickListener {
-                it.transitionName = "shared_element_vocazione"
-                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    requireActivity(),
-                    it,
-                    "shared_element_vocazione" // The transition name to be matched in Activity B.
-                )
-                val intent = Intent(requireActivity(), VocazioneDetailHostActivity::class.java)
-                startActivity(intent, options.toBundle())
+                if (OSUtils.isObySamsung()) {
+                    startActivity(
+                        Intent(
+                            requireActivity(),
+                            VocazioneDetailHostActivity::class.java
+                        )
+                    )
+                } else {
+                    it.transitionName = "shared_element_vocazione"
+                    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        requireActivity(),
+                        it,
+                        "shared_element_vocazione" // The transition name to be matched in Activity B.
+                    )
+                    val intent = Intent(requireActivity(), VocazioneDetailHostActivity::class.java)
+                    startActivity(intent, options.toBundle())
+                }
             }
         }
 

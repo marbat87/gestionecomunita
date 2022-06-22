@@ -2,6 +2,7 @@ package it.cammino.gestionecomunita.ui.comunita.detail
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
@@ -22,6 +23,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.color.MaterialColors
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
@@ -110,13 +112,21 @@ open class CommunityDetailFragment : Fragment() {
 
         val isTablet = resources.getBoolean(R.bool.tablet_layout)
 
+        if (!isTablet)
+            binding.appBarLayout.statusBarForeground = ColorDrawable(
+                ContextCompat.getColor(
+                    requireContext(),
+                    android.R.color.transparent
+                )
+            )
+
         if (isTablet && !viewModel.createMode)
             binding.appBar.isVisible = false
 
         if (isTablet && viewModel.createMode)
             binding.materialTabs.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireContext(),
+                MaterialColors.getColor(
+                    binding.materialTabs,
                     android.R.color.transparent
                 )
             )
@@ -277,7 +287,7 @@ open class CommunityDetailFragment : Fragment() {
                         .title(R.string.delete_community)
                         .icon(R.drawable.delete_24px)
                         .content(R.string.delete_community_dialog)
-                        .positiveButton(R.string.delete_confirm)
+                        .positiveButton(R.string.remove)
                         .negativeButton(android.R.string.cancel),
                     mActivity.supportFragmentManager
                 )
@@ -520,7 +530,7 @@ open class CommunityDetailFragment : Fragment() {
                         .title(R.string.delete_fratello)
                         .icon(R.drawable.delete_24px)
                         .content(R.string.delete_fratello_dialog)
-                        .positiveButton(R.string.delete_confirm)
+                        .positiveButton(R.string.remove)
                         .negativeButton(android.R.string.cancel),
                     mActivity.supportFragmentManager
                 )

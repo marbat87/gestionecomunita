@@ -208,7 +208,7 @@ open class VocazioneDetailFragment : Fragment() {
                         .title(R.string.delete_vocazione)
                         .icon(R.drawable.delete_24px)
                         .content(R.string.delete_vocazione_dialog)
-                        .positiveButton(R.string.delete_confirm)
+                        .positiveButton(R.string.remove)
                         .negativeButton(android.R.string.cancel),
                     mActivity.supportFragmentManager
                 )

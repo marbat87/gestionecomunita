@@ -1,4 +1,4 @@
-package it.cammino.gestionecomunita.ui.comunita.detail
+package it.cammino.gestionecomunita.ui.seminario.detail
 
 import android.os.Bundle
 import android.view.View
@@ -10,7 +10,7 @@ import it.cammino.gestionecomunita.databinding.ActivityCommunityDetailBinding
 import it.cammino.gestionecomunita.ui.ThemeableActivity
 import it.cammino.gestionecomunita.util.OSUtils
 
-class CommunityDetailHostActivity : ThemeableActivity() {
+class SeminarioDetailHostActivity : ThemeableActivity() {
 
     private lateinit var binding: ActivityCommunityDetailBinding
 
@@ -18,7 +18,7 @@ class CommunityDetailHostActivity : ThemeableActivity() {
         if (!OSUtils.isObySamsung()) {
             // Set the transition name, which matches Activity A’s start view transition name, on
             // the root view.
-            findViewById<View>(android.R.id.content).transitionName = "shared_element_comunita"
+            findViewById<View>(android.R.id.content).transitionName = "shared_element_seminario"
 
             // Attach a callback used to receive the shared elements from Activity A to be
             // used by the container transform transition.
@@ -39,26 +39,26 @@ class CommunityDetailHostActivity : ThemeableActivity() {
         setContentView(binding.root)
 
         if (savedInstanceState == null) {
-            val fragment = CommunityDetailFragment()
+            val fragment = SeminarioDetailFragment()
             val args = Bundle()
             args.putBoolean(
-                CommunityDetailFragment.EDIT_MODE,
-                this.intent.extras?.getBoolean(CommunityDetailFragment.EDIT_MODE) ?: true
+                SeminarioDetailFragment.EDIT_MODE,
+                this.intent.extras?.getBoolean(SeminarioDetailFragment.EDIT_MODE) ?: true
             )
             args.putBoolean(
-                CommunityDetailFragment.CREATE_MODE,
-                this.intent.extras?.getBoolean(CommunityDetailFragment.CREATE_MODE) ?: true
+                SeminarioDetailFragment.CREATE_MODE,
+                this.intent.extras?.getBoolean(SeminarioDetailFragment.CREATE_MODE) ?: true
             )
             args.putLong(
-                CommunityDetailFragment.ARG_ITEM_ID,
-                this.intent.extras?.getLong(CommunityDetailFragment.ARG_ITEM_ID) ?: -1
+                SeminarioDetailFragment.ARG_ITEM_ID,
+                this.intent.extras?.getLong(SeminarioDetailFragment.ARG_ITEM_ID) ?: -1
             )
             fragment.arguments = args
             supportFragmentManager.commit {
                 replace(
                     R.id.detail_fragment,
                     fragment,
-                    R.id.community_detail_fragment.toString()
+                    R.id.seminario_detail_fragment.toString()
                 )
             }
         }

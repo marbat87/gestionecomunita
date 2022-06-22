@@ -18,7 +18,12 @@
 
     <item
         android:id="@+id/navigation_dashboard"
-        android:icon="@drawable/church_24px"
+        android:icon="@drawable/settings_accessibility_24px"
         android:title="@string/title_centro_voc" />
+
+    <item
+        android:id="@+id/navigation_seminari"
+        android:icon="@drawable/church_24px"
+        android:title="@string/title_seminari" />
 
 </menu>

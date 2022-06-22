@@ -30,6 +30,7 @@ import it.cammino.gestionecomunita.dialog.small.SmallAddNotificationDialogFragme
 import it.cammino.gestionecomunita.item.PromemoriaItem
 import it.cammino.gestionecomunita.item.promemoriaItem
 import it.cammino.gestionecomunita.ui.comunita.detail.CommunityDetailFragment
+import it.cammino.gestionecomunita.util.OSUtils
 import it.cammino.gestionecomunita.util.systemLocale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -55,9 +56,11 @@ class CommunityNotificationsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedElementEnterTransition = MaterialContainerTransform()
-        exitTransition = MaterialSharedAxis(MaterialSharedAxis.Y, /* forward= */ true)
-        reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Y, /* forward= */ false)
+        if (!OSUtils.isObySamsung()) {
+            sharedElementEnterTransition = MaterialContainerTransform()
+            exitTransition = MaterialSharedAxis(MaterialSharedAxis.Y, /* forward= */ true)
+            reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Y, /* forward= */ false)
+        }
     }
 
     override fun onAttach(context: Context) {

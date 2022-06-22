@@ -29,16 +29,9 @@ abstract class ThemeableActivity : AppCompatActivity() {
         updateStatusBarLightMode(true)
     }
 
-    private fun updateStatusBarLightMode(auto: Boolean) {
+    fun updateStatusBarLightMode(auto: Boolean) {
         setLigthStatusBar(if (auto) !isDarkMode else false)
     }
-
-//    fun setTransparentStatusBar(trasparent: Boolean) {
-//        window.statusBarColor = if (trasparent) ContextCompat.getColor(
-//            this,
-//            android.R.color.transparent
-//        ) else SurfaceColors.SURFACE_2.getColor(this)
-//    }
 
     private fun setTaskDescription() {
         if (OSUtils.hasP())

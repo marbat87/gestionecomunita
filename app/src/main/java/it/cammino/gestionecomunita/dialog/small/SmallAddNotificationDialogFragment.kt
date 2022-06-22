@@ -19,13 +19,16 @@ import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.dialog.AddNotificationDialogFragment
 import it.cammino.gestionecomunita.dialog.DialogState
 import it.cammino.gestionecomunita.dialog.SimpleDialogFragment
+import it.cammino.gestionecomunita.util.OSUtils
 
 class SmallAddNotificationDialogFragment : AddNotificationDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enterTransition = MaterialSharedAxis(MaterialSharedAxis.Y, /* forward= */ true)
-        returnTransition = MaterialSharedAxis(MaterialSharedAxis.Y, /* forward= */ false)
+        if (!OSUtils.isObySamsung()) {
+            enterTransition = MaterialSharedAxis(MaterialSharedAxis.Y, /* forward= */ true)
+            returnTransition = MaterialSharedAxis(MaterialSharedAxis.Y, /* forward= */ false)
+        }
     }
 
     private val builder: Builder?

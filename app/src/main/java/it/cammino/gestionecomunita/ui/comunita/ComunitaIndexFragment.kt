@@ -18,6 +18,7 @@ import it.cammino.gestionecomunita.ui.comunita.detail.CommunityDetailHostActivit
 import it.cammino.gestionecomunita.ui.comunita.list.CommunityListFragment
 import it.cammino.gestionecomunita.ui.comunita.list.CommunityListViewModel
 import it.cammino.gestionecomunita.ui.comunita.list.CommunitySectionedListFragment
+import it.cammino.gestionecomunita.util.OSUtils
 
 class ComunitaIndexFragment : Fragment() {
 
@@ -48,14 +49,23 @@ class ComunitaIndexFragment : Fragment() {
 
         binding.extendedFab?.let { fab ->
             fab.setOnClickListener {
-                it.transitionName = "shared_element_comunita"
-                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    requireActivity(),
-                    it,
-                    "shared_element_comunita" // The transition name to be matched in Activity B.
-                )
-                val intent = Intent(requireActivity(), CommunityDetailHostActivity::class.java)
-                startActivity(intent, options.toBundle())
+                if (OSUtils.isObySamsung()) {
+                    startActivity(
+                        Intent(
+                            requireActivity(),
+                            CommunityDetailHostActivity::class.java
+                        )
+                    )
+                } else {
+                    it.transitionName = "shared_element_comunita"
+                    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        requireActivity(),
+                        it,
+                        "shared_element_comunita" // The transition name to be matched in Activity B.
+                    )
+                    val intent = Intent(requireActivity(), CommunityDetailHostActivity::class.java)
+                    startActivity(intent, options.toBundle())
+                }
             }
         }
 
