@@ -20,6 +20,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.transition.MaterialSharedAxis
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.FastItemAdapter
 import com.mikepenz.fastadapter.listeners.ClickEventHook
@@ -28,16 +29,18 @@ import it.cammino.gestionecomunita.database.ComunitaDatabase
 import it.cammino.gestionecomunita.database.entity.ResponsabileSeminario
 import it.cammino.gestionecomunita.database.entity.Seminario
 import it.cammino.gestionecomunita.database.entity.Seminarista
+import it.cammino.gestionecomunita.database.entity.VisitaSeminario
+import it.cammino.gestionecomunita.database.item.SeminaristaWithComunita
 import it.cammino.gestionecomunita.databinding.FragmentSeminarioDetailBinding
-import it.cammino.gestionecomunita.dialog.DialogState
-import it.cammino.gestionecomunita.dialog.EditBrotherDialogFragment
-import it.cammino.gestionecomunita.dialog.SimpleDialogFragment
+import it.cammino.gestionecomunita.dialog.*
 import it.cammino.gestionecomunita.dialog.large.LargeEditBrotherDialogFragment
+import it.cammino.gestionecomunita.dialog.large.LargeEditVisitaDialogFragment
+import it.cammino.gestionecomunita.dialog.large.LargeViewVisitaDialogFragment
 import it.cammino.gestionecomunita.dialog.small.SmallEditBrotherDialogFragment
-import it.cammino.gestionecomunita.item.ResponsabileListItem
-import it.cammino.gestionecomunita.item.SeminaristaItem
-import it.cammino.gestionecomunita.item.responsabileListItem
-import it.cammino.gestionecomunita.item.seminaristaItem
+import it.cammino.gestionecomunita.dialog.small.SmallEditVisitaDialogFragment
+import it.cammino.gestionecomunita.dialog.small.SmallViewVisitaDialogFragment
+import it.cammino.gestionecomunita.item.*
+import it.cammino.gestionecomunita.util.OSUtils
 import it.cammino.gestionecomunita.util.Utility
 import it.cammino.gestionecomunita.util.validateMandatoryField
 import kotlinx.coroutines.Dispatchers
@@ -49,7 +52,7 @@ import java.sql.Date
 open class SeminarioDetailFragment : Fragment() {
 
     private val viewModel: SeminarioDetailViewModel by viewModels()
-    private val inputdialogViewModel: EditBrotherDialogFragment.DialogViewModel by viewModels({ requireActivity() })
+    private val inputdialogViewModel: EditVisitaDialogFragment.DialogViewModel by viewModels({ requireActivity() })
     private val simpleDialogViewModel: SimpleDialogFragment.DialogViewModel by viewModels({ requireActivity() })
 
     private var _binding: FragmentSeminarioDetailBinding? = null
@@ -61,7 +64,7 @@ open class SeminarioDetailFragment : Fragment() {
     private var mMainActivity: AppCompatActivity? = null
 
     private val mAdapterSeminaristi: FastItemAdapter<SeminaristaItem> = FastItemAdapter()
-    private val mAdapterVisite: FastItemAdapter<SeminaristaItem> = FastItemAdapter()
+    private val mAdapterVisite: FastItemAdapter<VisitaSeminarioItem> = FastItemAdapter()
     private val mAdapterRettori: FastItemAdapter<ResponsabileListItem> = FastItemAdapter()
     private val mAdapterVice: FastItemAdapter<ResponsabileListItem> = FastItemAdapter()
     private val mAdapterSpirituali: FastItemAdapter<ResponsabileListItem> = FastItemAdapter()
@@ -73,6 +76,10 @@ open class SeminarioDetailFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (!OSUtils.isObySamsung()) {
+            exitTransition = MaterialSharedAxis(MaterialSharedAxis.Y, /* forward= */ true)
+            reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Y, /* forward= */ false)
+        }
 
         if (savedInstanceState == null) {
             arguments?.let {
@@ -164,6 +171,29 @@ open class SeminarioDetailFragment : Fragment() {
             }
         }
 
+        binding.fabAddVisita.let { fab ->
+            mMainActivity?.let { mActivity ->
+                fab.setOnClickListener {
+                    val builder = EditVisitaDialogFragment.Builder(
+                        mActivity, ADD_VISITA
+                    )
+                    if (resources.getBoolean(R.bool.large_layout)) {
+                        builder.positiveButton(R.string.save)
+                            .negativeButton(android.R.string.cancel)
+                        LargeEditVisitaDialogFragment.show(
+                            builder,
+                            mActivity.supportFragmentManager
+                        )
+                    } else {
+                        SmallEditVisitaDialogFragment.show(
+                            builder,
+                            mActivity.supportFragmentManager
+                        )
+                    }
+                }
+            }
+        }
+
         binding.dataInizioTextField.editText?.inputType = InputType.TYPE_NULL
         binding.dataInizioTextField.editText?.setOnKeyListener(null)
         binding.dataInizioTextField.editText?.setOnTouchListener { _, motionEvent ->
@@ -251,6 +281,14 @@ open class SeminarioDetailFragment : Fragment() {
             )
         )
 
+        mAdapterVisite.addEventHooks(
+            listOf(
+                cancellaVisitaHook,
+                modificaVisitaHook,
+                vediVisitaHook
+            )
+        )
+
         binding.materialTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 renderPageView(tab?.position ?: 0)
@@ -291,8 +329,20 @@ open class SeminarioDetailFragment : Fragment() {
             if (viewModel.createMode) {
                 activity?.finishAfterTransition()
             } else {
-                viewModel.editMode.value = false
-                lifecycleScope.launch { retrieveData() }
+                mMainActivity?.let { mActivity ->
+                    SimpleDialogFragment.show(
+                        SimpleDialogFragment.Builder(
+                            mActivity,
+                            UNDO_CHANGE
+                        )
+                            .title(R.string.annulla_modifiche_title)
+                            .icon(R.drawable.undo_24px)
+                            .content(R.string.annulla_modifiche_dialog)
+                            .positiveButton(R.string.annulla_modifiche_confirm)
+                            .negativeButton(android.R.string.cancel),
+                        mActivity.supportFragmentManager
+                    )
+                }
             }
         }
 
@@ -304,60 +354,8 @@ open class SeminarioDetailFragment : Fragment() {
             confirmChanges()
         }
 
-        inputdialogViewModel.state.observe(viewLifecycleOwner) {
-            Log.d(TAG, "inputDialogViewModel state $it")
-            if (!inputdialogViewModel.handled) {
-                when (it) {
-                    is DialogState.Positive -> {
-                        inputdialogViewModel.handled = true
-                        val seminaristaItem = seminaristaItem {
-                            nome = "AFFIO"
-                        }
-                        when (inputdialogViewModel.mTag) {
-                            ADD_SEMINARISTA -> {
-                                mAdapterSeminaristi.add(seminaristaItem)
-                                mAdapterSeminaristi.notifyAdapterItemInserted(mAdapterSeminaristi.adapterItemCount - 1)
-                                binding.noSeminaristiView.isVisible = false
-                            }
-                            EDIT_SEMINARISTA -> {
-                                mAdapterSeminaristi[viewModel.selectedSeminarista] = seminaristaItem
-                                mAdapterSeminaristi.notifyAdapterItemChanged(viewModel.selectedSeminarista)
-                            }
-                        }
-                    }
-                    is DialogState.Negative -> {
-                        inputdialogViewModel.handled = true
-                    }
-                }
-            }
-        }
+        subscribeUIChanges()
 
-        simpleDialogViewModel.state.observe(viewLifecycleOwner) {
-            Log.d(TAG, "simpleDialogViewModel state $it")
-            if (!simpleDialogViewModel.handled) {
-                when (it) {
-                    is DialogState.Positive -> {
-                        when (simpleDialogViewModel.mTag) {
-                            DELETE_SEMINARISTA -> {
-                                simpleDialogViewModel.handled = true
-                                mAdapterSeminaristi.remove(viewModel.selectedSeminarista)
-                                binding.noSeminaristiView.isVisible =
-                                    mAdapterSeminaristi.itemAdapter.adapterItemCount == 0
-                            }
-                            DELETE_SEMINARIO -> {
-                                simpleDialogViewModel.handled = true
-                                lifecycleScope.launch { deleteSeminario() }
-                            }
-                        }
-                    }
-                    is DialogState.Negative -> {
-                        simpleDialogViewModel.handled = true
-                    }
-                }
-            }
-        }
-
-        binding.materialTabs.getTabAt(viewModel.selectedTabIndex)?.select()
     }
 
     override fun onDestroyView() {
@@ -392,6 +390,104 @@ open class SeminarioDetailFragment : Fragment() {
             mAdapterRettori.set(viewModel.rettori)
             mAdapterVice.set(viewModel.viceRettori)
             mAdapterSpirituali.set(viewModel.direttoriSpirituali)
+            binding.materialTabs.getTabAt(viewModel.selectedTabIndex)?.select()
+        }
+    }
+
+    private fun subscribeUIChanges() {
+        //        inputdialogViewModel.state.observe(viewLifecycleOwner) {
+//            Log.d(TAG, "inputDialogViewModel state $it")
+//            if (!inputdialogViewModel.handled) {
+//                when (it) {
+//                    is DialogState.Positive -> {
+//                        inputdialogViewModel.handled = true
+//                        val seminaristaItem = seminaristaItem {
+//                            nome = "AFFIO"
+//                        }
+//                        when (inputdialogViewModel.mTag) {
+//                            ADD_SEMINARISTA -> {
+//                                mAdapterSeminaristi.add(seminaristaItem)
+//                                mAdapterSeminaristi.notifyAdapterItemInserted(mAdapterSeminaristi.adapterItemCount - 1)
+//                                binding.noSeminaristiView.isVisible = false
+//                            }
+//                            EDIT_SEMINARISTA -> {
+//                                mAdapterSeminaristi[viewModel.selectedSeminarista] = seminaristaItem
+//                                mAdapterSeminaristi.notifyAdapterItemChanged(viewModel.selectedSeminarista)
+//                            }
+//                        }
+//                    }
+//                    is DialogState.Negative -> {
+//                        inputdialogViewModel.handled = true
+//                    }
+//                }
+//            }
+//        }
+
+        inputdialogViewModel.state.observe(viewLifecycleOwner) {
+            Log.d(TAG, "inputDialogViewModel state $it")
+            if (!inputdialogViewModel.handled) {
+                when (it) {
+                    is DialogState.Positive -> {
+                        inputdialogViewModel.handled = true
+                        val visitaItem = visitaSeminarioItem {
+                            data = inputdialogViewModel.dataIncontro
+                            formatoriPresenti = inputdialogViewModel.formatoriText
+                            seminaristiPresenti = inputdialogViewModel.seminaristiText
+                            note = inputdialogViewModel.noteText
+                            editable = true
+                        }
+                        when (inputdialogViewModel.mTag) {
+                            ADD_VISITA -> {
+                                mAdapterVisite.add(visitaItem)
+                                mAdapterVisite.notifyAdapterItemInserted(mAdapterVisite.adapterItemCount - 1)
+                                binding.noVisiteView.isVisible = false
+                            }
+                            EDIT_VISITA -> {
+                                mAdapterVisite[viewModel.selectedVisita] = visitaItem
+                                mAdapterVisite.notifyAdapterItemChanged(viewModel.selectedVisita)
+                            }
+                        }
+                    }
+                    is DialogState.Negative -> {
+                        inputdialogViewModel.handled = true
+                    }
+                }
+            }
+        }
+
+        simpleDialogViewModel.state.observe(viewLifecycleOwner) {
+            Log.d(TAG, "simpleDialogViewModel state $it")
+            if (!simpleDialogViewModel.handled) {
+                when (it) {
+                    is DialogState.Positive -> {
+                        when (simpleDialogViewModel.mTag) {
+                            DELETE_SEMINARISTA -> {
+                                simpleDialogViewModel.handled = true
+                                mAdapterSeminaristi.remove(viewModel.selectedSeminarista)
+                                binding.noSeminaristiView.isVisible =
+                                    mAdapterSeminaristi.itemAdapter.adapterItemCount == 0
+                            }
+                            DELETE_SEMINARIO -> {
+                                simpleDialogViewModel.handled = true
+                                lifecycleScope.launch { deleteSeminario() }
+                            }
+                            DELETE_VISITA -> {
+                                simpleDialogViewModel.handled = true
+                                mAdapterVisite.remove(viewModel.selectedVisita)
+                                binding.noVisiteView.isVisible =
+                                    mAdapterVisite.itemAdapter.adapterItemCount == 0
+                            }
+                            UNDO_CHANGE -> {
+                                viewModel.editMode.value = false
+                                lifecycleScope.launch { retrieveData() }
+                            }
+                        }
+                    }
+                    is DialogState.Negative -> {
+                        simpleDialogViewModel.handled = true
+                    }
+                }
+            }
         }
     }
 
@@ -408,7 +504,6 @@ open class SeminarioDetailFragment : Fragment() {
             item: ResponsabileListItem
         ) {
             (fastAdapter as? FastItemAdapter)?.remove(position)
-            fastAdapter.notifyItemRemoved(position)
         }
     }
 
@@ -478,6 +573,114 @@ open class SeminarioDetailFragment : Fragment() {
         }
     }
 
+    private val cancellaVisitaHook = object : ClickEventHook<VisitaSeminarioItem>() {
+        override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
+            //return the views on which you want to bind this event
+            return viewHolder.itemView.findViewById(R.id.cancella_visita)
+        }
+
+        override fun onClick(
+            v: View,
+            position: Int,
+            fastAdapter: FastAdapter<VisitaSeminarioItem>,
+            item: VisitaSeminarioItem
+        ) {
+            mMainActivity?.let { mActivity ->
+                viewModel.selectedVisita = position
+                SimpleDialogFragment.show(
+                    SimpleDialogFragment.Builder(
+                        mActivity,
+                        DELETE_VISITA
+                    )
+                        .title(R.string.delete_visita)
+                        .icon(R.drawable.delete_24px)
+                        .content(R.string.delete_visita_dialog)
+                        .positiveButton(R.string.cancella)
+                        .negativeButton(android.R.string.cancel),
+                    mActivity.supportFragmentManager
+                )
+            }
+        }
+    }
+
+    private val modificaVisitaHook = object : ClickEventHook<VisitaSeminarioItem>() {
+        override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
+            //return the views on which you want to bind this event
+            return viewHolder.itemView.findViewById(R.id.modifica_visita)
+        }
+
+        override fun onClick(
+            v: View,
+            position: Int,
+            fastAdapter: FastAdapter<VisitaSeminarioItem>,
+            item: VisitaSeminarioItem
+        ) {
+            mMainActivity?.let { mActivity ->
+                viewModel.selectedVisita = position
+                val builder = EditVisitaDialogFragment.Builder(
+                    mActivity, EDIT_VISITA
+                ).apply {
+                    formatoriPrefill(item.formatoriPresenti)
+                    seminaristiPrefill(item.seminaristiPresenti)
+                    notePrefill(item.note)
+                    dataIncontroPrefill(item.data)
+                    setEditMode(true)
+                }
+                if (resources.getBoolean(R.bool.large_layout)) {
+                    builder.positiveButton(R.string.save)
+                        .negativeButton(android.R.string.cancel)
+                    LargeEditVisitaDialogFragment.show(
+                        builder,
+                        mActivity.supportFragmentManager
+                    )
+                } else {
+                    SmallEditVisitaDialogFragment.show(
+                        builder,
+                        mActivity.supportFragmentManager
+                    )
+                }
+            }
+        }
+    }
+
+    private val vediVisitaHook = object : ClickEventHook<VisitaSeminarioItem>() {
+        override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
+            //return the views on which you want to bind this event
+            return viewHolder.itemView.findViewById(R.id.vedi_visita)
+        }
+
+        override fun onClick(
+            v: View,
+            position: Int,
+            fastAdapter: FastAdapter<VisitaSeminarioItem>,
+            item: VisitaSeminarioItem
+        ) {
+            mMainActivity?.let { mActivity ->
+                val builder = ViewVisitaDialogFragment.Builder(
+                    mActivity, VIEW_VISITA
+                ).apply {
+                    formatoriPrefill(item.formatoriPresenti)
+                    seminaristiPrefill(item.seminaristiPresenti)
+                    notePrefill(item.note)
+                    dataIncontroPrefill(item.data)
+                }
+                if (resources.getBoolean(R.bool.large_layout)) {
+                    builder.positiveButton(R.string.save)
+                        .negativeButton(android.R.string.cancel)
+                    LargeViewVisitaDialogFragment.show(
+                        builder,
+                        mActivity.supportFragmentManager
+                    )
+                } else {
+                    SmallViewVisitaDialogFragment.show(
+                        builder,
+                        mActivity.supportFragmentManager
+                    )
+                }
+            }
+        }
+    }
+
     private fun confirmChanges() {
         if (validateForm()) {
             viewModel.seminario.seminario.nome =
@@ -516,6 +719,7 @@ open class SeminarioDetailFragment : Fragment() {
     private fun renderPageView(tabIndex: Int) {
         binding.seminaristiDetailScrollView.isVisible = tabIndex == 0
         binding.seminaristiRecyclew.isVisible = tabIndex == 2
+        binding.visiteRecyclew.isVisible = tabIndex == 1
         binding.noSeminaristiView.isVisible =
             (tabIndex == 2 && mAdapterSeminaristi.itemCount == 0)
         binding.noVisiteView.isVisible =
@@ -555,10 +759,11 @@ open class SeminarioDetailFragment : Fragment() {
     }
 
     private fun validateForm(): Boolean {
-        var valid = true
+        var valid = requireContext().validateMandatoryField(binding.nomeTextField)
 
-        if (!requireContext().validateMandatoryField(binding.nomeTextField))
-            valid = false
+        valid = valid && !(mAdapterRettori.adapterItems.any { it.hasError })
+        valid = valid && !(mAdapterVice.adapterItems.any { it.hasError })
+        valid = valid && !(mAdapterSpirituali.adapterItems.any { it.hasError })
 
         binding.dataInizioTextField.editText?.let {
             if (!it.text.isNullOrEmpty() &&
@@ -637,8 +842,8 @@ open class SeminarioDetailFragment : Fragment() {
     private fun truncateRelatedTables(id: Long) {
         val db = ComunitaDatabase.getInstance(requireContext())
 
-        viewModel.seminaristi.forEach {
-            db.comunitaSeminaristaDao().truncateTableBySeminarista(it.seminarista.idSeminarista)
+        viewModel.seminario.seminaristi.forEach {
+            db.comunitaSeminaristaDao().truncateTableBySeminarista(it.idSeminarista)
         }
         db.seminaristaDao().truncateTableBySeminario(id)
         db.responsabileSeminarioDao().truncateTableBySeminario(id)
@@ -670,6 +875,17 @@ open class SeminarioDetailFragment : Fragment() {
             it.comunitaList.forEach { com -> com.idSeminarista = insertedSeminaristaId }
             db.comunitaSeminaristaDao().insertComunita(it.comunitaList)
         }
+
+        db.visitaSeminarioDao().insertVisite(mAdapterVisite.adapterItems.map {
+            VisitaSeminario().apply {
+                idSeminario = id
+                formatoriPresenti = it.formatoriPresenti
+                seminaristiPresenti = it.seminaristiPresenti
+                note = it.note
+                dataVisita = it.data
+                note = it.note
+            }
+        })
 
         db.responsabileSeminarioDao()
             .insertResponsabili(mAdapterRettori.adapterItems.filter { it.nomeResponsabile.isNotEmpty() }
@@ -708,11 +924,12 @@ open class SeminarioDetailFragment : Fragment() {
 
     private suspend fun retrieveData() {
         Log.d(TAG, "createMode ${viewModel.createMode}")
+        val seminaristi: List<SeminaristaWithComunita>
         withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
             val db = ComunitaDatabase.getInstance(requireContext())
             viewModel.seminario = db.seminarioDao()
                 .getByIdWithDetails(viewModel.listId)
-            viewModel.seminaristi = db.seminaristaDao().getBySeminarioWithDetails(viewModel.listId)
+            seminaristi = db.seminaristaDao().getBySeminarioWithDetails(viewModel.listId)
         }
         binding.nomeTextField.editText?.setText(viewModel.seminario.seminario.nome)
         viewModel.seminario.seminario.dataInizio?.let {
@@ -765,7 +982,16 @@ open class SeminarioDetailFragment : Fragment() {
                 }
             })
 
-        mAdapterSeminaristi.set(viewModel.seminaristi.map {
+        mAdapterVisite.set(viewModel.seminario.visite.map {
+            visitaSeminarioItem {
+                data = it.dataVisita
+                formatoriPresenti = it.formatoriPresenti
+                seminaristiPresenti = it.seminaristiPresenti
+                note = it.note
+            }
+        })
+
+        mAdapterSeminaristi.set(seminaristi.map {
             seminaristaItem {
                 nome = it.seminarista.note
                 dataNascita = it.seminarista.dataNascita
@@ -786,8 +1012,6 @@ open class SeminarioDetailFragment : Fragment() {
             }
         })
 
-        mAdapterSeminaristi.set(viewModel.seminaristi.map { seminaristaItem { nome = it.seminarista.nome } })
-
     }
 
     companion object {
@@ -796,9 +1020,14 @@ open class SeminarioDetailFragment : Fragment() {
         const val EDIT_MODE = "edit_mode"
         const val CREATE_MODE = "create_mode"
         const val ADD_SEMINARISTA = "add_seminarista"
+        const val ADD_VISITA = "add_visita"
         const val EDIT_SEMINARISTA = "edit_seminarista"
+        const val EDIT_VISITA = "edit_visita"
+        const val VIEW_VISITA = "view_visita"
         const val DELETE_SEMINARISTA = "delete_seminarista"
+        const val UNDO_CHANGE = "undo_change"
         const val DELETE_SEMINARIO = "delete_seminario"
+        const val DELETE_VISITA = "delete_visita"
         const val ERROR_DIALOG = "community_detail_error_dialog"
 
     }

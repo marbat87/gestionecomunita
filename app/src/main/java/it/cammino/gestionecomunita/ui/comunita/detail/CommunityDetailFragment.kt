@@ -45,6 +45,7 @@ import it.cammino.gestionecomunita.dialog.small.SmallEditBrotherDialogFragment
 import it.cammino.gestionecomunita.item.ExpandableBrotherItem
 import it.cammino.gestionecomunita.item.expandableBrotherItem
 import it.cammino.gestionecomunita.ui.notifications.CommunityNotificationsFragment
+import it.cammino.gestionecomunita.ui.seminario.detail.SeminarioDetailFragment
 import it.cammino.gestionecomunita.util.StringUtils
 import it.cammino.gestionecomunita.util.Utility
 import it.cammino.gestionecomunita.util.systemLocale
@@ -330,8 +331,20 @@ open class CommunityDetailFragment : Fragment() {
             if (viewModel.createMode) {
                 activity?.finishAfterTransition()
             } else {
-                viewModel.editMode.value = false
-                lifecycleScope.launch { retrieveData() }
+                mMainActivity?.let { mActivity ->
+                    SimpleDialogFragment.show(
+                        SimpleDialogFragment.Builder(
+                            mActivity,
+                            UNDO_CHANGE
+                        )
+                            .title(R.string.annulla_modifiche_title)
+                            .icon(R.drawable.undo_24px)
+                            .content(R.string.annulla_modifiche_dialog)
+                            .positiveButton(R.string.annulla_modifiche_confirm)
+                            .negativeButton(android.R.string.cancel),
+                        mActivity.supportFragmentManager
+                    )
+                }
             }
         }
 
@@ -351,100 +364,7 @@ open class CommunityDetailFragment : Fragment() {
             )
         )
 
-        inputdialogViewModel.state.observe(viewLifecycleOwner) {
-            Log.d(TAG, "inputDialogViewModel state $it")
-            if (!inputdialogViewModel.handled) {
-                when (it) {
-                    is DialogState.Positive -> {
-                        inputdialogViewModel.handled = true
-                        val fratello = createBrotherItem(
-                            inputdialogViewModel.nomeText,
-                            inputdialogViewModel.cognomeText,
-                            inputdialogViewModel.statoCivileText,
-                            inputdialogViewModel.coniugeText,
-                            inputdialogViewModel.numFigli,
-                            inputdialogViewModel.tribuText,
-                            inputdialogViewModel.annoNascita,
-                            inputdialogViewModel.carismaText,
-                            inputdialogViewModel.comunitaOrigineText,
-                            inputdialogViewModel.dataArrivo,
-                            inputdialogViewModel.statoInt,
-                            inputdialogViewModel.noteText,
-                            inputdialogViewModel.dataInizioCammino,
-                            viewModel.selectedFratello
-                        )
-                        fratello.editable = true
-                        fratello.isExpanded = true
-                        when (inputdialogViewModel.mTag) {
-                            ADD_BROTHER -> {
-                                fratello.position = mAdapter.itemAdapter.adapterItemCount
-                                mAdapter.add(fratello)
-                                viewModel.fratelliPresenti = true
-                                binding.noFratelliView.isVisible = !viewModel.fratelliPresenti
-                            }
-                            EDIT_BROTHER -> {
-                                mAdapter[viewModel.selectedFratello] = fratello
-                            }
-                        }
-                    }
-                    is DialogState.Negative -> {
-                        inputdialogViewModel.handled = true
-                    }
-                }
-            }
-        }
-
-        simpleDialogViewModel.state.observe(viewLifecycleOwner) {
-            Log.d(TAG, "simpleDialogViewModel state $it")
-            if (!simpleDialogViewModel.handled) {
-                when (it) {
-                    is DialogState.Positive -> {
-                        when (simpleDialogViewModel.mTag) {
-                            DELETE_BROTHER -> {
-                                simpleDialogViewModel.handled = true
-                                mAdapter.remove(viewModel.selectedFratello)
-                                viewModel.fratelliPresenti =
-                                    mAdapter.itemAdapter.adapterItemCount > 0
-                                binding.noFratelliView.isVisible = !viewModel.fratelliPresenti
-                            }
-                            DELETE_COMMUNITY -> {
-                                simpleDialogViewModel.handled = true
-                                lifecycleScope.launch { deleteComunita() }
-                            }
-                        }
-                    }
-                    is DialogState.Negative -> {
-                        simpleDialogViewModel.handled = true
-                    }
-                }
-            }
-        }
-
-        addNotificationViewMode.state.observe(viewLifecycleOwner) {
-            Log.d(TAG, "simpleDialogViewModel state $it")
-            if (!addNotificationViewMode.handled) {
-                when (it) {
-                    is DialogState.Positive -> {
-                        when (addNotificationViewMode.mTag) {
-                            ADD_NOTIFICATION -> {
-                                addNotificationViewMode.handled = true
-                                lifecycleScope.launch {
-                                    addPromemoria(
-                                        addNotificationViewMode.idComunita,
-                                        addNotificationViewMode.data,
-                                        addNotificationViewMode.descrizioneText
-                                    )
-                                }
-                            }
-                        }
-                    }
-                    is DialogState.Negative -> {
-                        addNotificationViewMode.handled = true
-                    }
-                }
-            }
-        }
-        binding.materialTabs.getTabAt(viewModel.selectedTabIndex)?.select()
+        subscriveUiChanges()
     }
 
     override fun onDestroyView() {
@@ -505,6 +425,107 @@ open class CommunityDetailFragment : Fragment() {
             binding.noteTextField.editText?.setText(instance.getCharSequence("noteTextField"))
             binding.anniTextField.editText?.setText(instance.getCharSequence("anniTextField"))
             viewModel.elementi?.let { mAdapter.itemAdapter.set(it) }
+            binding.materialTabs.getTabAt(viewModel.selectedTabIndex)?.select()
+        }
+    }
+
+    private fun subscriveUiChanges() {
+        inputdialogViewModel.state.observe(viewLifecycleOwner) {
+            Log.d(TAG, "inputDialogViewModel state $it")
+            if (!inputdialogViewModel.handled) {
+                when (it) {
+                    is DialogState.Positive -> {
+                        inputdialogViewModel.handled = true
+                        val fratello = createBrotherItem(
+                            inputdialogViewModel.nomeText,
+                            inputdialogViewModel.cognomeText,
+                            inputdialogViewModel.statoCivileText,
+                            inputdialogViewModel.coniugeText,
+                            inputdialogViewModel.numFigli,
+                            inputdialogViewModel.tribuText,
+                            inputdialogViewModel.annoNascita,
+                            inputdialogViewModel.carismaText,
+                            inputdialogViewModel.comunitaOrigineText,
+                            inputdialogViewModel.dataArrivo,
+                            inputdialogViewModel.statoInt,
+                            inputdialogViewModel.noteText,
+                            inputdialogViewModel.dataInizioCammino,
+                            viewModel.selectedFratello
+                        )
+                        fratello.editable = true
+                        fratello.isExpanded = true
+                        when (inputdialogViewModel.mTag) {
+                            ADD_BROTHER -> {
+                                fratello.position = mAdapter.itemAdapter.adapterItemCount
+                                mAdapter.add(fratello)
+                                viewModel.fratelliPresenti = true
+                                binding.noFratelliView.isVisible = !viewModel.fratelliPresenti
+                            }
+                            EDIT_BROTHER -> {
+                                mAdapter[viewModel.selectedFratello] = fratello
+                            }
+                        }
+                    }
+                    is DialogState.Negative -> {
+                        inputdialogViewModel.handled = true
+                    }
+                }
+            }
+        }
+
+        simpleDialogViewModel.state.observe(viewLifecycleOwner) {
+            Log.d(TAG, "simpleDialogViewModel state $it")
+            if (!simpleDialogViewModel.handled) {
+                when (it) {
+                    is DialogState.Positive -> {
+                        when (simpleDialogViewModel.mTag) {
+                            DELETE_BROTHER -> {
+                                simpleDialogViewModel.handled = true
+                                mAdapter.remove(viewModel.selectedFratello)
+                                viewModel.fratelliPresenti =
+                                    mAdapter.itemAdapter.adapterItemCount > 0
+                                binding.noFratelliView.isVisible = !viewModel.fratelliPresenti
+                            }
+                            DELETE_COMMUNITY -> {
+                                simpleDialogViewModel.handled = true
+                                lifecycleScope.launch { deleteComunita() }
+                            }
+                            UNDO_CHANGE -> {
+                                viewModel.editMode.value = false
+                                lifecycleScope.launch { retrieveData() }
+                            }
+                        }
+                    }
+                    is DialogState.Negative -> {
+                        simpleDialogViewModel.handled = true
+                    }
+                }
+            }
+        }
+
+        addNotificationViewMode.state.observe(viewLifecycleOwner) {
+            Log.d(TAG, "simpleDialogViewModel state $it")
+            if (!addNotificationViewMode.handled) {
+                when (it) {
+                    is DialogState.Positive -> {
+                        when (addNotificationViewMode.mTag) {
+                            ADD_NOTIFICATION -> {
+                                addNotificationViewMode.handled = true
+                                lifecycleScope.launch {
+                                    addPromemoria(
+                                        addNotificationViewMode.idComunita,
+                                        addNotificationViewMode.data,
+                                        addNotificationViewMode.descrizioneText
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    is DialogState.Negative -> {
+                        addNotificationViewMode.handled = true
+                    }
+                }
+            }
         }
     }
 
@@ -1022,7 +1043,7 @@ open class CommunityDetailFragment : Fragment() {
         const val DELETE_BROTHER = "delete_brother"
         const val DELETE_COMMUNITY = "delete_community"
         const val ERROR_DIALOG = "community_detail_error_dialog"
-
+        const val UNDO_CHANGE = "undo_change"
     }
 
 }

@@ -11,6 +11,7 @@
     <item name="community_detail_history_fragment" type="id" />
     <item name="community_history_fragment" type="id" />
     <item name="fastadapter_promemoria_item_id" type="id" />
+    <item name="fastadapter_visita_item_id" type="id" />
     <item name="fastadapter_seminarista_item_id" type="id" />
     <item name="fastadapter_swipable_item_id" type="id" />
     <item name="vocazione_detail_fragment" type="id" />

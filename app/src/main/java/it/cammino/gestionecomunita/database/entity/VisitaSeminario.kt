@@ -2,6 +2,7 @@ package it.cammino.gestionecomunita.database.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.sql.Date
 
 @Entity
 open class VisitaSeminario {
@@ -16,5 +17,7 @@ open class VisitaSeminario {
     var seminaristiPresenti: String = ""
 
     var note: String = ""
+
+    var dataVisita: Date? = null
 
 }

@@ -31,6 +31,7 @@ class ResponsabileListItem : AbstractBindingItem<ResponsabileRowItemBinding>() {
         }
 
     var editable: Boolean = true
+    var hasError: Boolean = false
 
     override val type: Int
         get() = R.id.fastadapter_responsabile_item_id
@@ -88,6 +89,13 @@ class ResponsabileListItem : AbstractBindingItem<ResponsabileRowItemBinding>() {
                         )
                     )
                     dataDal = data
+                    if (dataAl != null && data > dataAl)
+                        binding.respDataDalTextField.error = ctx.getString(R.string.data_dal_error)
+                    else {
+                        binding.respDataAlTextField.error = null
+                        binding.respDataDalTextField.error = null
+                    }
+                    hasError = dataAl != null && data > dataAl
                 }
             }
             false
@@ -121,6 +129,13 @@ class ResponsabileListItem : AbstractBindingItem<ResponsabileRowItemBinding>() {
                         )
                     )
                     dataAl = data
+                    if (dataDal != null && data < dataDal)
+                        binding.respDataAlTextField.error = ctx.getString(R.string.data_al_error)
+                    else {
+                        binding.respDataAlTextField.error = null
+                        binding.respDataDalTextField.error = null
+                    }
+                    hasError = dataDal != null && data < dataDal
                 }
             }
             false

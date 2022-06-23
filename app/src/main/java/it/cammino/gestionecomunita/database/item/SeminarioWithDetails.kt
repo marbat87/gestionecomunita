@@ -23,4 +23,10 @@ data class SeminarioWithDetails(
     )
     val visite: List<VisitaSeminario>,
 
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "idSeminario",
+    )
+    val seminaristi: List<Seminarista>,
+
 )

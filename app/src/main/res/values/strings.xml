@@ -154,4 +154,17 @@
     <string name="add">Aggiungi</string>
     <string name="details">Dettaglio</string>
     <string name="no_visite">Non hai aggiunto nessun visita al seminario.</string>
+    <string name="data_dal_error">La data inizio non può essere successiva alla data fine</string>
+    <string name="data_al_error">La data fine non può essere antecedente alla data inizio</string>
+    <string name="formatori_presenti_label">Formatori presenti</string>
+    <string name="seminaristi_presenti_label">Seminaristi presenti</string>
+    <string name="note_label">Note</string>
+    <string name="visita">Visita</string>
+    <string name="nuova_visita">Nuova visita</string>
+    <string name="modifica_visita">Modifica visita</string>
+    <string name="delete_visita">Cancella visita</string>
+    <string name="delete_visita_dialog">Sei sicuro di voler cancellare la visita?</string>
+    <string name="annulla_modifiche_title">Scarta Modifiche</string>
+    <string name="annulla_modifiche_dialog">Sei sicuro di voler scartare tutte le modifiche fatte?</string>
+    <string name="annulla_modifiche_confirm">scarta</string>
 </resources>

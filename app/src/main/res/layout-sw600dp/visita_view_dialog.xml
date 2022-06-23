@@ -1,0 +1,83 @@
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/container_horizontal_margin"
+        android:layout_marginEnd="@dimen/container_horizontal_margin">
+
+        <TextView
+            android:id="@+id/data_visita_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_view_vertical_margin"
+            android:textAppearance="?textAppearanceBodyLarge"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="15/12/2021" />
+
+        <TextView
+            android:id="@+id/data_visita_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/data"
+            android:textAppearance="?textAppearanceLabelMedium"
+            app:layout_constraintTop_toBottomOf="@id/data_visita_text" />
+
+        <TextView
+            android:id="@+id/formatori_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_view_vertical_margin"
+            android:textAppearance="?textAppearanceBodyLarge"
+            app:layout_constraintTop_toBottomOf="@id/data_visita_label"
+            tools:text="Giuseppo, Flavio" />
+
+        <TextView
+            android:id="@+id/formatori_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/formatori_presenti_label"
+            android:textAppearance="?textAppearanceLabelMedium"
+            app:layout_constraintTop_toBottomOf="@id/formatori_text" />
+
+        <TextView
+            android:id="@+id/seminaristi_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_view_vertical_margin"
+            android:textAppearance="?textAppearanceBodyLarge"
+            app:layout_constraintTop_toBottomOf="@id/formatori_label"
+            tools:text="Mirko, Alessio" />
+
+        <TextView
+            android:id="@+id/seminaristi_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/seminaristi_presenti_label"
+            android:textAppearance="?textAppearanceLabelMedium"
+            app:layout_constraintTop_toBottomOf="@id/seminaristi_text" />
+
+        <TextView
+            android:id="@+id/note_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_view_vertical_margin"
+            android:textAppearance="?textAppearanceBodyLarge"
+            app:layout_constraintTop_toBottomOf="@id/seminaristi_label"
+            tools:text="test annotazioni" />
+
+        <TextView
+            android:id="@+id/note_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/note_label"
+            android:textAppearance="?textAppearanceLabelMedium"
+            app:layout_constraintTop_toBottomOf="@id/note_text" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>
