@@ -57,10 +57,9 @@ class SeminaristaItem : AbstractBindingItem<SeminaristaRowItemBinding>() {
     }
 
     override fun bindView(binding: SeminaristaRowItemBinding, payloads: List<Any>) {
-
         binding.nomeSeminarista.text = nome
-        binding.cancellaSeminarista.isVisible = editable
-
+        binding.editButtons.isVisible = editable
+        binding.vediSeminarista.isVisible = !editable
     }
 
     override fun unbindView(binding: SeminaristaRowItemBinding) {

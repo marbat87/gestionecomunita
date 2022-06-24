@@ -44,6 +44,7 @@
     <string name="comunita_item_name">%1$s - %2$s</string>
     <string name="telefono">Telefono</string>
     <string name="tappa">Tappa di Cammino</string>
+    <string name="tappa_provenienza">Tappa di provenienza</string>
     <string name="data_convivenza">Data convivenza</string>
     <string name="data_ultima_visita">Data ultima visita</string>
     <string name="data_ultima_modifica">Ultima modifica: %1$s</string>
@@ -62,10 +63,14 @@
     <string name="num_figli">N° figli</string>
     <string name="tribu">Tribù</string>
     <string name="data_nascita">Data di nascita</string>
+    <string name="data_entrata_seminario">Data entrata in seminario</string>
+    <string name="data_uscita_seminario">Data uscita dal seminario</string>
+    <string name="motivo_uscita_seminario">Motivo uscita</string>
     <string name="carisma">Carisma</string>
     <string name="preveniente_da">Proveniente da…</string>
     <string name="data_inizio_cammino">Data inizio cammino</string>
     <string name="comunita_provenienza">Comunità di provenienza</string>
+    <string name="catechisti_provenienza">Catechisti di provenienza</string>
     <string name="data_arrivo">Data di arrivo</string>
     <string name="stato_attuale">Stato attuale</string>
     <string name="cancella">Cancella</string>
@@ -146,6 +151,7 @@
     <string name="data_dal">Inizio incarico</string>
     <string name="data_al">Fine incarico</string>
     <string name="rettore">Rettore</string>
+    <string name="comunita_assegnazione_label">Comunità di assegnazione</string>
     <string name="vice_rettore">Vice-rettore</string>
     <string name="direttore_spiriturale">Direttore spirituale</string>
     <string name="delete_seminarista">Rimuovi seminarista</string>
@@ -167,4 +173,14 @@
     <string name="annulla_modifiche_title">Scarta Modifiche</string>
     <string name="annulla_modifiche_dialog">Sei sicuro di voler scartare tutte le modifiche fatte?</string>
     <string name="annulla_modifiche_confirm">scarta</string>
+    <string name="nuovo_seminarista">Nuovo seminarista</string>
+    <string name="modifica_seminarista">Modifica seminarista</string>
+    <string name="seminarista_title">Seminarista</string>
+    <string name="nome_cognome_label">Nome e cognome</string>
+    <string name="nazione_label">Nazione</string>
+    <string name="admissio_label">Admissio</string>
+    <string name="accolitato_label">Accolitato</string>
+    <string name="lettorato_label">Lettorato</string>
+    <string name="diaconato_label">Diaconato</string>
+    <string name="presbiterato_label">Presbiterato</string>
 </resources>

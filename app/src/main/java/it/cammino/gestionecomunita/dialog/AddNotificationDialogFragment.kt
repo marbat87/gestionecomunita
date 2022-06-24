@@ -2,8 +2,6 @@ package it.cammino.gestionecomunita.dialog
 
 
 import android.annotation.SuppressLint
-import android.text.InputType
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -15,7 +13,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import it.cammino.gestionecomunita.R
@@ -23,6 +20,7 @@ import it.cammino.gestionecomunita.database.ComunitaDatabase
 import it.cammino.gestionecomunita.database.entity.Comunita
 import it.cammino.gestionecomunita.util.Utility
 import it.cammino.gestionecomunita.util.capitalize
+import it.cammino.gestionecomunita.util.setupDatePicker
 import it.cammino.gestionecomunita.util.validateMandatoryField
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -61,36 +59,11 @@ open class AddNotificationDialogFragment : DialogFragment() {
             mView.findViewById<TextInputLayout>(R.id.note_text_field).editText?.setText(mBuilder.mNotaPrefill)
         }
 
-        val inputData =
-            mView.findViewById<TextInputLayout>(R.id.data_text_field).editText
-
-        inputData?.inputType = InputType.TYPE_NULL
-        inputData?.setOnKeyListener(null)
-        inputData?.setOnTouchListener { _, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_UP) {
-                val picker =
-                    MaterialDatePicker.Builder.datePicker()
-                        .setSelection(
-                            if (inputData.text.isNullOrBlank()) MaterialDatePicker.todayInUtcMilliseconds() else
-                                Utility.getDateFromString(
-                                    mView.context,
-                                    inputData.text?.toString() ?: ""
-                                )?.time
-                        )
-                        .setTitleText(R.string.data)
-                        .build()
-                picker.show(requireActivity().supportFragmentManager, "inputDataPicker")
-                picker.addOnPositiveButtonClickListener {
-                    inputData.setText(
-                        Utility.getStringFromDate(
-                            mView.context,
-                            Date(it)
-                        )
-                    )
-                }
-            }
-            false
-        }
+        mView.findViewById<TextInputLayout>(R.id.data_text_field).editText.setupDatePicker(
+            requireActivity(),
+            "inputData",
+            R.string.data
+        )
 
         return mView
     }

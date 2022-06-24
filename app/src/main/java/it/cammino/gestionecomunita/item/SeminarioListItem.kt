@@ -11,7 +11,7 @@ fun seminarioListItem(block: SeminarioListItem.() -> Unit): SeminarioListItem =
 
 class SeminarioListItem : AbstractBindingItem<SeminarioRowItemBinding>() {
 
-    var nomeSeminario: String = ""
+    private var nomeSeminario: String = ""
     var setNomeSeminario: String = ""
         set(value) {
             nomeSeminario = value

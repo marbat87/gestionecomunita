@@ -2,8 +2,6 @@ package it.cammino.gestionecomunita.dialog
 
 
 import android.annotation.SuppressLint
-import android.text.InputType
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AutoCompleteTextView
@@ -14,13 +12,9 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputLayout
 import it.cammino.gestionecomunita.R
-import it.cammino.gestionecomunita.util.StringUtils
-import it.cammino.gestionecomunita.util.Utility
-import it.cammino.gestionecomunita.util.capitalize
-import it.cammino.gestionecomunita.util.validateMandatoryField
+import it.cammino.gestionecomunita.util.*
 import java.io.Serializable
 import java.sql.Date
 
@@ -46,33 +40,11 @@ open class EditBrotherDialogFragment : DialogFragment() {
         mBuilder.mDataNascitaPrefill?.let {
             inputDataNascita?.setText(Utility.getStringFromDate(mView.context, it))
         }
-        inputDataNascita?.inputType = InputType.TYPE_NULL
-        inputDataNascita?.setOnKeyListener(null)
-        inputDataNascita?.setOnTouchListener { _, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_UP) {
-                val picker =
-                    MaterialDatePicker.Builder.datePicker()
-                        .setSelection(
-                            if (inputDataNascita.text.isNullOrBlank()) MaterialDatePicker.todayInUtcMilliseconds() else
-                                Utility.getDateFromString(
-                                    mView.context,
-                                    inputDataNascita.text?.toString() ?: ""
-                                )?.time
-                        )
-                        .setTitleText(R.string.data_nascita)
-                        .build()
-                picker.show(requireActivity().supportFragmentManager, "datanascitaTextFieldPicker")
-                picker.addOnPositiveButtonClickListener {
-                    inputDataNascita.setText(
-                        Utility.getStringFromDate(
-                            mView.context,
-                            Date(it)
-                        )
-                    )
-                }
-            }
-            false
-        }
+        inputDataNascita.setupDatePicker(
+            requireActivity(),
+            "inputDataNascita",
+            R.string.data_nascita
+        )
 
         mView.findViewById<TextInputLayout>(R.id.carisma_text_field).editText?.setText(mBuilder.mCarismaPrefill.toString())
         mView.findViewById<TextInputLayout>(R.id.tribu_text_field).editText?.setText(mBuilder.mTribuPrefill.toString())
@@ -85,33 +57,7 @@ open class EditBrotherDialogFragment : DialogFragment() {
         mBuilder.mDataArrivoPrefill?.let {
             inputDataArrivo?.setText(Utility.getStringFromDate(mView.context, it))
         }
-        inputDataArrivo?.inputType = InputType.TYPE_NULL
-        inputDataArrivo?.setOnKeyListener(null)
-        inputDataArrivo?.setOnTouchListener { _, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_UP) {
-                val picker =
-                    MaterialDatePicker.Builder.datePicker()
-                        .setSelection(
-                            if (inputDataArrivo.text.isNullOrBlank()) MaterialDatePicker.todayInUtcMilliseconds() else
-                                Utility.getDateFromString(
-                                    mView.context,
-                                    inputDataArrivo.text?.toString() ?: ""
-                                )?.time
-                        )
-                        .setTitleText(R.string.data_arrivo)
-                        .build()
-                picker.show(requireActivity().supportFragmentManager, "datanascitaTextFieldPicker")
-                picker.addOnPositiveButtonClickListener {
-                    inputDataArrivo.setText(
-                        Utility.getStringFromDate(
-                            mView.context,
-                            Date(it)
-                        )
-                    )
-                }
-            }
-            false
-        }
+        inputDataArrivo.setupDatePicker(requireActivity(), "inputDataArrivo", R.string.data_arrivo)
 
         val inputStato = mView.findViewById<AutoCompleteTextView>(R.id.stato_autcomplete)
         inputStato.setText(
@@ -131,34 +77,11 @@ open class EditBrotherDialogFragment : DialogFragment() {
         mBuilder.mDataInizioCamminoPrefill?.let {
             inputDataInizio?.setText(Utility.getStringFromDate(mView.context, it))
         }
-
-        inputDataInizio?.inputType = InputType.TYPE_NULL
-        inputDataInizio?.setOnKeyListener(null)
-        inputDataInizio?.setOnTouchListener { _, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_UP) {
-                val picker =
-                    MaterialDatePicker.Builder.datePicker()
-                        .setSelection(
-                            if (inputDataInizio.text.isNullOrBlank()) MaterialDatePicker.todayInUtcMilliseconds() else
-                                Utility.getDateFromString(
-                                    mView.context,
-                                    inputDataInizio.text?.toString() ?: ""
-                                )?.time
-                        )
-                        .setTitleText(R.string.data_inizio_cammino)
-                        .build()
-                picker.show(requireActivity().supportFragmentManager, "dataVisitaTextFieldPicker")
-                picker.addOnPositiveButtonClickListener {
-                    inputDataInizio.setText(
-                        Utility.getStringFromDate(
-                            mView.context,
-                            Date(it)
-                        )
-                    )
-                }
-            }
-            false
-        }
+        inputDataInizio.setupDatePicker(
+            requireActivity(),
+            "inputDataInizio",
+            R.string.data_inizio_cammino
+        )
 
         return mView
     }

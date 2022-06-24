@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import it.cammino.gestionecomunita.database.entity.Seminario
 import it.cammino.gestionecomunita.database.item.SeminarioWithDetails
-import it.cammino.gestionecomunita.database.item.SeminaristaWithComunita
 import it.cammino.gestionecomunita.item.ResponsabileListItem
 import it.cammino.gestionecomunita.item.SeminaristaItem
 import it.cammino.gestionecomunita.item.VisitaSeminarioItem

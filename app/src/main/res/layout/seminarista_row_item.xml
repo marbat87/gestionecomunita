@@ -25,20 +25,46 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?attr/textAppearanceListItem"
-            app:layout_constraintBottom_toTopOf="@id/modifica_seminarista"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Giovanni Rossi" />
 
+        <TextView
+            android:id="@+id/text_nome_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/nome"
+            android:textAppearance="?textAppearanceLabelMedium"
+            app:layout_constraintTop_toBottomOf="@id/nome_seminarista" />
+
         <Button
-            android:id="@+id/modifica_seminarista"
+            android:id="@+id/vedi_seminarista"
             style="@style/Widget.Material3.Button.TextButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/details"
             app:icon="@drawable/visibility_24px"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_nome_label" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/edit_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="modifica_seminarista, cancella_seminarista" />
+
+        <Button
+            android:id="@+id/modifica_seminarista"
+            style="@style/Widget.Material3.Button.TextButton.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/modifica"
+            app:icon="@drawable/edit_24px"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_nome_label" />
 
         <Button
             android:id="@+id/cancella_seminarista"
@@ -48,7 +74,8 @@
             android:text="@string/cancella"
             app:icon="@drawable/delete_24px"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/modifica_seminarista" />
+            app:layout_constraintStart_toEndOf="@id/modifica_seminarista"
+            app:layout_constraintTop_toBottomOf="@id/text_nome_label" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

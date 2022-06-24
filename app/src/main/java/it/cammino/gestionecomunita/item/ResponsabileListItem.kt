@@ -1,18 +1,17 @@
 package it.cammino.gestionecomunita.item
 
 import android.annotation.SuppressLint
-import android.text.InputType
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.FragmentActivity
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.mikepenz.fastadapter.binding.AbstractBindingItem
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.databinding.ResponsabileRowItemBinding
 import it.cammino.gestionecomunita.util.Utility
+import it.cammino.gestionecomunita.util.setupDatePicker
 import java.sql.Date
 
 fun responsabileListItem(block: ResponsabileListItem.() -> Unit): ResponsabileListItem =
@@ -61,85 +60,39 @@ class ResponsabileListItem : AbstractBindingItem<ResponsabileRowItemBinding>() {
         binding.respDataAlTextField.isEnabled = editable
         binding.removeResponsabile.isVisible = editable
 
-        binding.respDataDalTextField.editText?.inputType = InputType.TYPE_NULL
-        binding.respDataDalTextField.editText?.setOnKeyListener(null)
-        binding.respDataDalTextField.editText?.setOnTouchListener { _, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_UP) {
-                val picker =
-                    MaterialDatePicker.Builder.datePicker()
-                        .setSelection(
-                            if (binding.respDataDalTextField.editText?.text.isNullOrBlank()) MaterialDatePicker.todayInUtcMilliseconds() else
-                                Utility.getDateFromString(
-                                    ctx,
-                                    binding.respDataDalTextField.editText?.text?.toString() ?: ""
-                                )?.time
-                        )
-                        .setTitleText(R.string.data_convivenza)
-                        .build()
-                picker.show(
-                    (ctx as FragmentActivity).supportFragmentManager,
-                    "respDataDalTextFieldPicker"
-                )
-                picker.addOnPositiveButtonClickListener {
-                    val data = Date(it)
-                    binding.respDataDalTextField.editText?.setText(
-                        Utility.getStringFromDate(
-                            ctx,
-                            data
-                        )
-                    )
-                    dataDal = data
-                    if (dataAl != null && data > dataAl)
-                        binding.respDataDalTextField.error = ctx.getString(R.string.data_dal_error)
-                    else {
-                        binding.respDataAlTextField.error = null
-                        binding.respDataDalTextField.error = null
-                    }
-                    hasError = dataAl != null && data > dataAl
-                }
+        binding.respDataDalTextField.editText?.addTextChangedListener {
+            val data = Utility.getDateFromString(ctx, it.toString())
+            dataDal = data
+            if (data != null && dataAl != null && data > dataAl)
+                binding.respDataDalTextField.error = ctx.getString(R.string.data_dal_error)
+            else {
+                binding.respDataAlTextField.error = null
+                binding.respDataDalTextField.error = null
             }
-            false
+            hasError = data != null && dataAl != null && data > dataAl
         }
+        binding.respDataDalTextField.editText.setupDatePicker(
+            (ctx as FragmentActivity),
+            "respDataDalTextField",
+            R.string.data_dal
+        )
 
-        binding.respDataAlTextField.editText?.inputType = InputType.TYPE_NULL
-        binding.respDataAlTextField.editText?.setOnKeyListener(null)
-        binding.respDataAlTextField.editText?.setOnTouchListener { _, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_UP) {
-                val picker =
-                    MaterialDatePicker.Builder.datePicker()
-                        .setSelection(
-                            if (binding.respDataAlTextField.editText?.text.isNullOrBlank()) MaterialDatePicker.todayInUtcMilliseconds() else
-                                Utility.getDateFromString(
-                                    ctx,
-                                    binding.respDataAlTextField.editText?.text?.toString() ?: ""
-                                )?.time
-                        )
-                        .setTitleText(R.string.data_convivenza)
-                        .build()
-                picker.show(
-                    (ctx as FragmentActivity).supportFragmentManager,
-                    "respDataAlTextFieldPicker"
-                )
-                picker.addOnPositiveButtonClickListener {
-                    val data = Date(it)
-                    binding.respDataAlTextField.editText?.setText(
-                        Utility.getStringFromDate(
-                            ctx,
-                            data
-                        )
-                    )
-                    dataAl = data
-                    if (dataDal != null && data < dataDal)
-                        binding.respDataAlTextField.error = ctx.getString(R.string.data_al_error)
-                    else {
-                        binding.respDataAlTextField.error = null
-                        binding.respDataDalTextField.error = null
-                    }
-                    hasError = dataDal != null && data < dataDal
-                }
+        binding.respDataAlTextField.editText?.addTextChangedListener {
+            val data = Utility.getDateFromString(ctx, it.toString())
+            dataAl = data
+            if (data != null && dataDal != null && data < dataDal)
+                binding.respDataAlTextField.error = ctx.getString(R.string.data_al_error)
+            else {
+                binding.respDataAlTextField.error = null
+                binding.respDataDalTextField.error = null
             }
-            false
+            hasError = data != null && dataDal != null && data < dataDal
         }
+        binding.respDataAlTextField.editText.setupDatePicker(
+            ctx,
+            "respDataAlTextField",
+            R.string.data_al
+        )
 
         binding.respNomeTextField.editText?.doOnTextChanged { text, _, _, _ ->
             nomeResponsabile = text.toString()

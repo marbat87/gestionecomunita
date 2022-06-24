@@ -2,19 +2,26 @@
 
 package it.cammino.gestionecomunita.util
 
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
+import android.text.InputType
+import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
+import android.widget.EditText
 import androidx.annotation.RequiresApi
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.fragment.app.FragmentActivity
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.elevation.SurfaceColors
 import com.google.android.material.textfield.TextInputLayout
 import it.cammino.gestionecomunita.R
+import java.sql.Date
 import java.util.*
 
 @Suppress("DEPRECATION")
@@ -105,3 +112,52 @@ val Context.isDarkMode: Boolean
     get() {
         return (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
     }
+
+@SuppressLint("ClickableViewAccessibility")
+fun EditText?.setupDatePicker(activity: FragmentActivity, tag: String, titleId: Int) {
+    this?.inputType = InputType.TYPE_NULL
+    this?.setOnKeyListener(null)
+    this?.setOnTouchListener { _, motionEvent ->
+        if (motionEvent.action == MotionEvent.ACTION_UP) {
+            val picker =
+                MaterialDatePicker.Builder.datePicker()
+                    .setSelection(
+                        if (this.text.isNullOrBlank()) MaterialDatePicker.todayInUtcMilliseconds() else
+                            Utility.getDateFromString(
+                                context,
+                                this.text?.toString() ?: ""
+                            )?.time
+                    )
+                    .setTitleText(titleId)
+                    .build()
+            picker.show(activity.supportFragmentManager, "${tag}Picker")
+            picker.addOnPositiveButtonClickListener {
+                this.setText(
+                    Utility.getStringFromDate(
+                        context,
+                        Date(it)
+                    )
+                )
+            }
+        }
+        false
+    }
+}
+
+fun TextInputLayout?.validateDate(): Boolean {
+    this?.editText?.let {
+        if (!it.text.isNullOrEmpty() &&
+            Utility.getDateFromString(
+                context,
+                it.text.toString()
+            ) == null
+        ) {
+            this.error = context.getString(R.string.invalid_date)
+            return false
+        } else {
+            this.error = null
+            return true
+        }
+    }
+    return true
+}

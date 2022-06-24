@@ -4,11 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.text.InputType
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -23,8 +21,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.color.MaterialColors
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.mikepenz.fastadapter.FastAdapter
@@ -45,11 +41,7 @@ import it.cammino.gestionecomunita.dialog.small.SmallEditBrotherDialogFragment
 import it.cammino.gestionecomunita.item.ExpandableBrotherItem
 import it.cammino.gestionecomunita.item.expandableBrotherItem
 import it.cammino.gestionecomunita.ui.notifications.CommunityNotificationsFragment
-import it.cammino.gestionecomunita.ui.seminario.detail.SeminarioDetailFragment
-import it.cammino.gestionecomunita.util.StringUtils
-import it.cammino.gestionecomunita.util.Utility
-import it.cammino.gestionecomunita.util.systemLocale
-import it.cammino.gestionecomunita.util.validateMandatoryField
+import it.cammino.gestionecomunita.util.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -126,8 +118,8 @@ open class CommunityDetailFragment : Fragment() {
 
         if (isTablet && viewModel.createMode)
             binding.materialTabs.setBackgroundColor(
-                MaterialColors.getColor(
-                    binding.materialTabs,
+                ContextCompat.getColor(
+                    requireContext(),
                     android.R.color.transparent
                 )
             )
@@ -181,64 +173,17 @@ open class CommunityDetailFragment : Fragment() {
             viewModel.comunita.idTappa = i
         }
 
-        binding.dataConvivenzaTextField.editText?.inputType = InputType.TYPE_NULL
-        binding.dataConvivenzaTextField.editText?.setOnKeyListener(null)
-        binding.dataConvivenzaTextField.editText?.setOnTouchListener { _, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_UP) {
-                val picker =
-                    MaterialDatePicker.Builder.datePicker()
-                        .setSelection(
-                            if (binding.dataConvivenzaTextField.editText?.text.isNullOrBlank()) MaterialDatePicker.todayInUtcMilliseconds() else
-                                Utility.getDateFromString(
-                                    requireContext(),
-                                    binding.dataConvivenzaTextField.editText?.text?.toString() ?: ""
-                                )?.time
-                        )
-                        .setTitleText(R.string.data_convivenza)
-                        .build()
-                picker.show(
-                    requireActivity().supportFragmentManager,
-                    "dataConvivenzaTextFieldPicker"
-                )
-                picker.addOnPositiveButtonClickListener {
-                    binding.dataConvivenzaTextField.editText?.setText(
-                        Utility.getStringFromDate(
-                            requireContext(),
-                            Date(it)
-                        )
-                    )
-                }
-            }
-            false
-        }
+        binding.dataConvivenzaTextField.editText.setupDatePicker(
+            requireActivity(),
+            "dataConvivenzaTextField",
+            R.string.data_convivenza
+        )
 
-        binding.dataVisitaTextField.editText?.inputType = InputType.TYPE_NULL
-        binding.dataVisitaTextField.editText?.setOnKeyListener(null)
-        binding.dataVisitaTextField.editText?.setOnTouchListener { _, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_UP) {
-                val picker =
-                    MaterialDatePicker.Builder.datePicker()
-                        .setSelection(
-                            if (binding.dataVisitaTextField.editText?.text.isNullOrBlank()) MaterialDatePicker.todayInUtcMilliseconds() else
-                                Utility.getDateFromString(
-                                    requireContext(),
-                                    binding.dataVisitaTextField.editText?.text?.toString() ?: ""
-                                )?.time
-                        )
-                        .setTitleText(R.string.data_ultima_visita)
-                        .build()
-                picker.show(requireActivity().supportFragmentManager, "dataVisitaTextFieldPicker")
-                picker.addOnPositiveButtonClickListener {
-                    binding.dataVisitaTextField.editText?.setText(
-                        Utility.getStringFromDate(
-                            requireContext(),
-                            Date(it)
-                        )
-                    )
-                }
-            }
-            false
-        }
+        binding.dataVisitaTextField.editText.setupDatePicker(
+            requireActivity(),
+            "dataVisitaTextField",
+            R.string.data_ultima_visita
+        )
 
         binding.calendarToday.setOnClickListener {
             binding.dataVisitaTextField.editText?.setText(

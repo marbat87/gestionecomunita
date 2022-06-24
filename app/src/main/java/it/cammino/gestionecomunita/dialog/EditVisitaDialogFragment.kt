@@ -2,8 +2,6 @@ package it.cammino.gestionecomunita.dialog
 
 
 import android.annotation.SuppressLint
-import android.text.InputType
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
@@ -12,13 +10,9 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputLayout
 import it.cammino.gestionecomunita.R
-import it.cammino.gestionecomunita.util.StringUtils
-import it.cammino.gestionecomunita.util.Utility
-import it.cammino.gestionecomunita.util.capitalize
-import it.cammino.gestionecomunita.util.validateMandatoryField
+import it.cammino.gestionecomunita.util.*
 import java.io.Serializable
 import java.sql.Date
 
@@ -41,33 +35,11 @@ open class EditVisitaDialogFragment : DialogFragment() {
         mBuilder.mDataIncontroPrefill?.let {
             inputDataVisita?.setText(Utility.getStringFromDate(mView.context, it))
         }
-        inputDataVisita?.inputType = InputType.TYPE_NULL
-        inputDataVisita?.setOnKeyListener(null)
-        inputDataVisita?.setOnTouchListener { _, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_UP) {
-                val picker =
-                    MaterialDatePicker.Builder.datePicker()
-                        .setSelection(
-                            if (inputDataVisita.text.isNullOrBlank()) MaterialDatePicker.todayInUtcMilliseconds() else
-                                Utility.getDateFromString(
-                                    mView.context,
-                                    inputDataVisita.text?.toString() ?: ""
-                                )?.time
-                        )
-                        .setTitleText(R.string.data)
-                        .build()
-                picker.show(requireActivity().supportFragmentManager, "inputDataIncontroPicker")
-                picker.addOnPositiveButtonClickListener {
-                    inputDataVisita.setText(
-                        Utility.getStringFromDate(
-                            mView.context,
-                            Date(it)
-                        )
-                    )
-                }
-            }
-            false
-        }
+        inputDataVisita.setupDatePicker(
+            requireActivity(),
+            "inputDataVisita",
+            R.string.data
+        )
 
         return mView
     }

@@ -3,10 +3,8 @@ package it.cammino.gestionecomunita.ui.vocazione.detail
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -17,7 +15,6 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.datepicker.MaterialDatePicker
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.database.ComunitaDatabase
 import it.cammino.gestionecomunita.database.entity.Comunita
@@ -26,6 +23,7 @@ import it.cammino.gestionecomunita.databinding.FragmentVocazioneDetailBinding
 import it.cammino.gestionecomunita.dialog.DialogState
 import it.cammino.gestionecomunita.dialog.SimpleDialogFragment
 import it.cammino.gestionecomunita.util.Utility
+import it.cammino.gestionecomunita.util.setupDatePicker
 import it.cammino.gestionecomunita.util.systemLocale
 import it.cammino.gestionecomunita.util.validateMandatoryField
 import kotlinx.coroutines.Dispatchers
@@ -134,65 +132,17 @@ open class VocazioneDetailFragment : Fragment() {
             viewModel.vocazione.idComunita = viewModel.comunitaList[i].id
         }
 
-        binding.dataNascitaTextField.editText?.inputType = InputType.TYPE_NULL
-        binding.dataNascitaTextField.editText?.setOnKeyListener(null)
-        binding.dataNascitaTextField.editText?.setOnTouchListener { _, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_UP) {
-                val picker =
-                    MaterialDatePicker.Builder.datePicker()
-                        .setSelection(
-                            if (binding.dataNascitaTextField.editText?.text.isNullOrBlank()) MaterialDatePicker.todayInUtcMilliseconds() else
-                                Utility.getDateFromString(
-                                    requireContext(),
-                                    binding.dataNascitaTextField.editText?.text?.toString()
-                                        .orEmpty()
-                                )?.time
-                        )
-                        .setTitleText(R.string.data_nascita)
-                        .build()
-                picker.show(
-                    requireActivity().supportFragmentManager,
-                    "dataNascitaTextFieldPicker"
-                )
-                picker.addOnPositiveButtonClickListener {
-                    binding.dataNascitaTextField.editText?.setText(
-                        Utility.getStringFromDate(
-                            requireContext(),
-                            Date(it)
-                        )
-                    )
-                }
-            }
-            false
-        }
+        binding.dataNascitaTextField.editText.setupDatePicker(
+            requireActivity(),
+            "dataNascitaTextField",
+            R.string.data_nascita
+        )
 
-        binding.dataIngressoTextField.editText?.inputType = InputType.TYPE_NULL
-        binding.dataIngressoTextField.editText?.setOnKeyListener(null)
-        binding.dataIngressoTextField.editText?.setOnTouchListener { _, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_UP) {
-                val picker =
-                    MaterialDatePicker.Builder.datePicker()
-                        .setSelection(
-                            if (binding.dataIngressoTextField.editText?.text.isNullOrBlank()) MaterialDatePicker.todayInUtcMilliseconds() else
-                                Utility.getDateFromString(
-                                    requireContext(),
-                                    binding.dataIngressoTextField.editText?.text?.toString() ?: ""
-                                )?.time
-                        )
-                        .setTitleText(R.string.data_ultima_visita)
-                        .build()
-                picker.show(requireActivity().supportFragmentManager, "dataIngressoTextFieldPicker")
-                picker.addOnPositiveButtonClickListener {
-                    binding.dataIngressoTextField.editText?.setText(
-                        Utility.getStringFromDate(
-                            requireContext(),
-                            Date(it)
-                        )
-                    )
-                }
-            }
-            false
-        }
+        binding.dataIngressoTextField.editText.setupDatePicker(
+            requireActivity(),
+            "dataIngressoTextField",
+            R.string.data_ultima_visita
+        )
 
         binding.editVocazione.setOnClickListener {
             viewModel.editMode.value = true

@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/nome_text_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/container_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/container_horizontal_margin"
+            android:hint="@string/nome_cognome_label"
+            app:errorEnabled="true"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/data_nascita_text_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/container_horizontal_margin"
+            android:layout_marginTop="@dimen/text_field_space"
+            android:layout_marginEnd="@dimen/container_horizontal_margin"
+            android:hint="@string/data_nascita"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:layout_constraintTop_toBottomOf="@id/nome_text_field"
+            app:startIconDrawable="@drawable/calendar_today_24px">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="date" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/nazione_text_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/container_horizontal_margin"
+            android:layout_marginTop="@dimen/text_field_space"
+            android:layout_marginEnd="@dimen/container_horizontal_margin"
+            android:hint="@string/nazione_label"
+            app:layout_constraintTop_toBottomOf="@id/data_nascita_text_field">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/provenienza_divider_start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_field_space_no_error"
+            app:dividerInsetEnd="@dimen/container_horizontal_margin"
+            app:dividerInsetStart="@dimen/container_horizontal_margin"
+            app:layout_constraintTop_toBottomOf="@id/nazione_text_field" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/comunita_provenienza_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/container_horizontal_margin"
+            android:layout_marginTop="@dimen/text_field_space_no_error"
+            android:layout_marginEnd="@dimen/container_horizontal_margin"
+            android:hint="@string/comunita_provenienza"
+            app:layout_constraintTop_toBottomOf="@id/provenienza_divider_start">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/catechisti_text_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/container_horizontal_margin"
+            android:layout_marginTop="@dimen/text_field_space_no_error"
+            android:layout_marginEnd="@dimen/container_horizontal_margin"
+            android:hint="@string/catechisti_provenienza"
+            app:layout_constraintTop_toBottomOf="@id/comunita_provenienza_text">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tappa_text_field"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/container_horizontal_margin"
+            android:layout_marginTop="@dimen/text_field_space_no_error"
+            android:layout_marginEnd="@dimen/container_horizontal_margin"
+            android:hint="@string/tappa_provenienza"
+            app:layout_constraintTop_toBottomOf="@id/catechisti_text_field">
+
+            <AutoCompleteTextView
+                android:id="@+id/tappa_autcomplete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                app:simpleItems="@array/passaggi_entries"
+                tools:ignore="LabelFor" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/provenienza_divider_end"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_field_space_no_error"
+            app:dividerInsetEnd="@dimen/container_horizontal_margin"
+            app:dividerInsetStart="@dimen/container_horizontal_margin"
+            app:layout_constraintTop_toBottomOf="@id/tappa_text_field" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/data_ingresso_text_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/container_horizontal_margin"
+            android:layout_marginTop="@dimen/text_field_space_no_error"
+            android:layout_marginEnd="@dimen/container_horizontal_margin"
+            android:hint="@string/data_entrata_seminario"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:layout_constraintTop_toBottomOf="@id/provenienza_divider_end"
+            app:startIconDrawable="@drawable/calendar_today_24px">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="date" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/data_uscita_text_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/container_horizontal_margin"
+            android:layout_marginTop="@dimen/text_field_space"
+            android:layout_marginEnd="@dimen/container_horizontal_margin"
+            android:hint="@string/data_uscita_seminario"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:layout_constraintTop_toBottomOf="@id/data_ingresso_text_field"
+            app:startIconDrawable="@drawable/calendar_today_24px">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="date" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/motivo_text_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/container_horizontal_margin"
+            android:layout_marginTop="@dimen/text_field_space"
+            android:layout_marginEnd="@dimen/container_horizontal_margin"
+            android:hint="@string/motivo_uscita_seminario"
+            app:layout_constraintTop_toBottomOf="@id/data_uscita_text_field">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/date_seminario_divider_end"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_field_space_no_error"
+            app:dividerInsetEnd="@dimen/container_horizontal_margin"
+            app:dividerInsetStart="@dimen/container_horizontal_margin"
+            app:layout_constraintTop_toBottomOf="@id/motivo_text_field" />
+
+        <TextView
+            android:id="@+id/comunita_assegnazione_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/container_horizontal_margin"
+            android:layout_marginTop="@dimen/text_field_space_no_error"
+            android:layout_marginEnd="@dimen/container_horizontal_margin"
+            android:text="@string/comunita_assegnazione_label"
+            android:textAppearance="?textAppearanceTitleMedium"
+            app:layout_constraintTop_toBottomOf="@id/date_seminario_divider_end" />
+
+        <Button
+            android:id="@+id/add_comunita"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/container_horizontal_margin"
+            android:layout_marginEnd="@dimen/container_horizontal_margin"
+            android:text="@string/add"
+            app:layout_constraintBottom_toBottomOf="@id/comunita_assegnazione_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/comunita_assegnazione_title" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/comunita_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@id/comunita_assegnazione_title"
+            tools:listitem="@layout/responsabile_row_item" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/data_admissio_text_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/container_horizontal_margin"
+            android:layout_marginTop="@dimen/text_field_space"
+            android:layout_marginEnd="@dimen/container_horizontal_margin"
+            android:hint="@string/admissio_label"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:layout_constraintTop_toBottomOf="@id/comunita_recycler"
+            app:startIconDrawable="@drawable/calendar_today_24px">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="date" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/data_accolitato_text_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/container_horizontal_margin"
+            android:layout_marginTop="@dimen/text_field_space"
+            android:layout_marginEnd="@dimen/container_horizontal_margin"
+            android:hint="@string/accolitato_label"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:layout_constraintTop_toBottomOf="@id/data_admissio_text_field"
+            app:startIconDrawable="@drawable/calendar_today_24px">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="date" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/data_lettorato_text_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/container_horizontal_margin"
+            android:layout_marginTop="@dimen/text_field_space"
+            android:layout_marginEnd="@dimen/container_horizontal_margin"
+            android:hint="@string/lettorato_label"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:layout_constraintTop_toBottomOf="@id/data_accolitato_text_field"
+            app:startIconDrawable="@drawable/calendar_today_24px">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="date" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/data_diaconato_text_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/container_horizontal_margin"
+            android:layout_marginTop="@dimen/text_field_space"
+            android:layout_marginEnd="@dimen/container_horizontal_margin"
+            android:hint="@string/diaconato_label"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:layout_constraintTop_toBottomOf="@id/data_lettorato_text_field"
+            app:startIconDrawable="@drawable/calendar_today_24px">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="date" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/data_presbiterato_text_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/container_horizontal_margin"
+            android:layout_marginTop="@dimen/text_field_space"
+            android:layout_marginEnd="@dimen/container_horizontal_margin"
+            android:hint="@string/presbiterato_label"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:layout_constraintTop_toBottomOf="@id/data_diaconato_text_field"
+            app:startIconDrawable="@drawable/calendar_today_24px">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="date" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/note_text_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/container_horizontal_margin"
+            android:layout_marginTop="@dimen/text_field_space"
+            android:layout_marginEnd="@dimen/container_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:hint="@string/note_label"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/data_presbiterato_text_field">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:gravity="top"
+                android:inputType="text|textMultiLine" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

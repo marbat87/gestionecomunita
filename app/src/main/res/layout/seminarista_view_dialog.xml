@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:liftOnScroll="true"
+        app:statusBarForeground="@android:color/transparent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/seminarista_toolbar"
+            style="@style/Widget.Material3.Toolbar.OnSurface"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/close_24px"
+            app:title="@string/seminarista_title" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?android:colorBackground"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/container_horizontal_margin"
+            android:layout_marginEnd="@dimen/container_horizontal_margin">
+
+            <TextView
+                android:id="@+id/nome_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_view_vertical_margin"
+                android:textAppearance="?textAppearanceBodyLarge"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Pablo" />
+
+            <TextView
+                android:id="@+id/nome_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/nome_cognome_label"
+                android:textAppearance="?textAppearanceLabelMedium"
+                app:layout_constraintTop_toBottomOf="@id/nome_text" />
+
+            <TextView
+                android:id="@+id/data_nascita_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_view_vertical_margin"
+                android:textAppearance="?textAppearanceBodyLarge"
+                app:layout_constraintTop_toBottomOf="@id/nome_label"
+                tools:text="15/12/2022" />
+
+            <TextView
+                android:id="@+id/data_nascita_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/data_nascita"
+                android:textAppearance="?textAppearanceLabelMedium"
+                app:layout_constraintTop_toBottomOf="@id/data_nascita_text" />
+
+            <TextView
+                android:id="@+id/nazione_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_view_vertical_margin"
+                android:textAppearance="?textAppearanceBodyLarge"
+                app:layout_constraintTop_toBottomOf="@id/data_nascita_label"
+                tools:text="Italia" />
+
+            <TextView
+                android:id="@+id/nazione_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/nazione_label"
+                android:textAppearance="?textAppearanceLabelMedium"
+                app:layout_constraintTop_toBottomOf="@id/nazione_text" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/provenienza_divider_start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_view_vertical_margin"
+                app:layout_constraintTop_toBottomOf="@id/nazione_label" />
+
+            <TextView
+                android:id="@+id/comunita_provenienza_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_view_vertical_margin"
+                android:textAppearance="?textAppearanceBodyLarge"
+                app:layout_constraintTop_toBottomOf="@id/provenienza_divider_start"
+                tools:text="1 - borgonuovo" />
+
+            <TextView
+                android:id="@+id/comunita_provenienza_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/comunita_provenienza"
+                android:textAppearance="?textAppearanceLabelMedium"
+                app:layout_constraintTop_toBottomOf="@id/comunita_provenienza_text" />
+
+            <TextView
+                android:id="@+id/catechisti_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_view_vertical_margin"
+                android:textAppearance="?textAppearanceBodyLarge"
+                app:layout_constraintTop_toBottomOf="@id/comunita_provenienza_label"
+                tools:text="Daniele" />
+
+            <TextView
+                android:id="@+id/catechisti_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/catechesi_iniziali"
+                android:textAppearance="?textAppearanceLabelMedium"
+                app:layout_constraintTop_toBottomOf="@id/catechisti_text" />
+
+            <TextView
+                android:id="@+id/tappa_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_view_vertical_margin"
+                android:textAppearance="?textAppearanceBodyLarge"
+                app:layout_constraintTop_toBottomOf="@id/catechisti_label"
+                tools:text="Secondo Passaggio" />
+
+            <TextView
+                android:id="@+id/tappa_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tappa_provenienza"
+                android:textAppearance="?textAppearanceLabelMedium"
+                app:layout_constraintTop_toBottomOf="@id/tappa_text" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/provenienza_divider_end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_view_vertical_margin"
+                app:layout_constraintTop_toBottomOf="@id/tappa_label" />
+
+            <TextView
+                android:id="@+id/data_ingresso_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_view_vertical_margin"
+                android:textAppearance="?textAppearanceBodyLarge"
+                app:layout_constraintTop_toBottomOf="@id/provenienza_divider_end"
+                tools:text="15/12/1988" />
+
+            <TextView
+                android:id="@+id/data_ingresso_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/data_entrata_seminario"
+                android:textAppearance="?textAppearanceLabelMedium"
+                app:layout_constraintTop_toBottomOf="@id/data_ingresso_text" />
+
+            <TextView
+                android:id="@+id/data_uscita_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_view_vertical_margin"
+                android:textAppearance="?textAppearanceBodyLarge"
+                app:layout_constraintTop_toBottomOf="@id/data_ingresso_label"
+                tools:text="15/12/1988" />
+
+            <TextView
+                android:id="@+id/data_uscita_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/data_uscita_seminario"
+                android:textAppearance="?textAppearanceLabelMedium"
+                app:layout_constraintTop_toBottomOf="@id/data_uscita_text" />
+
+            <TextView
+                android:id="@+id/motivo_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_view_vertical_margin"
+                android:textAppearance="?textAppearanceBodyLarge"
+                app:layout_constraintTop_toBottomOf="@id/data_uscita_label"
+                tools:text="Boh" />
+
+            <TextView
+                android:id="@+id/motivo_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/motivo_uscita_seminario"
+                android:textAppearance="?textAppearanceLabelMedium"
+                app:layout_constraintTop_toBottomOf="@id/motivo_text" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/date_seminario_divider_end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_view_vertical_margin"
+                app:layout_constraintTop_toBottomOf="@id/motivo_label" />
+
+            <TextView
+                android:id="@+id/comunita_assegnazione_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="@string/comunita_assegnazione_label"
+                android:textAppearance="?textAppearanceTitleMedium"
+                app:layout_constraintTop_toBottomOf="@id/date_seminario_divider_end" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/comunita_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@id/comunita_assegnazione_title"
+                tools:listitem="@layout/comunita_seminarista_view_row_item" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/comunita_divider_end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_view_vertical_margin"
+                app:layout_constraintTop_toBottomOf="@id/comunita_recycler" />
+
+            <TextView
+                android:id="@+id/admissio_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_view_vertical_margin"
+                android:textAppearance="?textAppearanceBodyLarge"
+                app:layout_constraintTop_toBottomOf="@id/comunita_divider_end"
+                tools:text="15/12/2000" />
+
+            <TextView
+                android:id="@+id/admissio_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/admissio_label"
+                android:textAppearance="?textAppearanceLabelMedium"
+                app:layout_constraintTop_toBottomOf="@id/admissio_text" />
+
+            <TextView
+                android:id="@+id/accolitato_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_view_vertical_margin"
+                android:textAppearance="?textAppearanceBodyLarge"
+                app:layout_constraintTop_toBottomOf="@id/admissio_label"
+                tools:text="15/12/2000" />
+
+            <TextView
+                android:id="@+id/accolitato_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/accolitato_label"
+                android:textAppearance="?textAppearanceLabelMedium"
+                app:layout_constraintTop_toBottomOf="@id/accolitato_text" />
+
+            <TextView
+                android:id="@+id/lettorato_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_view_vertical_margin"
+                android:textAppearance="?textAppearanceBodyLarge"
+                app:layout_constraintTop_toBottomOf="@id/accolitato_label"
+                tools:text="15/12/2000" />
+
+            <TextView
+                android:id="@+id/lettorato_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/lettorato_label"
+                android:textAppearance="?textAppearanceLabelMedium"
+                app:layout_constraintTop_toBottomOf="@id/lettorato_text" />
+
+            <TextView
+                android:id="@+id/diaconato_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_view_vertical_margin"
+                android:textAppearance="?textAppearanceBodyLarge"
+                app:layout_constraintTop_toBottomOf="@id/lettorato_label"
+                tools:text="15/12/2000" />
+
+            <TextView
+                android:id="@+id/diaconato_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/diaconato_label"
+                android:textAppearance="?textAppearanceLabelMedium"
+                app:layout_constraintTop_toBottomOf="@id/diaconato_text" />
+
+            <TextView
+                android:id="@+id/presbiterato_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_view_vertical_margin"
+                android:textAppearance="?textAppearanceBodyLarge"
+                app:layout_constraintTop_toBottomOf="@id/diaconato_label"
+                tools:text="15/12/2000" />
+
+            <TextView
+                android:id="@+id/presbiterato_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/presbiterato_label"
+                android:textAppearance="?textAppearanceLabelMedium"
+                app:layout_constraintTop_toBottomOf="@id/presbiterato_text" />
+
+            <TextView
+                android:id="@+id/note_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_view_vertical_margin"
+                android:textAppearance="?textAppearanceBodyLarge"
+                app:layout_constraintTop_toBottomOf="@id/presbiterato_label"
+                tools:text="varie note di prova" />
+
+            <TextView
+                android:id="@+id/note_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/note_label"
+                android:textAppearance="?textAppearanceLabelMedium"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/note_text" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

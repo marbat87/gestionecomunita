@@ -34,10 +34,11 @@ open class ViewVisitaDialogFragment : DialogFragment() {
         }
 
         mView.findViewById<TextView>(R.id.formatori_text).text =
-            mBuilder.mFormatoriPrefill.toString()
+            mBuilder.mFormatoriPrefill.ifEmpty { StringUtils.DASH }
         mView.findViewById<TextView>(R.id.seminaristi_text).text =
-            mBuilder.mSeminaristiPrefill.toString()
-        mView.findViewById<TextView>(R.id.note_text).text = mBuilder.mNotePrefill.toString()
+            mBuilder.mSeminaristiPrefill.ifEmpty { StringUtils.DASH }
+        mView.findViewById<TextView>(R.id.note_text).text =
+            mBuilder.mNotePrefill.ifEmpty { StringUtils.DASH }
 
         return mView
     }

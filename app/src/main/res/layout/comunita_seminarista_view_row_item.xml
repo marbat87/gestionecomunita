@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/list_view_item_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginBottom="4dp"
+    app:rippleColor="@android:color/transparent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/listPreferredItemHeightLarge"
+        android:paddingStart="?listPreferredItemPaddingStart"
+        android:paddingTop="12dp"
+        android:paddingEnd="?listPreferredItemPaddingEnd"
+        android:paddingBottom="12dp">
+
+        <TextView
+            android:id="@+id/nome_comunita_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?textAppearanceBodyLarge"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="2a borgonuovo" />
+
+        <TextView
+            android:id="@+id/nome_comunita_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/comunita_assegnazione_label"
+            android:textAppearance="?textAppearanceLabelMedium"
+            app:layout_constraintTop_toBottomOf="@id/nome_comunita_text" />
+
+        <TextView
+            android:id="@+id/data_comunita_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_view_vertical_margin"
+            android:textAppearance="?textAppearanceBodyLarge"
+            app:layout_constraintTop_toBottomOf="@id/nome_comunita_label"
+            tools:text="12/05/2022" />
+
+        <TextView
+            android:id="@+id/data_comunita_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/data"
+            android:textAppearance="?textAppearanceLabelMedium"
+            app:layout_constraintTop_toBottomOf="@id/data_comunita_text" />
+
+        <TextView
+            android:id="@+id/tappa_comunita_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_view_vertical_margin"
+            android:textAppearance="?textAppearanceBodyLarge"
+            app:layout_constraintTop_toBottomOf="@id/data_comunita_label"
+            tools:text="Primo passaggio" />
+
+        <TextView
+            android:id="@+id/tappa_comunita_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tappa"
+            android:textAppearance="?textAppearanceLabelMedium"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tappa_comunita_text" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

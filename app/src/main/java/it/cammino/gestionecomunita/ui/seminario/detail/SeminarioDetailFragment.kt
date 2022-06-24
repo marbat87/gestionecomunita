@@ -4,10 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -18,7 +16,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.transition.MaterialSharedAxis
 import com.mikepenz.fastadapter.FastAdapter
@@ -33,26 +30,30 @@ import it.cammino.gestionecomunita.database.entity.VisitaSeminario
 import it.cammino.gestionecomunita.database.item.SeminaristaWithComunita
 import it.cammino.gestionecomunita.databinding.FragmentSeminarioDetailBinding
 import it.cammino.gestionecomunita.dialog.*
-import it.cammino.gestionecomunita.dialog.large.LargeEditBrotherDialogFragment
+import it.cammino.gestionecomunita.dialog.large.LargeEditSeminaristaDialogFragment
 import it.cammino.gestionecomunita.dialog.large.LargeEditVisitaDialogFragment
+import it.cammino.gestionecomunita.dialog.large.LargeViewSeminaristaDialogFragment
 import it.cammino.gestionecomunita.dialog.large.LargeViewVisitaDialogFragment
-import it.cammino.gestionecomunita.dialog.small.SmallEditBrotherDialogFragment
+import it.cammino.gestionecomunita.dialog.small.SmallEditSeminaristaDialogFragment
 import it.cammino.gestionecomunita.dialog.small.SmallEditVisitaDialogFragment
+import it.cammino.gestionecomunita.dialog.small.SmallViewSeminaristaDialogFragment
 import it.cammino.gestionecomunita.dialog.small.SmallViewVisitaDialogFragment
 import it.cammino.gestionecomunita.item.*
 import it.cammino.gestionecomunita.util.OSUtils
 import it.cammino.gestionecomunita.util.Utility
+import it.cammino.gestionecomunita.util.setupDatePicker
 import it.cammino.gestionecomunita.util.validateMandatoryField
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.sql.Date
 
 
 open class SeminarioDetailFragment : Fragment() {
 
     private val viewModel: SeminarioDetailViewModel by viewModels()
     private val inputdialogViewModel: EditVisitaDialogFragment.DialogViewModel by viewModels({ requireActivity() })
+    private val seminaristaEditdialogViewModel: EditSeminaristaDialogFragment.DialogViewModel by viewModels(
+        { requireActivity() })
     private val simpleDialogViewModel: SimpleDialogFragment.DialogViewModel by viewModels({ requireActivity() })
 
     private var _binding: FragmentSeminarioDetailBinding? = null
@@ -151,19 +152,20 @@ open class SeminarioDetailFragment : Fragment() {
 
         binding.fabAddSeminarista.setOnClickListener {
             mMainActivity?.let { mActivity ->
-                val builder = EditBrotherDialogFragment.Builder(
+                val builder = EditSeminaristaDialogFragment.Builder(
                     mActivity, ADD_SEMINARISTA
-                )
-                    .setEditMode(false)
+                ).apply {
+                    editMode = false
+                }
                 if (mActivity.resources.getBoolean(R.bool.large_layout)) {
                     builder.positiveButton(R.string.save)
                         .negativeButton(android.R.string.cancel)
-                    LargeEditBrotherDialogFragment.show(
+                    LargeEditSeminaristaDialogFragment.show(
                         builder,
                         mActivity.supportFragmentManager
                     )
                 } else {
-                    SmallEditBrotherDialogFragment.show(
+                    SmallEditSeminaristaDialogFragment.show(
                         builder,
                         mActivity.supportFragmentManager
                     )
@@ -194,64 +196,17 @@ open class SeminarioDetailFragment : Fragment() {
             }
         }
 
-        binding.dataInizioTextField.editText?.inputType = InputType.TYPE_NULL
-        binding.dataInizioTextField.editText?.setOnKeyListener(null)
-        binding.dataInizioTextField.editText?.setOnTouchListener { _, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_UP) {
-                val picker =
-                    MaterialDatePicker.Builder.datePicker()
-                        .setSelection(
-                            if (binding.dataInizioTextField.editText?.text.isNullOrBlank()) MaterialDatePicker.todayInUtcMilliseconds() else
-                                Utility.getDateFromString(
-                                    requireContext(),
-                                    binding.dataInizioTextField.editText?.text?.toString() ?: ""
-                                )?.time
-                        )
-                        .setTitleText(R.string.data_inizio)
-                        .build()
-                picker.show(
-                    requireActivity().supportFragmentManager,
-                    "dataInizioTextFieldPicker"
-                )
-                picker.addOnPositiveButtonClickListener {
-                    binding.dataInizioTextField.editText?.setText(
-                        Utility.getStringFromDate(
-                            requireContext(),
-                            Date(it)
-                        )
-                    )
-                }
-            }
-            false
-        }
+        binding.dataInizioTextField.editText.setupDatePicker(
+            requireActivity(),
+            "dataInizioTextField",
+            R.string.data_inizio
+        )
 
-        binding.dataDecretoTextField.editText?.inputType = InputType.TYPE_NULL
-        binding.dataDecretoTextField.editText?.setOnKeyListener(null)
-        binding.dataDecretoTextField.editText?.setOnTouchListener { _, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_UP) {
-                val picker =
-                    MaterialDatePicker.Builder.datePicker()
-                        .setSelection(
-                            if (binding.dataDecretoTextField.editText?.text.isNullOrBlank()) MaterialDatePicker.todayInUtcMilliseconds() else
-                                Utility.getDateFromString(
-                                    requireContext(),
-                                    binding.dataDecretoTextField.editText?.text?.toString() ?: ""
-                                )?.time
-                        )
-                        .setTitleText(R.string.data_decreto)
-                        .build()
-                picker.show(requireActivity().supportFragmentManager, "dataDecretoTextFieldPicker")
-                picker.addOnPositiveButtonClickListener {
-                    binding.dataDecretoTextField.editText?.setText(
-                        Utility.getStringFromDate(
-                            requireContext(),
-                            Date(it)
-                        )
-                    )
-                }
-            }
-            false
-        }
+        binding.dataDecretoTextField.editText.setupDatePicker(
+            requireActivity(),
+            "dataDecretoTextField",
+            R.string.data_decreto
+        )
 
         binding.seminaristiRecyclew.adapter = mAdapterSeminaristi
         binding.visiteRecyclew.adapter = mAdapterVisite
@@ -277,7 +232,8 @@ open class SeminarioDetailFragment : Fragment() {
         mAdapterSeminaristi.addEventHooks(
             listOf(
                 cancellaSeminaristaHook,
-                modificaSeminaristaHook
+                modificaSeminaristaHook,
+                vediSeminaristaHook
             )
         )
 
@@ -395,33 +351,49 @@ open class SeminarioDetailFragment : Fragment() {
     }
 
     private fun subscribeUIChanges() {
-        //        inputdialogViewModel.state.observe(viewLifecycleOwner) {
-//            Log.d(TAG, "inputDialogViewModel state $it")
-//            if (!inputdialogViewModel.handled) {
-//                when (it) {
-//                    is DialogState.Positive -> {
-//                        inputdialogViewModel.handled = true
-//                        val seminaristaItem = seminaristaItem {
-//                            nome = "AFFIO"
-//                        }
-//                        when (inputdialogViewModel.mTag) {
-//                            ADD_SEMINARISTA -> {
-//                                mAdapterSeminaristi.add(seminaristaItem)
-//                                mAdapterSeminaristi.notifyAdapterItemInserted(mAdapterSeminaristi.adapterItemCount - 1)
-//                                binding.noSeminaristiView.isVisible = false
-//                            }
-//                            EDIT_SEMINARISTA -> {
-//                                mAdapterSeminaristi[viewModel.selectedSeminarista] = seminaristaItem
-//                                mAdapterSeminaristi.notifyAdapterItemChanged(viewModel.selectedSeminarista)
-//                            }
-//                        }
-//                    }
-//                    is DialogState.Negative -> {
-//                        inputdialogViewModel.handled = true
-//                    }
-//                }
-//            }
-//        }
+        seminaristaEditdialogViewModel.state.observe(viewLifecycleOwner) {
+            Log.d(TAG, "seminaristaEditdialogViewModel state $it")
+            if (!seminaristaEditdialogViewModel.handled) {
+                when (it) {
+                    is DialogState.Positive -> {
+                        seminaristaEditdialogViewModel.handled = true
+                        val seminaristaItem = seminaristaItem {
+                            nome = seminaristaEditdialogViewModel.nomeText
+                            dataNascita = seminaristaEditdialogViewModel.dataNascitaText
+                            nazione = seminaristaEditdialogViewModel.nazioneText
+                            dataEntrata = seminaristaEditdialogViewModel.dataEntrataText
+                            dataUscita = seminaristaEditdialogViewModel.dataUscitaText
+                            motivoUscita = seminaristaEditdialogViewModel.motivoText
+                            comunitaList = seminaristaEditdialogViewModel.comunitaAssegnazioneText
+                            comunitaProvenienza =
+                                seminaristaEditdialogViewModel.comunitaProvenienzaText
+                            catechistiProvenienza =
+                                seminaristaEditdialogViewModel.catechistiProvenienzaText
+                            idTappaProvenienza = seminaristaEditdialogViewModel.idTappaText
+                            dataAdmissio = seminaristaEditdialogViewModel.dataAdmissioText
+                            dataAccolitato = seminaristaEditdialogViewModel.dataAccolitatoText
+                            dataLettorato = seminaristaEditdialogViewModel.dataLettoratoText
+                            dataPresbiterato = seminaristaEditdialogViewModel.dataPresbiteratoText
+                            dataDiaconato = seminaristaEditdialogViewModel.dataDiaconatoText
+                            note = seminaristaEditdialogViewModel.noteText
+                        }
+                        when (seminaristaEditdialogViewModel.mTag) {
+                            ADD_SEMINARISTA -> {
+                                mAdapterSeminaristi.add(seminaristaItem)
+                                binding.noSeminaristiView.isVisible = false
+                            }
+                            EDIT_SEMINARISTA -> {
+                                mAdapterSeminaristi[viewModel.selectedSeminarista] = seminaristaItem
+                                mAdapterSeminaristi.notifyAdapterItemChanged(viewModel.selectedSeminarista)
+                            }
+                        }
+                    }
+                    is DialogState.Negative -> {
+                        inputdialogViewModel.handled = true
+                    }
+                }
+            }
+        }
 
         inputdialogViewModel.state.observe(viewLifecycleOwner) {
             Log.d(TAG, "inputDialogViewModel state $it")
@@ -551,20 +523,87 @@ open class SeminarioDetailFragment : Fragment() {
         ) {
             mMainActivity?.let { mActivity ->
                 viewModel.selectedSeminarista = position
-                val builder = EditBrotherDialogFragment.Builder(
+                val builder = EditSeminaristaDialogFragment.Builder(
                     mActivity, EDIT_SEMINARISTA
-                )
-                    .nomePrefill(item.nome)
-                    .setEditMode(true)
+                ).apply {
+                    editMode = true
+                    nomePrefill = item.nome
+                    dataNascitaPrefill = item.dataNascita
+                    nazionePrefill = item.nazione
+                    dataEntrataPrefill = item.dataEntrata
+                    dataUscitaPrefill = item.dataUscita
+                    motivoPrefill = item.motivoUscita
+                    comunitaProvenienzaPrefill = item.comunitaProvenienza
+                    catechistiProvenienzaPrefill = item.catechistiProvenienza
+                    idTappaPrefill = item.idTappaProvenienza
+                    comunitaAssegnazione = item.comunitaList
+                    dataAdmissioPrefill = item.dataAdmissio
+                    dataAccolitatoPrefill = item.dataAccolitato
+                    dataLettoratoPrefill = item.dataLettorato
+                    dataDiaconatoPrefill = item.dataDiaconato
+                    dataPresbiteratoPrefill = item.dataPresbiterato
+                    notePrefill = item.note
+                }
                 if (mActivity.resources.getBoolean(R.bool.large_layout)) {
                     builder.positiveButton(R.string.save)
                         .negativeButton(android.R.string.cancel)
-                    LargeEditBrotherDialogFragment.show(
+                    LargeEditSeminaristaDialogFragment.show(
                         builder,
                         mActivity.supportFragmentManager
                     )
                 } else {
-                    SmallEditBrotherDialogFragment.show(
+                    SmallEditSeminaristaDialogFragment.show(
+                        builder,
+                        mActivity.supportFragmentManager
+                    )
+                }
+            }
+        }
+    }
+
+    private val vediSeminaristaHook = object : ClickEventHook<SeminaristaItem>() {
+        override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
+            //return the views on which you want to bind this event
+            return viewHolder.itemView.findViewById(R.id.vedi_seminarista)
+        }
+
+        override fun onClick(
+            v: View,
+            position: Int,
+            fastAdapter: FastAdapter<SeminaristaItem>,
+            item: SeminaristaItem
+        ) {
+            mMainActivity?.let { mActivity ->
+                viewModel.selectedSeminarista = position
+                val builder = ViewSeminaristaDialogFragment.Builder(
+                    mActivity, VIEW_SEMINARISTA
+                ).apply {
+                    nomePrefill = item.nome
+                    dataNascitaPrefill = item.dataNascita
+                    nazionePrefill = item.nazione
+                    dataEntrataPrefill = item.dataEntrata
+                    dataUscitaPrefill = item.dataUscita
+                    motivoPrefill = item.motivoUscita
+                    comunitaProvenienzaPrefill = item.comunitaProvenienza
+                    catechistiProvenienzaPrefill = item.catechistiProvenienza
+                    idTappaPrefill = item.idTappaProvenienza
+                    comunitaAssegnazione = item.comunitaList
+                    dataAdmissioPrefill = item.dataAdmissio
+                    dataAccolitatoPrefill = item.dataAccolitato
+                    dataLettoratoPrefill = item.dataLettorato
+                    dataDiaconatoPrefill = item.dataDiaconato
+                    dataPresbiteratoPrefill = item.dataPresbiterato
+                    notePrefill = item.note
+                }
+                if (mActivity.resources.getBoolean(R.bool.large_layout)) {
+                    builder.positiveButton(R.string.save)
+                        .negativeButton(android.R.string.cancel)
+                    LargeViewSeminaristaDialogFragment.show(
+                        builder,
+                        mActivity.supportFragmentManager
+                    )
+                } else {
+                    SmallViewSeminaristaDialogFragment.show(
                         builder,
                         mActivity.supportFragmentManager
                     )
@@ -855,7 +894,8 @@ open class SeminarioDetailFragment : Fragment() {
 
         mAdapterSeminaristi.adapterItems.forEach {
             val seminarista = Seminarista().apply {
-                nome = it.note
+                idSeminario = id
+                nome = it.nome
                 dataNascita = it.dataNascita
                 nazione = it.nazione
                 comuntiaProvenienza = it.comunitaProvenienza
@@ -993,7 +1033,7 @@ open class SeminarioDetailFragment : Fragment() {
 
         mAdapterSeminaristi.set(seminaristi.map {
             seminaristaItem {
-                nome = it.seminarista.note
+                nome = it.seminarista.nome
                 dataNascita = it.seminarista.dataNascita
                 nazione = it.seminarista.nazione
                 comunitaProvenienza = it.seminarista.comuntiaProvenienza
@@ -1009,6 +1049,7 @@ open class SeminarioDetailFragment : Fragment() {
                 dataPresbiterato = it.seminarista.dataPresbiterato
                 note = it.seminarista.note
                 comunitaList = it.comunita
+                editable = false
             }
         })
 
@@ -1024,6 +1065,7 @@ open class SeminarioDetailFragment : Fragment() {
         const val EDIT_SEMINARISTA = "edit_seminarista"
         const val EDIT_VISITA = "edit_visita"
         const val VIEW_VISITA = "view_visita"
+        const val VIEW_SEMINARISTA = "view_seminarista"
         const val DELETE_SEMINARISTA = "delete_seminarista"
         const val UNDO_CHANGE = "undo_change"
         const val DELETE_SEMINARIO = "delete_seminario"

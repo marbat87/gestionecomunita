@@ -12,8 +12,10 @@ open class ComunitaSeminarista {
 
     var idSeminarista: Long = 0
 
+    var comunitaAssegnazione: String = ""
+
     var dataAssegnazione: Date? = null
 
-    var idTappaAssegnazione: Int = -1
+    var idTappaAssegnazione: Int = 0
 
 }
