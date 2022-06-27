@@ -195,4 +195,36 @@
 
     <style name="Widget.Material3.TabLayout.DetailPage" parent="Widget.Material3.TabLayout.OnSurface" />
 
+    <style name="Widget.Material3.TextInputLayout.OutlinedBox.PrimaryText">
+        <item name="materialThemeOverlay">
+            @style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox.PrimaryText
+        </item>
+    </style>
+
+    <style name="ThemeOverlay.Material3.TextInputEditText.OutlinedBox.PrimaryText">
+        <item name="editTextStyle">
+            @style/Widget.Material3.TextInputEditText.OutlinedBox.PrimaryText
+        </item>
+    </style>
+
+    <style name="Widget.Material3.TextInputEditText.OutlinedBox.PrimaryText">
+        <item name="android:textColor">@color/primary_textfield_input_text_color</item>
+    </style>
+
+    <style name="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu.PrimaryText">
+        <item name="materialThemeOverlay">
+            @style/ThemeOverlay.Material3.AutoCompleteTextView.OutlinedBox.PrimaryText
+        </item>
+    </style>
+
+    <style name="ThemeOverlay.Material3.AutoCompleteTextView.OutlinedBox.PrimaryText">
+        <item name="autoCompleteTextViewStyle">
+            @style/Widget.Material3.AutoCompleteTextView.OutlinedBox.PrimaryText
+        </item>
+    </style>
+
+    <style name="Widget.Material3.AutoCompleteTextView.OutlinedBox.PrimaryText">
+        <item name="android:textColor">@color/primary_textfield_autocomplete_text_color</item>
+    </style>
+
 </resources>

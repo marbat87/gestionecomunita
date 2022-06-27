@@ -77,6 +77,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/diocesi_text_field"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.PrimaryText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/container_horizontal_margin"
@@ -94,6 +95,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/numero_text_field"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.PrimaryText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/container_horizontal_margin"
@@ -112,6 +114,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/parrocchia_text_field"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.PrimaryText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/container_horizontal_margin"
@@ -130,6 +133,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/anni_text_field"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.PrimaryText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/container_horizontal_margin"
@@ -148,6 +152,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/parrocco_text_field"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.PrimaryText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/container_horizontal_margin"
@@ -165,6 +170,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/email_text_field"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.PrimaryText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/container_horizontal_margin"
@@ -184,6 +190,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/responsabile_text_field"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.PrimaryText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/container_horizontal_margin"
@@ -201,6 +208,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/telefono_text_field"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.PrimaryText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/container_horizontal_margin"
@@ -220,6 +228,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/catechisti_text_field"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.PrimaryText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/container_horizontal_margin"
@@ -237,7 +246,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tappa_text_field"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu.PrimaryText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/container_horizontal_margin"
@@ -260,6 +269,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/data_convivenza_text_field"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.PrimaryText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/container_horizontal_margin"
@@ -281,6 +291,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/data_visita_text_field"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.PrimaryText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/container_horizontal_margin"
@@ -319,12 +330,13 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/note_text_field"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.PrimaryText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/container_horizontal_margin"
                 android:layout_marginTop="@dimen/text_field_space"
                 android:layout_marginEnd="@dimen/container_horizontal_margin"
-                android:layout_marginBottom="@dimen/text_field_space"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:enabled="false"
                 android:hint="@string/note"
                 app:layout_constraintBottom_toBottomOf="parent"

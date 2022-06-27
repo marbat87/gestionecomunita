@@ -10,6 +10,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/resp_nome_text_field"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.PrimaryText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/container_horizontal_margin"
@@ -29,6 +30,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/resp_data_dal_text_field"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.PrimaryText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/container_horizontal_margin"
@@ -52,6 +54,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/resp_data_al_text_field"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.PrimaryText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/text_field_space"
