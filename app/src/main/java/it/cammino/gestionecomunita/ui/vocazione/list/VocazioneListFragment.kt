@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import com.mikepenz.fastadapter.adapters.FastItemAdapter
+import it.cammino.gestionecomunita.MainActivity
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.database.entity.Vocazione
 import it.cammino.gestionecomunita.databinding.FragmentCommunityListBinding
@@ -69,6 +70,7 @@ open class VocazioneListFragment : Fragment() {
                 // Add menu items here
                 menuInflater.inflate(R.menu.filter_vocation_menu, menu)
                 menu.findItem(viewModel.selectedFilter).isChecked = true
+                (activity as? MainActivity)?.updateProfileImage()
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/backup_old_code"
+        android:checkable="true"
+        android:checked="true"
+        android:icon="@drawable/cloud_upload_24px"
+        android:title="@string/upload_old_code" />
+    <item
+        android:id="@+id/backup_new_code"
+        android:checkable="true"
+        android:checked="true"
+        android:icon="@drawable/key_24px"
+        android:title="@string/upload_new_code" />
+    <item
+        android:id="@+id/restore_old_code"
+        android:checkable="true"
+        android:icon="@drawable/cloud_download_24px"
+        android:title="@string/restore_old_code" />
+    <item
+        android:id="@+id/restore_new_code"
+        android:checkable="true"
+        android:icon="@drawable/password_24px"
+        android:title="@string/restore_new_code" />
+    <item
+        android:id="@+id/gplus_signout"
+        android:checkable="true"
+        android:icon="@drawable/person_remove_24px"
+        android:title="@string/gplus_signout" />
+    <item
+        android:id="@+id/gplus_revoke"
+        android:checkable="true"
+        android:icon="@drawable/person_off_24px"
+        android:title="@string/gplus_revoke" />
+</menu>

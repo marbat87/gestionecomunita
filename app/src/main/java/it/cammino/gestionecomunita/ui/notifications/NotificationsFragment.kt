@@ -28,6 +28,7 @@ import it.cammino.gestionecomunita.dialog.large.LargeAddNotificationDialogFragme
 import it.cammino.gestionecomunita.dialog.small.SmallAddNotificationDialogFragment
 import it.cammino.gestionecomunita.item.PromemoriaItem
 import it.cammino.gestionecomunita.item.promemoriaItem
+import it.cammino.gestionecomunita.ui.AccountMenuFragment
 import it.cammino.gestionecomunita.ui.comunita.detail.CommunityDetailFragment
 import it.cammino.gestionecomunita.util.OSUtils
 import it.cammino.gestionecomunita.util.systemLocale
@@ -36,7 +37,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.sql.Date
 
-class NotificationsFragment : Fragment() {
+class NotificationsFragment : AccountMenuFragment() {
 
     private val viewModel: NotificationsViewModel by viewModels()
     private val addNotificationViewMode: AddNotificationDialogFragment.DialogViewModel by viewModels(

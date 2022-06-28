@@ -14,6 +14,9 @@ interface PromemoriaDao {
     @get:Query("SELECT * FROM promemoria ORDER BY data asc")
     val liveAll: LiveData<List<Promemoria>>
 
+    @get:Query("SELECT * FROM promemoria")
+    val all: List<Promemoria>
+
     @Query("SELECT * FROM promemoria where idPromemoria = :idPromemoria")
     fun getById(idPromemoria: Long): Promemoria?
 
@@ -23,8 +26,14 @@ interface PromemoriaDao {
     @Query("DELETE FROM promemoria where idComunita = :idComunita")
     fun truncateTableByComunita(idComunita: Long)
 
+    @Query("DELETE FROM promemoria")
+    fun truncateTable()
+
     @Insert
     fun insertPromemoria(promemoria: Promemoria)
+
+    @Insert
+    fun insertPromemoria(promemoria: List<Promemoria>)
 
     @Update
     fun updatePromemoria(promemoria: Promemoria)

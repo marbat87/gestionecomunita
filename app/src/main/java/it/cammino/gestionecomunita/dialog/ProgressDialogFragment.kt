@@ -1,40 +1,46 @@
 package it.cammino.gestionecomunita.dialog
 
 
-import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.KeyEvent
+import android.view.View
+import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
-import androidx.core.text.HtmlCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.util.StringUtils
 import it.cammino.gestionecomunita.util.capitalize
 import java.io.Serializable
+import java.text.NumberFormat
 
 @Suppress("unused")
-class SimpleDialogFragment : DialogFragment() {
+class ProgressDialogFragment : DialogFragment() {
 
     private val viewModel: DialogViewModel by viewModels({ requireActivity() })
+
+    private val progressPercentFormat = NumberFormat.getPercentInstance()
+    private val progressNumberFormat = "%1d/%2d"
+
+    private var mView: View? = null
 
     private val builder: Builder?
         get() = if (arguments?.containsKey(BUILDER_TAG) != true) null else arguments?.getSerializable(
             BUILDER_TAG
         ) as? Builder
 
-    @SuppressLint("CheckResult")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val mBuilder = builder
-            ?: throw IllegalStateException("SimpleDialogFragment should be created using its Builder interface.")
+            ?: throw IllegalStateException("ProgressDialogFragment should be created using its Builder interface.")
 
         val dialog = MaterialAlertDialogBuilder(requireContext())
 
@@ -43,14 +49,6 @@ class SimpleDialogFragment : DialogFragment() {
 
         if (mBuilder.mIcon != 0)
             dialog.setIcon(mBuilder.mIcon)
-
-        if (mBuilder.mContent.isNotEmpty())
-            dialog.setMessage(
-                HtmlCompat.fromHtml(
-                    mBuilder.mContent,
-                    HtmlCompat.FROM_HTML_MODE_COMPACT
-                )
-            )
 
         mBuilder.mPositiveButton?.let {
             dialog.setPositiveButton(it) { _, _ ->
@@ -64,9 +62,17 @@ class SimpleDialogFragment : DialogFragment() {
             dialog.setNegativeButton(it) { _, _ ->
                 viewModel.mTag = mBuilder.mTag
                 viewModel.handled = false
-                viewModel.state.value = DialogState.Negative(this)
+                viewModel.state.value = DialogState.Positive(this)
             }
         }
+
+        mView = layoutInflater.inflate(R.layout.indeterminate_progressbar, null, false)
+        dialog.setView(mView)
+        val mdContent =
+            mView?.findViewById<TextView>(R.id.md_content_indeterminate)
+        mdContent?.isVisible = mBuilder.mContent != null
+        mdContent?.text = mBuilder.mContent
+            ?: StringUtils.EMPTY_STRING
 
         dialog.setCancelable(mBuilder.mCanceable)
 
@@ -82,26 +88,16 @@ class SimpleDialogFragment : DialogFragment() {
         return dialog.show()
     }
 
+    fun setContent(@StringRes res: Int) {
+        mView?.findViewById<TextView>(R.id.md_content_indeterminate)?.setText(res)
+    }
+
     fun cancel() {
         dialog?.cancel()
     }
 
-    fun setOnCancelListener(listener: DialogInterface.OnCancelListener) {
-        dialog?.setOnCancelListener(listener)
-    }
-
     override fun dismiss() {
         super.dismissAllowingStateLoss()
-    }
-
-    override fun onCancel(dialog: DialogInterface) {
-        super.onCancel(dialog)
-        val mBuilder = builder
-        if (mBuilder?.mCanceListener == true) {
-            viewModel.mTag = mBuilder.mTag
-            viewModel.handled = false
-            viewModel.state.value = DialogState.Positive(this)
-        }
     }
 
     class Builder(context: AppCompatActivity, internal val mTag: String) : Serializable {
@@ -109,26 +105,24 @@ class SimpleDialogFragment : DialogFragment() {
         @Transient
         private val mContext: AppCompatActivity = context
         internal var mTitle = 0
-        internal var mIcon = 0
-        internal var mContent: String = StringUtils.EMPTY_STRING
+        internal var mIcon: Int = 0
+        internal var mContent: CharSequence? = null
         internal var mPositiveButton: CharSequence? = null
         internal var mNegativeButton: CharSequence? = null
         internal var mCanceable = false
-
-        internal var mCanceListener = false
-
-        fun icon(@DrawableRes drawable: Int): Builder {
-            mIcon = drawable
-            return this
-        }
 
         fun title(@StringRes text: Int): Builder {
             mTitle = text
             return this
         }
 
+        fun icon(@DrawableRes text: Int): Builder {
+            mIcon = text
+            return this
+        }
+
         fun content(@StringRes content: Int): Builder {
-            mContent = this.mContext.resources.getString(content)
+            mContent = this.mContext.resources.getText(content)
             return this
         }
 
@@ -147,11 +141,6 @@ class SimpleDialogFragment : DialogFragment() {
             return this
         }
 
-        fun setHasCancelListener(): Builder {
-            mCanceListener = true
-            return this
-        }
-
         fun setCanceable(): Builder {
             mCanceable = true
             return this
@@ -162,9 +151,9 @@ class SimpleDialogFragment : DialogFragment() {
     companion object {
         private const val BUILDER_TAG = "bundle_builder"
 
-        private fun newInstance() = SimpleDialogFragment()
+        private fun newInstance() = ProgressDialogFragment()
 
-        private fun newInstance(builder: Builder): SimpleDialogFragment {
+        private fun newInstance(builder: Builder): ProgressDialogFragment {
             return newInstance().apply {
                 arguments = bundleOf(
                     Pair(BUILDER_TAG, builder)
@@ -178,19 +167,19 @@ class SimpleDialogFragment : DialogFragment() {
             }
         }
 
-        fun findVisible(context: AppCompatActivity?, tag: String): SimpleDialogFragment? {
+        fun findVisible(context: AppCompatActivity?, tag: String): ProgressDialogFragment? {
             context?.let {
                 val frag = it.supportFragmentManager.findFragmentByTag(tag)
-                return if (frag != null && frag is SimpleDialogFragment) frag else null
+                return if (frag != null && frag is ProgressDialogFragment) frag else null
             }
             return null
         }
     }
 
     class DialogViewModel : ViewModel() {
-        var mTag: String = ""
+        var mTag: String = StringUtils.EMPTY_STRING
         var handled = true
-        val state = MutableLiveData<DialogState<SimpleDialogFragment>>()
+        val state = MutableLiveData<DialogState<ProgressDialogFragment>>()
     }
 
 }

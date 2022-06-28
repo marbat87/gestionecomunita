@@ -13,6 +13,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.databinding.TabsLayoutBinding
+import it.cammino.gestionecomunita.ui.AccountMenuFragment
 import it.cammino.gestionecomunita.ui.comunita.detail.CommunityDetailFragment
 import it.cammino.gestionecomunita.ui.comunita.detail.CommunityDetailHostActivity
 import it.cammino.gestionecomunita.ui.comunita.list.CommunityListFragment
@@ -20,7 +21,7 @@ import it.cammino.gestionecomunita.ui.comunita.list.CommunityListViewModel
 import it.cammino.gestionecomunita.ui.comunita.list.CommunitySectionedListFragment
 import it.cammino.gestionecomunita.util.OSUtils
 
-class ComunitaIndexFragment : Fragment() {
+class ComunitaIndexFragment : AccountMenuFragment() {
 
     private val viewModel: ComunitaIndexViewModel by viewModels()
 

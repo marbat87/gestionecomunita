@@ -3,4 +3,6 @@
     <dimen name="container_horizontal_margin">48dp</dimen>
     <dimen name="text_field_space">0dp</dimen>
     <dimen name="text_field_space_no_error">20dp</dimen>
+    <dimen name="activity_min_margin">10dip</dimen>
+    <dimen name="activity_min_top_margin">15dip</dimen>
 </resources>

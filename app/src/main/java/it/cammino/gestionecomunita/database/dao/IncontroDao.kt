@@ -11,6 +11,9 @@ interface IncontroDao {
     @Insert
     fun insertIncontro(incontro: Incontro)
 
+    @Insert
+    fun insertIncontri(incontro: List<Incontro>)
+
     @Update
     fun updateIncontro(incontro: Incontro)
 
@@ -20,8 +23,14 @@ interface IncontroDao {
     @Query("DELETE FROM incontro where idComunita = :idComunita")
     fun truncateTableByComunita(idComunita: Long)
 
+    @Query("DELETE FROM incontro")
+    fun truncateTable()
+
     @Query("SELECT * FROM incontro WHERE idIncontro = :idIncontro")
     fun getIncontroById(idIncontro: Long): Incontro?
+
+    @get:Query("SELECT * from incontro")
+    val all: List<Incontro>
 
     @get:Query("SELECT * from incontro")
     val liveAll: LiveData<List<Incontro>>

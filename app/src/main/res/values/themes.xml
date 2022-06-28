@@ -227,4 +227,8 @@
         <item name="android:textColor">@color/primary_textfield_autocomplete_text_color</item>
     </style>
 
+    <style name="ShapeAppearanceOverlay.Gestionecomunita.CornerSize50Percent" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
+
 </resources>

@@ -10,6 +10,7 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
 import android.text.InputType
+import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
@@ -160,4 +161,10 @@ fun TextInputLayout?.validateDate(): Boolean {
         }
     }
     return true
+}
+
+fun Context.getTypedValueResId(resId: Int): Int {
+    val outTypedValue = TypedValue()
+    theme.resolveAttribute(resId, outTypedValue, true)
+    return outTypedValue.resourceId
 }

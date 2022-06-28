@@ -14,6 +14,9 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     var liveIncontri: LiveData<List<Incontro>>? = null
         private set
 
+    var backupCode: String = ""
+    var showSnackbar = true
+
     init {
         val mDb = ComunitaDatabase.getInstance(getApplication())
         livePromemoria = mDb.promemoriaDao().liveAll

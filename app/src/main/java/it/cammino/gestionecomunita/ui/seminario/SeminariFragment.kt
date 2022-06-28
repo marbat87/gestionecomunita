@@ -11,11 +11,12 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.databinding.FragmentSeminariBinding
+import it.cammino.gestionecomunita.ui.AccountMenuFragment
 import it.cammino.gestionecomunita.ui.seminario.detail.SeminarioDetailFragment
 import it.cammino.gestionecomunita.ui.seminario.detail.SeminarioDetailHostActivity
 import it.cammino.gestionecomunita.util.OSUtils
 
-class SeminariFragment : Fragment() {
+class SeminariFragment : AccountMenuFragment() {
 
     private val viewModel: SeminariViewModel by viewModels()
 

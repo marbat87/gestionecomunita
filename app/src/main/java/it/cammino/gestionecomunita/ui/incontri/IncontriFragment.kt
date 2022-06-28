@@ -29,13 +29,14 @@ import it.cammino.gestionecomunita.dialog.large.LargeEditMeetingDialogFragment
 import it.cammino.gestionecomunita.dialog.small.SmallEditMeetingDialogFragment
 import it.cammino.gestionecomunita.item.ExpandableMeetingItem
 import it.cammino.gestionecomunita.item.expandableMeetingItem
+import it.cammino.gestionecomunita.ui.AccountMenuFragment
 import it.cammino.gestionecomunita.util.systemLocale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.sql.Date
 
-class IncontriFragment : Fragment() {
+class IncontriFragment : AccountMenuFragment() {
 
     private val viewModel: IncontriViewModel by viewModels()
     private val addNotificationViewModel: EditMeetingDialogFragment.DialogViewModel by viewModels({ requireActivity() })

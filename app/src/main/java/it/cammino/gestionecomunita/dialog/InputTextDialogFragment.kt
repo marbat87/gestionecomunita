@@ -3,26 +3,24 @@ package it.cammino.gestionecomunita.dialog
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.KeyEvent
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
-import androidx.core.text.HtmlCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputEditText
+import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.util.StringUtils
 import it.cammino.gestionecomunita.util.capitalize
 import java.io.Serializable
 
-@Suppress("unused")
-class SimpleDialogFragment : DialogFragment() {
+class InputTextDialogFragment : DialogFragment() {
 
     private val viewModel: DialogViewModel by viewModels({ requireActivity() })
 
@@ -38,23 +36,19 @@ class SimpleDialogFragment : DialogFragment() {
 
         val dialog = MaterialAlertDialogBuilder(requireContext())
 
+        val mView = layoutInflater.inflate(R.layout.input_search, null, false)
+        dialog.setView(mView)
+        val input = mView.findViewById<TextInputEditText>(R.id.input_text)
+        input.setText(mBuilder.mPrefill ?: StringUtils.EMPTY_STRING)
+        input.selectAll()
+
         if (mBuilder.mTitle != 0)
             dialog.setTitle(mBuilder.mTitle)
-
-        if (mBuilder.mIcon != 0)
-            dialog.setIcon(mBuilder.mIcon)
-
-        if (mBuilder.mContent.isNotEmpty())
-            dialog.setMessage(
-                HtmlCompat.fromHtml(
-                    mBuilder.mContent,
-                    HtmlCompat.FROM_HTML_MODE_COMPACT
-                )
-            )
 
         mBuilder.mPositiveButton?.let {
             dialog.setPositiveButton(it) { _, _ ->
                 viewModel.mTag = mBuilder.mTag
+                viewModel.outputText = input.text.toString()
                 viewModel.handled = false
                 viewModel.state.value = DialogState.Positive(this)
             }
@@ -62,9 +56,7 @@ class SimpleDialogFragment : DialogFragment() {
 
         mBuilder.mNegativeButton?.let {
             dialog.setNegativeButton(it) { _, _ ->
-                viewModel.mTag = mBuilder.mTag
-                viewModel.handled = false
-                viewModel.state.value = DialogState.Negative(this)
+                dismiss()
             }
         }
 
@@ -86,54 +78,30 @@ class SimpleDialogFragment : DialogFragment() {
         dialog?.cancel()
     }
 
-    fun setOnCancelListener(listener: DialogInterface.OnCancelListener) {
-        dialog?.setOnCancelListener(listener)
-    }
-
-    override fun dismiss() {
-        super.dismissAllowingStateLoss()
-    }
-
-    override fun onCancel(dialog: DialogInterface) {
-        super.onCancel(dialog)
-        val mBuilder = builder
-        if (mBuilder?.mCanceListener == true) {
-            viewModel.mTag = mBuilder.mTag
-            viewModel.handled = false
-            viewModel.state.value = DialogState.Positive(this)
-        }
-    }
-
-    class Builder(context: AppCompatActivity, internal val mTag: String) : Serializable {
+    class Builder(context: AppCompatActivity, val mTag: String) : Serializable {
 
         @Transient
         private val mContext: AppCompatActivity = context
-        internal var mTitle = 0
-        internal var mIcon = 0
-        internal var mContent: String = StringUtils.EMPTY_STRING
-        internal var mPositiveButton: CharSequence? = null
-        internal var mNegativeButton: CharSequence? = null
-        internal var mCanceable = false
 
-        internal var mCanceListener = false
-
-        fun icon(@DrawableRes drawable: Int): Builder {
-            mIcon = drawable
-            return this
-        }
+        @StringRes
+        var mTitle = 0
+        var mPositiveButton: CharSequence? = null
+        var mNegativeButton: CharSequence? = null
+        var mCanceable = false
+        var mPrefill: CharSequence? = null
 
         fun title(@StringRes text: Int): Builder {
             mTitle = text
             return this
         }
 
-        fun content(@StringRes content: Int): Builder {
-            mContent = this.mContext.resources.getString(content)
+        fun prefill(@StringRes text: Int): Builder {
+            mPrefill = this.mContext.resources.getText(text)
             return this
         }
 
-        fun content(content: String): Builder {
-            mContent = content
+        fun prefill(text: String): Builder {
+            mPrefill = text
             return this
         }
 
@@ -147,24 +115,20 @@ class SimpleDialogFragment : DialogFragment() {
             return this
         }
 
-        fun setHasCancelListener(): Builder {
-            mCanceListener = true
-            return this
-        }
-
-        fun setCanceable(): Builder {
-            mCanceable = true
+        fun setCanceable(canceable: Boolean): Builder {
+            mCanceable = canceable
             return this
         }
 
     }
 
     companion object {
+
         private const val BUILDER_TAG = "bundle_builder"
 
-        private fun newInstance() = SimpleDialogFragment()
+        private fun newInstance() = InputTextDialogFragment()
 
-        private fun newInstance(builder: Builder): SimpleDialogFragment {
+        private fun newInstance(builder: Builder): InputTextDialogFragment {
             return newInstance().apply {
                 arguments = bundleOf(
                     Pair(BUILDER_TAG, builder)
@@ -177,20 +141,13 @@ class SimpleDialogFragment : DialogFragment() {
                 show(fragmentManger, builder.mTag)
             }
         }
-
-        fun findVisible(context: AppCompatActivity?, tag: String): SimpleDialogFragment? {
-            context?.let {
-                val frag = it.supportFragmentManager.findFragmentByTag(tag)
-                return if (frag != null && frag is SimpleDialogFragment) frag else null
-            }
-            return null
-        }
     }
 
     class DialogViewModel : ViewModel() {
-        var mTag: String = ""
+        var mTag: String = StringUtils.EMPTY_STRING
+        var outputText: String = StringUtils.EMPTY_STRING
         var handled = true
-        val state = MutableLiveData<DialogState<SimpleDialogFragment>>()
+        val state = MutableLiveData<DialogState<InputTextDialogFragment>>()
     }
 
 }

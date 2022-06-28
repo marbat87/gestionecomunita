@@ -24,10 +24,16 @@ interface SeminarioDao {
     @Insert
     fun insertSeminario(seminario: Seminario): Long
 
+    @Insert
+    fun insertSeminari(seminario: List<Seminario>)
+
     @Update
     fun updateSeminario(seminario: Seminario)
 
     @Delete
     fun deleteSeminario(seminario: Seminario)
+
+    @Query("DELETE FROM seminario")
+    fun truncateTable()
 
 }

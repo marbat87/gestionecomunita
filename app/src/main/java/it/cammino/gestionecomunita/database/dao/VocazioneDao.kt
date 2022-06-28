@@ -19,6 +19,9 @@ interface VocazioneDao {
     @Insert
     fun insertVocazione(vocazione: Vocazione): Long
 
+    @Insert
+    fun insertVocazioni(vocazione: List<Vocazione>)
+
     @Update
     fun updateVocazione(vocazione: Vocazione)
 
@@ -27,5 +30,8 @@ interface VocazioneDao {
 
     @Query("DELETE FROM vocazione where idComunita = :idComunita")
     fun truncateTableByComunita(idComunita: Long)
+
+    @Query("DELETE FROM vocazione")
+    fun truncateTable()
 
 }

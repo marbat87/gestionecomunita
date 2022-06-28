@@ -14,13 +14,14 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.databinding.TabsLayoutBinding
+import it.cammino.gestionecomunita.ui.AccountMenuFragment
 import it.cammino.gestionecomunita.ui.vocazione.detail.VocazioneDetailFragment
 import it.cammino.gestionecomunita.ui.vocazione.detail.VocazioneDetailHostActivity
 import it.cammino.gestionecomunita.ui.vocazione.list.VocazioneListFragment
 import it.cammino.gestionecomunita.ui.vocazione.list.VocazioneSectionedListFragment
 import it.cammino.gestionecomunita.util.OSUtils
 
-class CentroVocazionaleFragment : Fragment() {
+class CentroVocazionaleFragment : AccountMenuFragment() {
 
     private val viewModel: CentroVocazionaleViewModel by viewModels()
 
