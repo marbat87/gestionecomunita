@@ -24,7 +24,7 @@ open class AccountMenuFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         mMainActivity?.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                (activity as? MainActivity)?.updateProfileImage()
+                mMainActivity?.updateProfileImage()
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {

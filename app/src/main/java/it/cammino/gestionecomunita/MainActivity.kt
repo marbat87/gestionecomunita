@@ -128,9 +128,11 @@ class MainActivity : ThemeableActivity() {
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
+            // Your server's client ID, not your Android client ID.
+            .requestIdToken(getString(R.string.client_id))
             .build()
+
         // [END configure_signin]
 
         // [START build_client]
@@ -534,8 +536,7 @@ class MainActivity : ThemeableActivity() {
                 Toast.makeText(
                     this, getString(
                         R.string.login_failed,
-                        -1,
-                        task.exception?.localizedMessage
+                        task.exception?.message
                     ), Toast.LENGTH_SHORT
                 )
                     .show()
@@ -572,8 +573,7 @@ class MainActivity : ThemeableActivity() {
                         Toast.makeText(
                             this, getString(
                                 R.string.login_failed,
-                                -1,
-                                task.exception?.localizedMessage
+                                task.exception?.message
                             ), Toast.LENGTH_SHORT
                         )
                             .show()

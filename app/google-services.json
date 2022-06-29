@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "9545803189-1d7s2ji50rf95vk6h9gsaolunfdctf8p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "it.cammino.gestionecomunita",
+            "certificate_hash": "fd8bc996e6c625deec754fdeb2b1ee0343975795"
+          }
+        },
+        {
+          "client_id": "9545803189-nnfp1ojknba858h7163r6im9tgfmk50d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "it.cammino.gestionecomunita",
+            "certificate_hash": "f6e8d792564a3a1cc7eea34fc97d966887977373"
+          }
+        },
+        {
           "client_id": "9545803189-ikp32gbl3d8jf841nji3ssdqr0euaq2p.apps.googleusercontent.com",
           "client_type": 3
         }
