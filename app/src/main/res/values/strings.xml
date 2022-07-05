@@ -1,5 +1,4 @@
 <resources>
-    <string name="client_id" translatable="false">9545803189-ikp32gbl3d8jf841nji3ssdqr0euaq2p.apps.googleusercontent.com</string>
     <string name="app_name">Cammino Neocatecumenale</string>
     <string name="title_comunita">Comunità</string>
     <string name="title_centro_voc">Centro vocazionale</string>

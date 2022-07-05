@@ -1,115 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    app:layout_constraintBottom_toTopOf="@id/nav_view"
+    app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/main_content"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
-        app:layout_constraintBottom_toTopOf="@id/nav_view"
-        app:layout_constraintTop_toTopOf="parent">
+        app:statusBarForeground="?colorSurface">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/app_bar_layout"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/main_toolbar"
+            style="@style/Widget.Material3.Toolbar.Surface"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
-            app:statusBarForeground="?colorSurface">
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways" />
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/main_toolbar"
-                style="@style/Widget.Material3.Toolbar.Surface"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_scrollFlags="scroll|enterAlways" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-        </com.google.android.material.appbar.AppBarLayout>
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/loading_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:elevation="11dp"
+        android:indeterminate="true"
+        android:visibility="invisible"
+        app:indeterminateAnimationType="contiguous"
+        app:indicatorColor="@array/cat_custom_progress_colors"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-        <com.google.android.material.progressindicator.LinearProgressIndicator
-            android:id="@+id/loading_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:elevation="11dp"
-            android:indeterminate="true"
-            android:visibility="invisible"
-            app:indeterminateAnimationType="contiguous"
-            app:indicatorColor="@array/cat_custom_progress_colors"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/nav_host_fragment_activity_main"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/m3_bottom_nav_min_height"
+        android:background="?android:colorBackground"
+        app:defaultNavHost="true"
+        app:layout_behavior=".ui.FABAwareScrollingViewBehavior"
+        app:navGraph="@navigation/mobile_navigation"
+        tools:ignore="PrivateResource" />
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/nav_host_fragment_activity_main"
-            android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:defaultNavHost="true"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:navGraph="@navigation/mobile_navigation" />
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/extended_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin_bottom_navigation"
+        android:contentDescription="@string/nuova_comunita"
+        android:text="@string/nuova_comunita"
+        app:icon="@drawable/add_24px" />
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/extended_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginEnd="@dimen/fab_margin"
-            android:layout_marginBottom="@dimen/fab_margin"
-            android:contentDescription="@string/nuova_comunita"
-            android:text="@string/nuova_comunita"
-            app:icon="@drawable/add_24px" />
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/extended_fab_promemoria"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin_bottom_navigation"
+        android:contentDescription="@string/nuovo_promemoria"
+        android:text="@string/nuovo_promemoria"
+        android:visibility="gone"
+        app:icon="@drawable/add_24px" />
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/extended_fab_promemoria"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginEnd="@dimen/fab_margin"
-            android:layout_marginBottom="@dimen/fab_margin"
-            android:contentDescription="@string/nuovo_promemoria"
-            android:text="@string/nuovo_promemoria"
-            android:visibility="gone"
-            app:icon="@drawable/add_24px" />
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/extended_fab_incontro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin_bottom_navigation"
+        android:contentDescription="@string/nuovo_incontro"
+        android:text="@string/nuovo_incontro"
+        android:visibility="gone"
+        app:icon="@drawable/add_24px" />
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/extended_fab_incontro"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginEnd="@dimen/fab_margin"
-            android:layout_marginBottom="@dimen/fab_margin"
-            android:contentDescription="@string/nuovo_incontro"
-            android:text="@string/nuovo_incontro"
-            android:visibility="gone"
-            app:icon="@drawable/add_24px" />
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/extended_fab_vocazione"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin_bottom_navigation"
+        android:contentDescription="@string/vocazione_new_title"
+        android:text="@string/vocazione_new_title"
+        android:visibility="gone"
+        app:icon="@drawable/add_24px" />
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/extended_fab_vocazione"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginEnd="@dimen/fab_margin"
-            android:layout_marginBottom="@dimen/fab_margin"
-            android:contentDescription="@string/vocazione_new_title"
-            android:text="@string/vocazione_new_title"
-            android:visibility="gone"
-            app:icon="@drawable/add_24px" />
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/extended_fab_seminari"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginEnd="@dimen/fab_margin"
-            android:layout_marginBottom="@dimen/fab_margin"
-            android:contentDescription="@string/nuovo_seminario"
-            android:text="@string/nuovo_seminario"
-            android:visibility="gone"
-            app:icon="@drawable/add_24px" />
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/extended_fab_seminari"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin_bottom_navigation"
+        android:contentDescription="@string/nuovo_seminario"
+        android:text="@string/nuovo_seminario"
+        android:visibility="gone"
+        app:icon="@drawable/add_24px" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
@@ -120,5 +116,5 @@
         app:layout_scrollFlags="scroll|enterAlways"
         app:menu="@menu/bottom_nav_menu" />
 
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>

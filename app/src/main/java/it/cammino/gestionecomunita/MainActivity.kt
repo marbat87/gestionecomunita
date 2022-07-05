@@ -130,7 +130,7 @@ class MainActivity : ThemeableActivity() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
             // Your server's client ID, not your Android client ID.
-            .requestIdToken(getString(R.string.client_id))
+            .requestIdToken(getString(R.string.default_web_client_id))
             .build()
 
         // [END configure_signin]
