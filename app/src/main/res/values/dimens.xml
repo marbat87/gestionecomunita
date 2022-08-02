@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
@@ -14,4 +14,5 @@
     <dimen name="text_field_space_no_error">20dp</dimen>
     <dimen name="activity_min_margin">5dip</dimen>
     <dimen name="activity_min_top_margin">10dip</dimen>
+    <dimen name="m3_btn_icon_only_default_size" tools:override="true">24dp</dimen>
 </resources>

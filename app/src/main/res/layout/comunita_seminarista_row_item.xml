@@ -78,11 +78,10 @@
 
     <Button
         android:id="@+id/remove_comunita"
-        style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly"
+        style="?attr/materialIconButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:icon="@drawable/close_24px"
-        app:iconSize="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

@@ -350,80 +350,9 @@
         android:id="@+id/bottomAppBar"
         style="@style/Widget.Material3.BottomAppBar"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        app:hideOnScroll="true">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/edit_menu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:constraint_referenced_ids="cancel_change, confirm_changes" />
-
-            <Button
-                android:id="@+id/cancel_change"
-                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly.OnPrimary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:icon="@drawable/undo_24px"
-                app:iconSize="24dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-            <Button
-                android:id="@+id/confirm_changes"
-                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly.OnPrimary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:visibility="gone"
-                app:icon="@drawable/save_24px"
-                app:iconSize="24dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/cancel_change"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/vocazione_menu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:constraint_referenced_ids="edit_vocazione, delete_vocazione" />
-
-            <Button
-                android:id="@+id/edit_vocazione"
-                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly.OnPrimary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:icon="@drawable/edit_24px"
-                app:iconSize="24dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-            <Button
-                android:id="@+id/delete_vocazione"
-                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly.OnPrimary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:icon="@drawable/delete_24px"
-                app:iconSize="24dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/edit_vocazione"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </com.google.android.material.bottomappbar.BottomAppBar>
+        app:hideOnScroll="true"
+        app:menu="@menu/vocazione_menu" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

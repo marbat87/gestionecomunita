@@ -219,82 +219,88 @@ open class CommunityDetailFragment : Fragment() {
             }
         })
 
-        binding.editCommunity.setOnClickListener {
-            viewModel.editMode.value = true
-        }
-
-        binding.deleteCommunity.setOnClickListener {
-            mMainActivity?.let { mActivity ->
-                SimpleDialogFragment.show(
-                    SimpleDialogFragment.Builder(
-                        mActivity,
-                        DELETE_COMMUNITY
-                    )
-                        .title(R.string.delete_community)
-                        .icon(R.drawable.delete_24px)
-                        .content(R.string.delete_community_dialog)
-                        .positiveButton(R.string.remove)
-                        .negativeButton(android.R.string.cancel),
-                    mActivity.supportFragmentManager
-                )
-            }
-        }
-
-        binding.historyCommunity.setOnClickListener {
-            mMainActivity?.let { mActivity ->
-                val builder = CommunityHistoryDialogFragment.Builder(
-                    mActivity, HISTORY
-                )
-                builder.idComunita = viewModel.listId
-                if (mActivity.resources.getBoolean(R.bool.large_layout)) {
-                    builder.positiveButton(android.R.string.ok)
-                    LargeCommunityHistoryDialogFragment.show(
-                        builder,
-                        mActivity.supportFragmentManager
-                    )
-                } else {
-                    SmallCommunityHistoryDialogFragment.show(
-                        builder,
-                        mActivity.supportFragmentManager
-                    )
+        binding.bottomAppBar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.edit_community -> {
+                    viewModel.editMode.value = true
+                    true
                 }
-            }
-        }
-
-        binding.notificationCommunity.setOnClickListener {
-            parentFragmentManager.commit {
-                replace(
-                    R.id.detail_fragment,
-                    CommunityNotificationsFragment.newInstance(viewModel.listId),
-                    R.id.community_detail_history_fragment.toString()
-                ).addSharedElement(it, "shared_element_notifications")
-                    .addToBackStack(R.id.community_detail_history_fragment.toString())
-            }
-        }
-
-        binding.cancelChange.setOnClickListener {
-            if (viewModel.createMode) {
-                activity?.finishAfterTransition()
-            } else {
-                mMainActivity?.let { mActivity ->
-                    SimpleDialogFragment.show(
-                        SimpleDialogFragment.Builder(
-                            mActivity,
-                            UNDO_CHANGE
+                R.id.delete_community -> {
+                    mMainActivity?.let { mActivity ->
+                        SimpleDialogFragment.show(
+                            SimpleDialogFragment.Builder(
+                                mActivity,
+                                DELETE_COMMUNITY
+                            )
+                                .title(R.string.delete_community)
+                                .icon(R.drawable.delete_24px)
+                                .content(R.string.delete_community_dialog)
+                                .positiveButton(R.string.remove)
+                                .negativeButton(android.R.string.cancel),
+                            mActivity.supportFragmentManager
                         )
-                            .title(R.string.annulla_modifiche_title)
-                            .icon(R.drawable.undo_24px)
-                            .content(R.string.annulla_modifiche_dialog)
-                            .positiveButton(R.string.annulla_modifiche_confirm)
-                            .negativeButton(android.R.string.cancel),
-                        mActivity.supportFragmentManager
-                    )
+                    }
+                    true
                 }
+                R.id.history_community -> {
+                    mMainActivity?.let { mActivity ->
+                        val builder = CommunityHistoryDialogFragment.Builder(
+                            mActivity, HISTORY
+                        )
+                        builder.idComunita = viewModel.listId
+                        if (mActivity.resources.getBoolean(R.bool.large_layout)) {
+                            builder.positiveButton(android.R.string.ok)
+                            LargeCommunityHistoryDialogFragment.show(
+                                builder,
+                                mActivity.supportFragmentManager
+                            )
+                        } else {
+                            SmallCommunityHistoryDialogFragment.show(
+                                builder,
+                                mActivity.supportFragmentManager
+                            )
+                        }
+                    }
+                    true
+                }
+                R.id.notification_community -> {
+                    parentFragmentManager.commit {
+                        replace(
+                            R.id.detail_fragment,
+                            CommunityNotificationsFragment.newInstance(viewModel.listId),
+                            R.id.community_detail_history_fragment.toString()
+                        ).addSharedElement(binding.bottomAppBar, "shared_element_notifications")
+                            .addToBackStack(R.id.community_detail_history_fragment.toString())
+                    }
+                    true
+                }
+                R.id.cancel_change -> {
+                    if (viewModel.createMode) {
+                        activity?.finishAfterTransition()
+                    } else {
+                        mMainActivity?.let { mActivity ->
+                            SimpleDialogFragment.show(
+                                SimpleDialogFragment.Builder(
+                                    mActivity,
+                                    UNDO_CHANGE
+                                )
+                                    .title(R.string.annulla_modifiche_title)
+                                    .icon(R.drawable.undo_24px)
+                                    .content(R.string.annulla_modifiche_dialog)
+                                    .positiveButton(R.string.annulla_modifiche_confirm)
+                                    .negativeButton(android.R.string.cancel),
+                                mActivity.supportFragmentManager
+                            )
+                        }
+                    }
+                    true
+                }
+                R.id.confirm_changes -> {
+                    confirmChanges()
+                    true
+                }
+                else -> false
             }
-        }
-
-        binding.confirmChanges.setOnClickListener {
-            confirmChanges()
         }
 
         binding.salvaComunita.setOnClickListener {
@@ -436,6 +442,7 @@ open class CommunityDetailFragment : Fragment() {
                                 lifecycleScope.launch { deleteComunita() }
                             }
                             UNDO_CHANGE -> {
+                                simpleDialogViewModel.handled = true
                                 viewModel.editMode.value = false
                                 lifecycleScope.launch { retrieveData() }
                             }
@@ -687,8 +694,8 @@ open class CommunityDetailFragment : Fragment() {
         binding.noteTextField.isEnabled = editMode
         binding.anniTextField.isEnabled = editMode
         binding.fabAddBrother.isVisible = editMode && viewModel.selectedTabIndex == 1
-        binding.editMenu.isVisible = editMode
-        binding.communityMenu.isVisible = !editMode
+        binding.bottomAppBar.menu.clear()
+        binding.bottomAppBar.inflateMenu(if (editMode) R.menu.edit_menu else R.menu.comunita_menu)
         binding.calendarToday.isEnabled = editMode
         if (!editMode) {
             binding.numeroTextField.error = null
@@ -902,6 +909,7 @@ open class CommunityDetailFragment : Fragment() {
             binding.emailTextField.editText?.setText(viewModel.comunita.email)
             binding.responsabileTextField.editText?.setText(viewModel.comunita.responsabile)
             binding.telefonoTextField.editText?.setText(viewModel.comunita.telefono)
+
             if (viewModel.comunita.idTappa != -1)
                 binding.tappaAutcomplete.setText(
                     requireContext().resources.getTextArray(R.array.passaggi_entries)[viewModel.comunita.idTappa],
@@ -910,6 +918,7 @@ open class CommunityDetailFragment : Fragment() {
             else {
                 binding.tappaAutcomplete.text = null
             }
+
             viewModel.comunita.dataConvivenza?.let {
                 binding.dataConvivenzaTextField.editText?.setText(
                     Utility.getStringFromDate(
@@ -917,7 +926,10 @@ open class CommunityDetailFragment : Fragment() {
                         it
                     )
                 )
+            } ?: run {
+                binding.dataConvivenzaTextField.editText?.text = null
             }
+
             viewModel.comunita.dataUltimaVisita?.let {
                 binding.dataVisitaTextField.editText?.setText(
                     Utility.getStringFromDate(
@@ -925,7 +937,10 @@ open class CommunityDetailFragment : Fragment() {
                         it
                     )
                 )
+            } ?: run {
+                binding.dataVisitaTextField.editText?.text = null
             }
+
             binding.noteTextField.editText?.setText(viewModel.comunita.note)
             binding.anniTextField.editText?.setText(if (viewModel.comunita.numAnni > 0) viewModel.comunita.numAnni.toString() else StringUtils.EMPTY_STRING)
 

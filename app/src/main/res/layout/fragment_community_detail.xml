@@ -315,14 +315,13 @@
 
             <Button
                 android:id="@+id/calendar_today"
-                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly"
+                style="?attr/materialIconButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/container_horizontal_margin"
                 android:layout_marginEnd="@dimen/container_horizontal_margin"
                 android:layout_marginBottom="@dimen/text_field_space_no_error"
                 app:icon="@drawable/today_24px"
-                app:iconSize="24dp"
                 app:layout_constraintBottom_toBottomOf="@id/data_visita_text_field"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/data_visita_text_field"
@@ -413,104 +412,10 @@
         android:id="@+id/bottomAppBar"
         style="@style/Widget.Material3.BottomAppBar"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        app:hideOnScroll="true">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/edit_menu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:constraint_referenced_ids="cancel_change, confirm_changes" />
-
-            <Button
-                android:id="@+id/cancel_change"
-                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly.OnPrimary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:icon="@drawable/undo_24px"
-                app:iconSize="24dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-            <Button
-                android:id="@+id/confirm_changes"
-                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly.OnPrimary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                app:icon="@drawable/save_24px"
-                app:iconSize="24dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/cancel_change"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/community_menu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:constraint_referenced_ids="edit_community, delete_community, history_community, notification_community" />
-
-            <Button
-                android:id="@+id/edit_community"
-                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly.OnPrimary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:icon="@drawable/edit_24px"
-                app:iconSize="24dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-            <Button
-                android:id="@+id/history_community"
-                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly.OnPrimary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:icon="@drawable/history_24px"
-                app:iconSize="24dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/edit_community"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-            <Button
-                android:id="@+id/notification_community"
-                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly.OnPrimary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:transitionName="shared_element_notifications"
-                app:icon="@drawable/notifications_24px"
-                app:iconSize="24dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/history_community"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-            <Button
-                android:id="@+id/delete_community"
-                style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly.OnPrimary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:icon="@drawable/delete_24px"
-                app:iconSize="24dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/notification_community"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </com.google.android.material.bottomappbar.BottomAppBar>
+        android:transitionName="shared_element_notifications"
+        app:hideOnScroll="true"
+        app:menu="@menu/comunita_menu" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

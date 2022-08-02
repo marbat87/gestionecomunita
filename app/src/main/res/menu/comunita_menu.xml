@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/edit_community"
+        android:icon="@drawable/edit_24px"
+        android:orderInCategory="97"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction,MenuTitle" />
+
+    <item
+        android:id="@+id/history_community"
+        android:icon="@drawable/history_24px"
+        android:orderInCategory="98"
+        app:showAsAction="always"
+        tools:ignore="MenuTitle" />
+
+    <item
+        android:id="@+id/notification_community"
+        android:icon="@drawable/notifications_24px"
+        android:orderInCategory="99"
+        app:showAsAction="always"
+        tools:ignore="MenuTitle" />
+
+    <item
+        android:id="@+id/delete_community"
+        android:icon="@drawable/delete_24px"
+        android:orderInCategory="100"
+        android:transitionName="shared_element_notifications"
+        app:showAsAction="always"
+        tools:ignore="MenuTitle" />
+
+</menu>

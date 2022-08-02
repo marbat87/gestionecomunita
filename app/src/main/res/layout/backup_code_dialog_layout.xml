@@ -31,12 +31,11 @@
 
     <Button
         android:id="@+id/copy_code"
-        style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly"
+        style="?attr/materialIconButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/container_horizontal_margin"
         app:icon="@drawable/content_copy_24px"
-        app:iconSize="24dp"
         app:layout_constraintBottom_toBottomOf="@id/backup_code"
         app:layout_constraintStart_toEndOf="@id/backup_code"
         app:layout_constraintTop_toTopOf="@id/backup_code"

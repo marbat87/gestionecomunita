@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <style name="Theme.App.Starting" parent="Theme.SplashScreen.IconBackground">
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
@@ -175,22 +175,6 @@
     <style name="TextAppearance.GestioneComunita.LabelSmall" parent="TextAppearance.Material3.LabelSmall">
         <item name="fontFamily">?gestionecomunita_medium_font</item>
         <item name="android:fontFamily">?gestionecomunita_medium_font</item>
-    </style>
-
-    <style name="Widget.GestioneComunita.Button.TextButton.IconOnly" parent="Widget.Material3.Button.TextButton">
-        <item name="iconPadding">0dp</item>
-        <item name="iconTint" tools:ignore="PrivateResource">
-            @color/m3_text_button_foreground_color_selector
-        </item>
-        <item name="android:insetTop">0dp</item>
-        <item name="android:insetBottom">0dp</item>
-        <item name="android:paddingLeft">12dp</item>
-        <item name="android:minWidth">48dp</item>
-        <item name="android:minHeight">48dp</item>
-    </style>
-
-    <style name="Widget.GestioneComunita.Button.TextButton.IconOnly.OnPrimary">
-        <item name="iconTint">?attr/colorOnPrimaryContainer</item>
     </style>
 
     <style name="Widget.Material3.TabLayout.DetailPage" parent="Widget.Material3.TabLayout.OnSurface" />

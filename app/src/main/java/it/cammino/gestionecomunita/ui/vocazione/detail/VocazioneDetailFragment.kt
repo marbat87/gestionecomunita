@@ -144,38 +144,56 @@ open class VocazioneDetailFragment : Fragment() {
             R.string.data_ultima_visita
         )
 
-        binding.editVocazione.setOnClickListener {
-            viewModel.editMode.value = true
-        }
-
-        binding.deleteVocazione.setOnClickListener {
-            mMainActivity?.let { mActivity ->
-                SimpleDialogFragment.show(
-                    SimpleDialogFragment.Builder(
-                        mActivity,
-                        DELETE_VOCAZIONE
-                    )
-                        .title(R.string.delete_vocazione)
-                        .icon(R.drawable.delete_24px)
-                        .content(R.string.delete_vocazione_dialog)
-                        .positiveButton(R.string.remove)
-                        .negativeButton(android.R.string.cancel),
-                    mActivity.supportFragmentManager
-                )
+        binding.bottomAppBar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.edit_vocazione -> {
+                    viewModel.editMode.value = true
+                    true
+                }
+                R.id.delete_vocazione -> {
+                    mMainActivity?.let { mActivity ->
+                        SimpleDialogFragment.show(
+                            SimpleDialogFragment.Builder(
+                                mActivity,
+                                DELETE_VOCAZIONE
+                            )
+                                .title(R.string.delete_vocazione)
+                                .icon(R.drawable.delete_24px)
+                                .content(R.string.delete_vocazione_dialog)
+                                .positiveButton(R.string.remove)
+                                .negativeButton(android.R.string.cancel),
+                            mActivity.supportFragmentManager
+                        )
+                    }
+                    true
+                }
+                R.id.cancel_change -> {
+                    if (viewModel.createMode) {
+                        activity?.finishAfterTransition()
+                    } else {
+                        mMainActivity?.let { mActivity ->
+                            SimpleDialogFragment.show(
+                                SimpleDialogFragment.Builder(
+                                    mActivity,
+                                    UNDO_VOCAZIONE
+                                )
+                                    .title(R.string.annulla_modifiche_title)
+                                    .icon(R.drawable.undo_24px)
+                                    .content(R.string.annulla_modifiche_dialog)
+                                    .positiveButton(R.string.annulla_modifiche_confirm)
+                                    .negativeButton(android.R.string.cancel),
+                                mActivity.supportFragmentManager
+                            )
+                        }
+                    }
+                    true
+                }
+                R.id.confirm_changes -> {
+                    confirmChanges()
+                    true
+                }
+                else -> false
             }
-        }
-
-        binding.cancelChange.setOnClickListener {
-            if (viewModel.createMode) {
-                activity?.finishAfterTransition()
-            } else {
-                viewModel.editMode.value = false
-                lifecycleScope.launch { retrieveData(false) }
-            }
-        }
-
-        binding.confirmChanges.setOnClickListener {
-            confirmChanges()
         }
 
         binding.salvaVocazione.setOnClickListener {
@@ -191,6 +209,11 @@ open class VocazioneDetailFragment : Fragment() {
                             DELETE_VOCAZIONE -> {
                                 simpleDialogViewModel.handled = true
                                 lifecycleScope.launch { deleteVocazione() }
+                            }
+                            UNDO_VOCAZIONE -> {
+                                simpleDialogViewModel.handled = true
+                                viewModel.editMode.value = false
+                                lifecycleScope.launch { retrieveData(true) }
                             }
                         }
                     }
@@ -326,8 +349,8 @@ open class VocazioneDetailFragment : Fragment() {
         binding.tappaTextField.isEnabled = editMode
         binding.dataIngressoTextField.isEnabled = editMode
         binding.noteTextField.isEnabled = editMode
-        binding.editMenu.isVisible = editMode
-        binding.vocazioneMenu.isVisible = !editMode
+        binding.bottomAppBar.menu.clear()
+        binding.bottomAppBar.inflateMenu(if (editMode) R.menu.edit_menu else R.menu.vocazione_menu)
         binding.sessoTextField.isEnabled = editMode
         if (!editMode) {
             binding.nomeTextField.error = null
@@ -456,6 +479,8 @@ open class VocazioneDetailFragment : Fragment() {
                         comunita.parrocchia
                     ), false
                 )
+            } else {
+                textView.text = null
             }
 
             binding.lastEditDate.text = getString(
@@ -490,6 +515,8 @@ open class VocazioneDetailFragment : Fragment() {
                         it
                     )
                 )
+            } ?: run {
+                binding.dataNascitaTextField.editText?.text = null
             }
 
             viewModel.vocazione.dataIngresso?.let {
@@ -499,6 +526,8 @@ open class VocazioneDetailFragment : Fragment() {
                         it
                     )
                 )
+            } ?: run {
+                binding.dataIngressoTextField.editText?.text = null
             }
 
         } else {
@@ -518,6 +547,7 @@ open class VocazioneDetailFragment : Fragment() {
         const val CREATE_MODE = "create_mode"
         const val DELETE_VOCAZIONE = "delete_vocazione"
         const val ERROR_DIALOG = "community_detail_error_dialog"
+        const val UNDO_VOCAZIONE = "undo_vocazione"
 
     }
 

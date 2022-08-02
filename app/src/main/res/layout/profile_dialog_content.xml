@@ -8,13 +8,12 @@
 
     <Button
         android:id="@+id/close_modal"
-        style="@style/Widget.GestioneComunita.Button.TextButton.IconOnly"
+        style="?attr/materialIconButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:icon="@drawable/close_24px"
         android:layout_marginStart="15dp"
         android:layout_marginTop="?dialogPreferredPadding"
-        app:iconSize="24dp"
         app:iconTint="?colorSecondary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

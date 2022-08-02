@@ -260,50 +260,56 @@ open class SeminarioDetailFragment : Fragment() {
             }
         })
 
-        binding.editSeminario.setOnClickListener {
-            viewModel.editMode.value = true
-        }
-
-        binding.deleteSeminario.setOnClickListener {
-            mMainActivity?.let { mActivity ->
-                SimpleDialogFragment.show(
-                    SimpleDialogFragment.Builder(
-                        mActivity,
-                        DELETE_SEMINARIO
-                    )
-                        .title(R.string.delete_seminario)
-                        .icon(R.drawable.delete_24px)
-                        .content(R.string.delete_seminario_dialog)
-                        .positiveButton(R.string.delete_confirm)
-                        .negativeButton(android.R.string.cancel),
-                    mActivity.supportFragmentManager
-                )
-            }
-        }
-
-        binding.cancelChange.setOnClickListener {
-            if (viewModel.createMode) {
-                activity?.finishAfterTransition()
-            } else {
-                mMainActivity?.let { mActivity ->
-                    SimpleDialogFragment.show(
-                        SimpleDialogFragment.Builder(
-                            mActivity,
-                            UNDO_CHANGE
-                        )
-                            .title(R.string.annulla_modifiche_title)
-                            .icon(R.drawable.undo_24px)
-                            .content(R.string.annulla_modifiche_dialog)
-                            .positiveButton(R.string.annulla_modifiche_confirm)
-                            .negativeButton(android.R.string.cancel),
-                        mActivity.supportFragmentManager
-                    )
+        binding.bottomAppBar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.edit_seminario -> {
+                    viewModel.editMode.value = true
+                    true
                 }
+                R.id.delete_seminario -> {
+                    mMainActivity?.let { mActivity ->
+                        SimpleDialogFragment.show(
+                            SimpleDialogFragment.Builder(
+                                mActivity,
+                                DELETE_SEMINARIO
+                            )
+                                .title(R.string.delete_seminario)
+                                .icon(R.drawable.delete_24px)
+                                .content(R.string.delete_seminario_dialog)
+                                .positiveButton(R.string.delete_confirm)
+                                .negativeButton(android.R.string.cancel),
+                            mActivity.supportFragmentManager
+                        )
+                    }
+                    true
+                }
+                R.id.cancel_change -> {
+                    if (viewModel.createMode) {
+                        activity?.finishAfterTransition()
+                    } else {
+                        mMainActivity?.let { mActivity ->
+                            SimpleDialogFragment.show(
+                                SimpleDialogFragment.Builder(
+                                    mActivity,
+                                    UNDO_SEMINARIO
+                                )
+                                    .title(R.string.annulla_modifiche_title)
+                                    .icon(R.drawable.undo_24px)
+                                    .content(R.string.annulla_modifiche_dialog)
+                                    .positiveButton(R.string.annulla_modifiche_confirm)
+                                    .negativeButton(android.R.string.cancel),
+                                mActivity.supportFragmentManager
+                            )
+                        }
+                    }
+                    true
+                }
+                R.id.confirm_changes -> {
+                    confirmChanges()
+                    true
+                }
+                else -> false
             }
-        }
-
-        binding.confirmChanges.setOnClickListener {
-            confirmChanges()
         }
 
         binding.salvaSeminario.setOnClickListener {
@@ -449,7 +455,7 @@ open class SeminarioDetailFragment : Fragment() {
                                 binding.noVisiteView.isVisible =
                                     mAdapterVisite.itemAdapter.adapterItemCount == 0
                             }
-                            UNDO_CHANGE -> {
+                            UNDO_SEMINARIO -> {
                                 viewModel.editMode.value = false
                                 lifecycleScope.launch { retrieveData() }
                             }
@@ -775,8 +781,8 @@ open class SeminarioDetailFragment : Fragment() {
         binding.fabAddSeminarista.isVisible = editMode && viewModel.selectedTabIndex == 2
         binding.fabAddVisita.isVisible =
             (viewModel.selectedTabIndex == 1 && viewModel.editMode.value == true)
-        binding.editMenu.isVisible = editMode
-        binding.seminarioMenu.isVisible = !editMode
+        binding.bottomAppBar.menu.clear()
+        binding.bottomAppBar.inflateMenu(if (editMode) R.menu.edit_menu else R.menu.seminario_menu)
         binding.addRettore.isVisible = editMode
         binding.addVicerettore.isVisible = editMode
         binding.addSpirituale.isVisible = editMode
@@ -979,7 +985,10 @@ open class SeminarioDetailFragment : Fragment() {
                     it
                 )
             )
+        } ?: run {
+            binding.dataInizioTextField.editText?.text = null
         }
+
         viewModel.seminario.seminario.dataDecreto?.let {
             binding.dataDecretoTextField.editText?.setText(
                 Utility.getStringFromDate(
@@ -987,6 +996,8 @@ open class SeminarioDetailFragment : Fragment() {
                     it
                 )
             )
+        } ?: run {
+            binding.dataDecretoTextField.editText?.text = null
         }
 
         mAdapterRettori.set(viewModel.seminario.responsabili.filter { it.incarico == ResponsabileSeminario.Incarico.RETTORE }
@@ -1067,7 +1078,7 @@ open class SeminarioDetailFragment : Fragment() {
         const val VIEW_VISITA = "view_visita"
         const val VIEW_SEMINARISTA = "view_seminarista"
         const val DELETE_SEMINARISTA = "delete_seminarista"
-        const val UNDO_CHANGE = "undo_change"
+        const val UNDO_SEMINARIO = "undo_seminario"
         const val DELETE_SEMINARIO = "delete_seminario"
         const val DELETE_VISITA = "delete_visita"
         const val ERROR_DIALOG = "community_detail_error_dialog"
