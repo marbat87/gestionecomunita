@@ -36,6 +36,10 @@ class CommunitySubItem : AbstractExpandableItem<CommunitySubItem.ViewHolder>(),
         }
 
     var id: Long = 0
+        set(value) {
+            identifier = value
+            field = value
+        }
 
     override val type: Int
         get() = R.id.fastadapter_sub_item_id
@@ -51,7 +55,6 @@ class CommunitySubItem : AbstractExpandableItem<CommunitySubItem.ViewHolder>(),
 
         private var textComunita: TextView? = null
         private var textResponsabile: TextView? = null
-//        private var mId: TextView? = null
 
         override fun bindView(item: CommunitySubItem, payloads: List<Any>) {
             val ctx = itemView.context
@@ -75,13 +78,11 @@ class CommunitySubItem : AbstractExpandableItem<CommunitySubItem.ViewHolder>(),
         override fun unbindView(item: CommunitySubItem) {
             textComunita?.text = null
             textResponsabile?.text = null
-//            mId?.text = null
         }
 
         init {
             textComunita = view.findViewById(R.id.text_comunita)
             textResponsabile = view.findViewById(R.id.text_responsabile)
-//            mId = view.findViewById(R.id.text_id_canto)
         }
     }
 

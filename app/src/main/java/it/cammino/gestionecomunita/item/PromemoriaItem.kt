@@ -20,6 +20,10 @@ class PromemoriaItem : AbstractBindingItem<PromemoriaRowItemBinding>() {
     var idComunita: Long = -1
 
     var id: Long = 0
+        set(value) {
+            identifier = value
+            field = value
+        }
 
     override val type: Int
         get() = R.id.fastadapter_promemoria_item_id

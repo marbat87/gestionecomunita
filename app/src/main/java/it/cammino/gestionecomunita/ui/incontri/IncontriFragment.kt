@@ -17,6 +17,7 @@ import com.google.android.material.tabs.TabLayout
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.FastItemAdapter
 import com.mikepenz.fastadapter.listeners.ClickEventHook
+import com.mikepenz.itemanimators.SlideRightAlphaAnimator
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.database.ComunitaDatabase
 import it.cammino.gestionecomunita.database.entity.Incontro
@@ -76,6 +77,10 @@ class IncontriFragment : AccountMenuFragment() {
 
         binding.incontroTodoRecycler.adapter = mAdapterTodo
         binding.incontroDoneRecycler.adapter = mAdapterDone
+
+        binding.incontroTodoRecycler.itemAnimator = SlideRightAlphaAnimator()
+        binding.incontroDoneRecycler.itemAnimator = SlideRightAlphaAnimator()
+
         subscribeUiChanges()
 
         binding.meetingTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {

@@ -15,4 +15,5 @@
     <dimen name="activity_min_margin">5dip</dimen>
     <dimen name="activity_min_top_margin">10dip</dimen>
     <dimen name="m3_btn_icon_only_default_size" tools:override="true">24dp</dimen>
+    <dimen name="recycler_fab_padding_bottom">88dp</dimen>
 </resources>

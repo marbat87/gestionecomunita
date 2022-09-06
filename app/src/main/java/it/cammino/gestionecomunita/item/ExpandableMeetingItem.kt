@@ -35,6 +35,10 @@ class ExpandableMeetingItem : AbstractBindingItem<IncontroExpandableItemBinding>
     var isExpanded: Boolean = false
 
     var id: Long = 0
+        set(value) {
+            identifier = value
+            field = value
+        }
 
     var position: Int = 0
 

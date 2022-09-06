@@ -18,6 +18,7 @@ import com.google.android.material.transition.MaterialSharedAxis
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.FastItemAdapter
 import com.mikepenz.fastadapter.listeners.ClickEventHook
+import com.mikepenz.itemanimators.SlideRightAlphaAnimator
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.database.ComunitaDatabase
 import it.cammino.gestionecomunita.database.entity.Promemoria
@@ -87,6 +88,7 @@ class CommunityNotificationsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.promemoriaRecycler.adapter = mAdapter
+        binding.promemoriaRecycler.itemAnimator = SlideRightAlphaAnimator()
 
         binding.promemoriaToolbar.setNavigationOnClickListener {
             parentFragmentManager.popBackStack()
