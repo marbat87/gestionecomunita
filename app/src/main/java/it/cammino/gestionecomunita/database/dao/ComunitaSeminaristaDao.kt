@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import it.cammino.gestionecomunita.database.entity.ComunitaSeminarista
-import it.cammino.gestionecomunita.database.entity.Seminario
 
 @Dao
 interface ComunitaSeminaristaDao {

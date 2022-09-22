@@ -1,4 +1,4 @@
-package it.cammino.risuscito.database.serializer
+package it.cammino.gestionecomunita.database.serializer
 
 import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext

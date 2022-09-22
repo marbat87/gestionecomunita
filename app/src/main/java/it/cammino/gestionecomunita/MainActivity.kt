@@ -63,8 +63,8 @@ import it.cammino.gestionecomunita.ui.vocazione.detail.VocazioneDetailHostActivi
 import it.cammino.gestionecomunita.util.OSUtils
 import it.cammino.gestionecomunita.util.StringUtils
 import it.cammino.gestionecomunita.util.getTypedValueResId
-import it.cammino.risuscito.database.serializer.DateTimeDeserializer
-import it.cammino.risuscito.database.serializer.DateTimeSerializer
+import it.cammino.gestionecomunita.database.serializer.DateTimeDeserializer
+import it.cammino.gestionecomunita.database.serializer.DateTimeSerializer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
