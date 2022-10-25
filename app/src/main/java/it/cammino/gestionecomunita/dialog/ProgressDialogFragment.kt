@@ -1,6 +1,7 @@
 package it.cammino.gestionecomunita.dialog
 
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import android.view.KeyEvent
@@ -20,6 +21,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.util.StringUtils
 import it.cammino.gestionecomunita.util.capitalize
+import it.cammino.gestionecomunita.util.getSerializableWrapper
 import java.io.Serializable
 import java.text.NumberFormat
 
@@ -34,10 +36,12 @@ class ProgressDialogFragment : DialogFragment() {
     private var mView: View? = null
 
     private val builder: Builder?
-        get() = if (arguments?.containsKey(BUILDER_TAG) != true) null else arguments?.getSerializable(
-            BUILDER_TAG
+        get() = if (arguments?.containsKey(BUILDER_TAG) != true) null else arguments?.getSerializableWrapper(
+            BUILDER_TAG,
+            Builder::class.java
         ) as? Builder
 
+    @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val mBuilder = builder
             ?: throw IllegalStateException("ProgressDialogFragment should be created using its Builder interface.")

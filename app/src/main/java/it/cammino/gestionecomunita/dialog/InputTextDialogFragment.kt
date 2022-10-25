@@ -18,6 +18,7 @@ import com.google.android.material.textfield.TextInputEditText
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.util.StringUtils
 import it.cammino.gestionecomunita.util.capitalize
+import it.cammino.gestionecomunita.util.getSerializableWrapper
 import java.io.Serializable
 
 class InputTextDialogFragment : DialogFragment() {
@@ -25,8 +26,9 @@ class InputTextDialogFragment : DialogFragment() {
     private val viewModel: DialogViewModel by viewModels({ requireActivity() })
 
     private val builder: Builder?
-        get() = if (arguments?.containsKey(BUILDER_TAG) != true) null else arguments?.getSerializable(
-            BUILDER_TAG
+        get() = if (arguments?.containsKey(BUILDER_TAG) != true) null else arguments?.getSerializableWrapper(
+            BUILDER_TAG,
+            Builder::class.java
         ) as? Builder
 
     @SuppressLint("CheckResult")

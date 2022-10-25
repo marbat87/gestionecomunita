@@ -17,6 +17,7 @@ import it.cammino.gestionecomunita.item.CommunityListItem
 import it.cammino.gestionecomunita.item.communityListItem
 import it.cammino.gestionecomunita.ui.comunita.ComunitaIndexViewModel
 import it.cammino.gestionecomunita.util.Utility
+import it.cammino.gestionecomunita.util.getSerializableWrapper
 
 open class CommunityListFragment : Fragment() {
 
@@ -32,7 +33,10 @@ open class CommunityListFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         viewModel.indexType =
-            arguments?.getSerializable(CommunityListViewModel.INDEX_TYPE) as? CommunityListViewModel.IndexType
+            arguments?.getSerializableWrapper(
+                CommunityListViewModel.INDEX_TYPE,
+                CommunityListViewModel.IndexType::class.java
+            ) as? CommunityListViewModel.IndexType
                 ?: CommunityListViewModel.IndexType.TUTTE
     }
 

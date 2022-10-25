@@ -53,8 +53,6 @@
 
         <item name="windowActionModeOverlay">true</item>
 
-        <!--        <item name="tabStyle">@style/Widget.Gestionecomunita.TabLayout</item>-->
-
         <item name="textAppearanceDisplayLarge">
             @style/TextAppearance.GestioneComunita.DisplayLarge
         </item>
@@ -209,10 +207,6 @@
 
     <style name="Widget.Material3.AutoCompleteTextView.OutlinedBox.PrimaryText">
         <item name="android:textColor">@color/primary_textfield_autocomplete_text_color</item>
-    </style>
-
-    <style name="ShapeAppearanceOverlay.Gestionecomunita.CornerSize50Percent" parent="">
-        <item name="cornerSize">50%</item>
     </style>
 
 </resources>

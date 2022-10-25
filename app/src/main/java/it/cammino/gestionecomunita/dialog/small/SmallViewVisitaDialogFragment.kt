@@ -16,20 +16,22 @@ import com.google.android.material.transition.MaterialSharedAxis
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.dialog.ViewVisitaDialogFragment
 import it.cammino.gestionecomunita.util.OSUtils
+import it.cammino.gestionecomunita.util.getSerializableWrapper
 
 @Suppress("unused")
 class SmallViewVisitaDialogFragment : ViewVisitaDialogFragment() {
 
     private val builder: Builder?
-        get() = if (arguments?.containsKey(BUILDER_TAG) != true) null else arguments?.getSerializable(
-            BUILDER_TAG
+        get() = if (arguments?.containsKey(BUILDER_TAG) != true) null else arguments?.getSerializableWrapper(
+            BUILDER_TAG,
+            Builder::class.java
         ) as? Builder
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (!OSUtils.isObySamsung()) {
-            enterTransition = MaterialSharedAxis(MaterialSharedAxis.Y, /* forward= */ true)
-            returnTransition = MaterialSharedAxis(MaterialSharedAxis.Y, /* forward= */ false)
+            enterTransition = MaterialSharedAxis(MaterialSharedAxis.Y, /* forward = */ true)
+            returnTransition = MaterialSharedAxis(MaterialSharedAxis.Y, /* forward = */ false)
         }
     }
 

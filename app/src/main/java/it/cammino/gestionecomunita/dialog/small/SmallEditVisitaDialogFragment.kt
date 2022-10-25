@@ -20,20 +20,22 @@ import it.cammino.gestionecomunita.dialog.DialogState
 import it.cammino.gestionecomunita.dialog.EditVisitaDialogFragment
 import it.cammino.gestionecomunita.dialog.SimpleDialogFragment
 import it.cammino.gestionecomunita.util.OSUtils
+import it.cammino.gestionecomunita.util.getSerializableWrapper
 
 @Suppress("unused")
 class SmallEditVisitaDialogFragment : EditVisitaDialogFragment() {
 
     private val builder: Builder?
-        get() = if (arguments?.containsKey(BUILDER_TAG) != true) null else arguments?.getSerializable(
-            BUILDER_TAG
+        get() = if (arguments?.containsKey(BUILDER_TAG) != true) null else arguments?.getSerializableWrapper(
+            BUILDER_TAG,
+            Builder::class.java
         ) as? Builder
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (!OSUtils.isObySamsung()) {
-            enterTransition = MaterialSharedAxis(MaterialSharedAxis.Y, /* forward= */ true)
-            returnTransition = MaterialSharedAxis(MaterialSharedAxis.Y, /* forward= */ false)
+            enterTransition = MaterialSharedAxis(MaterialSharedAxis.Y, /* forward = */ true)
+            returnTransition = MaterialSharedAxis(MaterialSharedAxis.Y, /* forward = */ false)
         }
     }
 

@@ -22,6 +22,7 @@ import com.google.android.material.navigation.NavigationView
 import com.squareup.picasso.Picasso
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.util.StringUtils
+import it.cammino.gestionecomunita.util.getSerializableWrapper
 import java.io.Serializable
 
 @Suppress("unused")
@@ -30,8 +31,9 @@ class ProfileDialogFragment : DialogFragment() {
     private val viewModel: DialogViewModel by viewModels({ requireActivity() })
 
     private val builder: Builder?
-        get() = if (arguments?.containsKey(BUILDER_TAG) != true) null else arguments?.getSerializable(
-            BUILDER_TAG
+        get() = if (arguments?.containsKey(BUILDER_TAG) != true) null else arguments?.getSerializableWrapper(
+            BUILDER_TAG,
+            Builder::class.java
         ) as? Builder
 
     @SuppressLint("CheckResult")
@@ -62,7 +64,9 @@ class ProfileDialogFragment : DialogFragment() {
                 }
         }
 
-        mView.findViewById<NavigationView>(R.id.profile_options).let {
+        val profileOptionView = mView.findViewById<NavigationView>(R.id.profile_options)
+
+        profileOptionView?.let {
             it.menu.clear()
             it.inflateMenu(R.menu.account_options)
             it.checkedItem?.isChecked = false
@@ -71,9 +75,9 @@ class ProfileDialogFragment : DialogFragment() {
         val oldCode = PreferenceManager.getDefaultSharedPreferences(requireContext())
             .getString(StringUtils.PREFERENCE_BACKUP_CODE, StringUtils.EMPTY_STRING).orEmpty()
 
-        mView.findViewById<NavigationView>(R.id.profile_options).menu.findItem(R.id.backup_old_code).isVisible =
+        profileOptionView.menu.findItem(R.id.backup_old_code).isVisible =
             oldCode.isNotEmpty()
-        mView.findViewById<NavigationView>(R.id.profile_options).menu.findItem(R.id.restore_old_code).isVisible =
+        profileOptionView.menu.findItem(R.id.restore_old_code).isVisible =
             oldCode.isNotEmpty()
 
         mView.findViewById<NavigationView>(R.id.profile_options).setNavigationItemSelectedListener {

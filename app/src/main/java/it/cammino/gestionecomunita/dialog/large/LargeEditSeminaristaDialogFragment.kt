@@ -13,13 +13,15 @@ import com.google.android.material.textfield.TextInputLayout
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.dialog.DialogState
 import it.cammino.gestionecomunita.dialog.EditSeminaristaDialogFragment
+import it.cammino.gestionecomunita.util.getSerializableWrapper
 
 @Suppress("unused")
 class LargeEditSeminaristaDialogFragment : EditSeminaristaDialogFragment() {
 
     private val builder: Builder?
-        get() = if (arguments?.containsKey(BUILDER_TAG) != true) null else arguments?.getSerializable(
-            BUILDER_TAG
+        get() = if (arguments?.containsKey(BUILDER_TAG) != true) null else arguments?.getSerializableWrapper(
+            BUILDER_TAG,
+            Builder::class.java
         ) as? Builder
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

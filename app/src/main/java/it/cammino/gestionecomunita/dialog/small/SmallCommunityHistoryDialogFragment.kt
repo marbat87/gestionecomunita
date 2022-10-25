@@ -15,13 +15,15 @@ import androidx.fragment.app.commit
 import com.google.android.material.appbar.MaterialToolbar
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.dialog.CommunityHistoryDialogFragment
+import it.cammino.gestionecomunita.util.getSerializableWrapper
 
 @Suppress("unused")
 class SmallCommunityHistoryDialogFragment : CommunityHistoryDialogFragment() {
 
     private val builder: Builder?
-        get() = if (arguments?.containsKey(BUILDER_TAG) != true) null else arguments?.getSerializable(
-            BUILDER_TAG
+        get() = if (arguments?.containsKey(BUILDER_TAG) != true) null else arguments?.getSerializableWrapper(
+            BUILDER_TAG,
+            Builder::class.java
         ) as? Builder
 
     override fun onCreateView(
