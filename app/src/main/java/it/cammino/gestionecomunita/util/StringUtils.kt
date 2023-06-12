@@ -10,6 +10,7 @@ object StringUtils {
     const val DASH = "-"
     private const val CODE_LENGTH = 16
     const val PREFERENCE_BACKUP_CODE = "backup_code"
+    internal const val SHARED_AXIS = "shared_axis"
 
     fun generateRandomCode(): String {
         val chars = ("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijk"

@@ -12,7 +12,6 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -34,7 +33,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.color.DynamicColors
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
+import com.google.android.material.transition.platform.MaterialSharedAxis
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
@@ -47,9 +46,28 @@ import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import com.squareup.picasso.Picasso
 import it.cammino.gestionecomunita.database.ComunitaDatabase
-import it.cammino.gestionecomunita.database.entity.*
+import it.cammino.gestionecomunita.database.entity.Comunita
+import it.cammino.gestionecomunita.database.entity.ComunitaSeminarista
+import it.cammino.gestionecomunita.database.entity.Fratello
+import it.cammino.gestionecomunita.database.entity.Incontro
+import it.cammino.gestionecomunita.database.entity.Passaggio
+import it.cammino.gestionecomunita.database.entity.Promemoria
+import it.cammino.gestionecomunita.database.entity.ResponsabileSeminario
+import it.cammino.gestionecomunita.database.entity.Seminario
+import it.cammino.gestionecomunita.database.entity.Seminarista
+import it.cammino.gestionecomunita.database.entity.VisitaSeminario
+import it.cammino.gestionecomunita.database.entity.Vocazione
+import it.cammino.gestionecomunita.database.serializer.DateTimeDeserializer
+import it.cammino.gestionecomunita.database.serializer.DateTimeSerializer
 import it.cammino.gestionecomunita.databinding.ActivityMainBinding
-import it.cammino.gestionecomunita.dialog.*
+import it.cammino.gestionecomunita.dialog.AddNotificationDialogFragment
+import it.cammino.gestionecomunita.dialog.BackupCodeDialogFragment
+import it.cammino.gestionecomunita.dialog.DialogState
+import it.cammino.gestionecomunita.dialog.EditMeetingDialogFragment
+import it.cammino.gestionecomunita.dialog.InputTextDialogFragment
+import it.cammino.gestionecomunita.dialog.ProfileDialogFragment
+import it.cammino.gestionecomunita.dialog.ProgressDialogFragment
+import it.cammino.gestionecomunita.dialog.SimpleDialogFragment
 import it.cammino.gestionecomunita.dialog.large.LargeAddNotificationDialogFragment
 import it.cammino.gestionecomunita.dialog.large.LargeEditMeetingDialogFragment
 import it.cammino.gestionecomunita.dialog.small.SmallAddNotificationDialogFragment
@@ -58,17 +76,21 @@ import it.cammino.gestionecomunita.ui.ThemeableActivity
 import it.cammino.gestionecomunita.ui.comunita.detail.CommunityDetailFragment
 import it.cammino.gestionecomunita.ui.comunita.detail.CommunityDetailHostActivity
 import it.cammino.gestionecomunita.ui.incontri.IncontriFragment
+import it.cammino.gestionecomunita.ui.seminario.detail.SeminarioDetailFragment
 import it.cammino.gestionecomunita.ui.seminario.detail.SeminarioDetailHostActivity
+import it.cammino.gestionecomunita.ui.vocazione.detail.VocazioneDetailFragment
 import it.cammino.gestionecomunita.ui.vocazione.detail.VocazioneDetailHostActivity
-import it.cammino.gestionecomunita.util.OSUtils
 import it.cammino.gestionecomunita.util.StringUtils
 import it.cammino.gestionecomunita.util.getTypedValueResId
-import it.cammino.gestionecomunita.database.serializer.DateTimeDeserializer
-import it.cammino.gestionecomunita.database.serializer.DateTimeSerializer
+import it.cammino.gestionecomunita.util.startActivityWithTransition
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.*
+import java.io.BufferedWriter
+import java.io.File
+import java.io.FileWriter
+import java.io.InputStream
+import java.io.InputStreamReader
 import java.sql.Date
 import java.util.concurrent.ExecutionException
 
@@ -94,29 +116,6 @@ class MainActivity : ThemeableActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         DynamicColors.applyToActivityIfAvailable(this)
-        if (!OSUtils.isObySamsung()) {
-            // Attach a callback used to capture the shared elements from this Activity to be used
-            // by the container transform transition
-            setExitSharedElementCallback(object :
-                MaterialContainerTransformSharedElementCallback() {
-                override fun onSharedElementEnd(
-                    sharedElementNames: MutableList<String>,
-                    sharedElements: MutableList<View>,
-                    sharedElementSnapshots: MutableList<View>
-                ) {
-                    super.onSharedElementEnd(
-                        sharedElementNames,
-                        sharedElements,
-                        sharedElementSnapshots
-                    )
-                    Log.d(TAG, "onTransitionEnd")
-                    if (!resources.getBoolean(R.bool.tablet_layout)) updateStatusBarLightMode(true)
-                }
-            })
-
-            // Keep system bars (status bar, navigation bar) persistent throughout the transition.
-            window.sharedElementsUseOverlay = false
-        }
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -174,6 +173,7 @@ class MainActivity : ThemeableActivity() {
                     binding.extendedFabVocazione?.isVisible = false
                     binding.extendedFabSeminari?.isVisible = false
                 }
+
                 R.id.navigation_incontri -> {
                     binding.extendedFab?.isVisible = false
                     binding.extendedFabPromemoria?.isVisible = false
@@ -181,6 +181,7 @@ class MainActivity : ThemeableActivity() {
                     binding.extendedFabVocazione?.isVisible = false
                     binding.extendedFabSeminari?.isVisible = false
                 }
+
                 R.id.navigation_notifications -> {
                     binding.extendedFab?.isVisible = false
                     binding.extendedFabPromemoria?.isVisible = true
@@ -188,6 +189,7 @@ class MainActivity : ThemeableActivity() {
                     binding.extendedFabVocazione?.isVisible = false
                     binding.extendedFabSeminari?.isVisible = false
                 }
+
                 R.id.navigation_dashboard -> {
                     binding.extendedFab?.isVisible = false
                     binding.extendedFabPromemoria?.isVisible = false
@@ -195,6 +197,7 @@ class MainActivity : ThemeableActivity() {
                     binding.extendedFabVocazione?.isVisible = true
                     binding.extendedFabSeminari?.isVisible = false
                 }
+
                 R.id.navigation_seminari -> {
                     binding.extendedFab?.isVisible = false
                     binding.extendedFabPromemoria?.isVisible = false
@@ -202,20 +205,20 @@ class MainActivity : ThemeableActivity() {
                     binding.extendedFabVocazione?.isVisible = false
                     binding.extendedFabSeminari?.isVisible = true
                 }
+
                 else -> {}
             }
         }
 
         binding.extendedFab?.let { fab ->
             fab.setOnClickListener {
-                it.transitionName = "shared_element_comunita"
-                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    this,
-                    it,
-                    "shared_element_comunita" // The transition name to be matched in Activity B.
-                )
+                val args = Bundle()
+                args.putLong(CommunityDetailFragment.ARG_ITEM_ID, -1)
+                args.putBoolean(CommunityDetailFragment.EDIT_MODE, true)
+                args.putBoolean(CommunityDetailFragment.CREATE_MODE, true)
                 val intent = Intent(this, CommunityDetailHostActivity::class.java)
-                startActivity(intent, options.toBundle())
+                intent.putExtras(args)
+                startActivityWithTransition(intent, MaterialSharedAxis.X)
             }
         }
 
@@ -264,45 +267,25 @@ class MainActivity : ThemeableActivity() {
 
         binding.extendedFabVocazione?.let { fab ->
             fab.setOnClickListener {
-                if (OSUtils.isObySamsung()) {
-                    startActivity(
-                        Intent(
-                            this,
-                            VocazioneDetailHostActivity::class.java
-                        )
-                    )
-                } else {
-                    it.transitionName = "shared_element_vocazione"
-                    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        this,
-                        it,
-                        "shared_element_vocazione" // The transition name to be matched in Activity B.
-                    )
-                    val intent = Intent(this, VocazioneDetailHostActivity::class.java)
-                    startActivity(intent, options.toBundle())
-                }
+                val args = Bundle()
+                args.putLong(VocazioneDetailFragment.ARG_ITEM_ID, -1)
+                args.putBoolean(VocazioneDetailFragment.EDIT_MODE, true)
+                args.putBoolean(VocazioneDetailFragment.CREATE_MODE, true)
+                val intent = Intent(this, VocazioneDetailHostActivity::class.java)
+                intent.putExtras(args)
+                startActivityWithTransition(intent, MaterialSharedAxis.X)
             }
         }
 
         binding.extendedFabSeminari?.let { fab ->
             fab.setOnClickListener {
-                if (OSUtils.isObySamsung()) {
-                    startActivity(
-                        Intent(
-                            this,
-                            SeminarioDetailHostActivity::class.java
-                        )
-                    )
-                } else {
-                    it.transitionName = "shared_element_seminario"
-                    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        this,
-                        it,
-                        "shared_element_seminario" // The transition name to be matched in Activity B.
-                    )
-                    val intent = Intent(this, SeminarioDetailHostActivity::class.java)
-                    startActivity(intent, options.toBundle())
-                }
+                val args = Bundle()
+                args.putLong(SeminarioDetailFragment.ARG_ITEM_ID, -1)
+                args.putBoolean(SeminarioDetailFragment.EDIT_MODE, true)
+                args.putBoolean(SeminarioDetailFragment.CREATE_MODE, true)
+                val intent = Intent(this, SeminarioDetailHostActivity::class.java)
+                intent.putExtras(args)
+                startActivityWithTransition(intent, MaterialSharedAxis.X)
             }
         }
 
@@ -385,6 +368,7 @@ class MainActivity : ThemeableActivity() {
                                 )
                                 lifecycleScope.launch { backupDbPrefs() }
                             }
+
                             BACKUP_OLD_CODE -> {
                                 simpleDialogViewModel.handled = true
                                 ProgressDialogFragment.show(
@@ -396,6 +380,7 @@ class MainActivity : ThemeableActivity() {
                                 )
                                 lifecycleScope.launch { backupDbPrefs(false) }
                             }
+
                             RESTORE_OLD_CODE -> {
                                 simpleDialogViewModel.handled = true
                                 ProgressDialogFragment.show(
@@ -407,16 +392,19 @@ class MainActivity : ThemeableActivity() {
                                 )
                                 lifecycleScope.launch { restoreDbPrefs(false) }
                             }
+
                             SIGNOUT -> {
                                 simpleDialogViewModel.handled = true
                                 signOut()
                             }
+
                             REVOKE -> {
                                 simpleDialogViewModel.handled = true
                                 revokeAccess()
                             }
                         }
                     }
+
                     is DialogState.Negative -> {
                         simpleDialogViewModel.handled = true
                     }
@@ -432,18 +420,23 @@ class MainActivity : ThemeableActivity() {
                         R.id.backup_old_code -> {
                             showAccountRelatedDialog(BACKUP_OLD_CODE)
                         }
+
                         R.id.backup_new_code -> {
                             showAccountRelatedDialog(BACKUP_NEW_CODE)
                         }
+
                         R.id.restore_old_code -> {
                             showAccountRelatedDialog(RESTORE_OLD_CODE)
                         }
+
                         R.id.restore_new_code -> {
                             showAccountRelatedDialog(RESTORE_NEW_CODE)
                         }
+
                         R.id.gplus_signout -> {
                             showAccountRelatedDialog(SIGNOUT)
                         }
+
                         R.id.gplus_revoke -> {
                             showAccountRelatedDialog(REVOKE)
                         }
@@ -1173,11 +1166,13 @@ class MainActivity : ThemeableActivity() {
                         )
                         positiveButton(R.string.upload_old_code_confirm)
                     }
+
                     BACKUP_NEW_CODE -> {
                         title(R.string.upload_new_code_confirm)
                         content(R.string.upload_new_code_content)
                         positiveButton(R.string.upload_new_code_confirm)
                     }
+
                     RESTORE_OLD_CODE -> {
                         title(R.string.restore_code_confirm)
                         content(
@@ -1192,11 +1187,13 @@ class MainActivity : ThemeableActivity() {
                         )
                         positiveButton(R.string.restore_code_confirm)
                     }
+
                     SIGNOUT -> {
                         title(R.string.gplus_signout)
                         content(R.string.dialog_acc_disconn_text)
                         positiveButton(R.string.disconnect_confirm)
                     }
+
                     REVOKE -> {
                         title(R.string.gplus_revoke)
                         content(R.string.dialog_acc_revoke_text)

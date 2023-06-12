@@ -30,6 +30,7 @@ import it.cammino.gestionecomunita.dialog.small.SmallEditMeetingDialogFragment
 import it.cammino.gestionecomunita.item.ExpandableMeetingItem
 import it.cammino.gestionecomunita.item.expandableMeetingItem
 import it.cammino.gestionecomunita.ui.AccountMenuFragment
+import it.cammino.gestionecomunita.util.setEnterTransition
 import it.cammino.gestionecomunita.util.systemLocale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -56,6 +57,11 @@ class IncontriFragment : AccountMenuFragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mMainActivity = activity as? AppCompatActivity
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setEnterTransition()
     }
 
     override fun onCreateView(

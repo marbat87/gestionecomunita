@@ -5,16 +5,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
+import com.google.android.material.transition.platform.MaterialSharedAxis
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.databinding.FragmentSeminariBinding
 import it.cammino.gestionecomunita.ui.AccountMenuFragment
 import it.cammino.gestionecomunita.ui.seminario.detail.SeminarioDetailFragment
 import it.cammino.gestionecomunita.ui.seminario.detail.SeminarioDetailHostActivity
-import it.cammino.gestionecomunita.util.OSUtils
+import it.cammino.gestionecomunita.util.startActivityWithTransition
 
 class SeminariFragment : AccountMenuFragment() {
 
@@ -45,23 +45,7 @@ class SeminariFragment : AccountMenuFragment() {
 
         binding.extendedFabSeminari?.let { fab ->
             fab.setOnClickListener {
-                if (OSUtils.isObySamsung()) {
-                    startActivity(
-                        Intent(
-                            requireActivity(),
-                            SeminarioDetailHostActivity::class.java
-                        )
-                    )
-                } else {
-                    it.transitionName = "shared_element_seminario"
-                    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        requireActivity(),
-                        it,
-                        "shared_element_seminario" // The transition name to be matched in Activity B.
-                    )
-                    val intent = Intent(requireActivity(), SeminarioDetailHostActivity::class.java)
-                    startActivity(intent, options.toBundle())
-                }
+                goToDetails(editMode = true, createMode = true)
             }
         }
 
@@ -84,17 +68,23 @@ class SeminariFragment : AccountMenuFragment() {
                         )
                     }
                 } else {
-                    val args = Bundle()
-                    args.putLong(SeminarioDetailFragment.ARG_ITEM_ID, viewModel.clickedId)
-                    args.putBoolean(SeminarioDetailFragment.EDIT_MODE, false)
-                    args.putBoolean(SeminarioDetailFragment.CREATE_MODE, false)
-                    val intent = Intent(requireContext(), SeminarioDetailHostActivity::class.java)
-                    intent.putExtras(args)
-                    startActivity(intent)
+                    goToDetails(editMode = false, createMode = false)
                 }
             }
         }
 
+    }
+
+    private fun goToDetails(editMode: Boolean, createMode: Boolean) {
+        val args = Bundle()
+        args.putLong(SeminarioDetailFragment.ARG_ITEM_ID, viewModel.clickedId)
+        args.putBoolean(SeminarioDetailFragment.EDIT_MODE, editMode)
+        args.putBoolean(SeminarioDetailFragment.CREATE_MODE, createMode)
+        activity?.let { act ->
+            val intent = Intent(act, SeminarioDetailHostActivity::class.java)
+            intent.putExtras(args)
+            act.startActivityWithTransition(intent, MaterialSharedAxis.X)
+        }
     }
 
     companion object {

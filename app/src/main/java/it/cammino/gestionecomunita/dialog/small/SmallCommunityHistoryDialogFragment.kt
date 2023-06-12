@@ -16,9 +16,15 @@ import com.google.android.material.appbar.MaterialToolbar
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.dialog.CommunityHistoryDialogFragment
 import it.cammino.gestionecomunita.util.getSerializableWrapper
+import it.cammino.gestionecomunita.util.setEnterTransition
 
 @Suppress("unused")
 class SmallCommunityHistoryDialogFragment : CommunityHistoryDialogFragment() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setEnterTransition()
+    }
 
     private val builder: Builder?
         get() = if (arguments?.containsKey(BUILDER_TAG) != true) null else arguments?.getSerializableWrapper(

@@ -13,8 +13,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.transition.MaterialContainerTransform
-import com.google.android.material.transition.MaterialSharedAxis
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.FastItemAdapter
 import com.mikepenz.fastadapter.listeners.ClickEventHook
@@ -31,7 +29,7 @@ import it.cammino.gestionecomunita.dialog.small.SmallAddNotificationDialogFragme
 import it.cammino.gestionecomunita.item.PromemoriaItem
 import it.cammino.gestionecomunita.item.promemoriaItem
 import it.cammino.gestionecomunita.ui.comunita.detail.CommunityDetailFragment
-import it.cammino.gestionecomunita.util.OSUtils
+import it.cammino.gestionecomunita.util.setEnterTransition
 import it.cammino.gestionecomunita.util.systemLocale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -57,11 +55,7 @@ class CommunityNotificationsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!OSUtils.isObySamsung()) {
-            sharedElementEnterTransition = MaterialContainerTransform()
-            exitTransition = MaterialSharedAxis(MaterialSharedAxis.Y, /* forward= */ true)
-            reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Y, /* forward= */ false)
-        }
+        setEnterTransition()
     }
 
     override fun onAttach(context: Context) {

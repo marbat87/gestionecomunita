@@ -14,13 +14,12 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.transition.MaterialSharedAxis
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.dialog.DialogState
 import it.cammino.gestionecomunita.dialog.EditVisitaDialogFragment
 import it.cammino.gestionecomunita.dialog.SimpleDialogFragment
-import it.cammino.gestionecomunita.util.OSUtils
 import it.cammino.gestionecomunita.util.getSerializableWrapper
+import it.cammino.gestionecomunita.util.setEnterTransition
 
 @Suppress("unused")
 class SmallEditVisitaDialogFragment : EditVisitaDialogFragment() {
@@ -33,10 +32,7 @@ class SmallEditVisitaDialogFragment : EditVisitaDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!OSUtils.isObySamsung()) {
-            enterTransition = MaterialSharedAxis(MaterialSharedAxis.Y, /* forward = */ true)
-            returnTransition = MaterialSharedAxis(MaterialSharedAxis.Y, /* forward = */ false)
-        }
+        setEnterTransition()
     }
 
     override fun onCreateView(

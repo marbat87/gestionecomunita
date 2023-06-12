@@ -17,7 +17,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
-import com.google.android.material.transition.MaterialSharedAxis
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.FastItemAdapter
 import com.mikepenz.fastadapter.listeners.ClickEventHook
@@ -39,8 +38,8 @@ import it.cammino.gestionecomunita.dialog.small.SmallEditVisitaDialogFragment
 import it.cammino.gestionecomunita.dialog.small.SmallViewSeminaristaDialogFragment
 import it.cammino.gestionecomunita.dialog.small.SmallViewVisitaDialogFragment
 import it.cammino.gestionecomunita.item.*
-import it.cammino.gestionecomunita.util.OSUtils
 import it.cammino.gestionecomunita.util.Utility
+import it.cammino.gestionecomunita.util.setEnterTransition
 import it.cammino.gestionecomunita.util.setupDatePicker
 import it.cammino.gestionecomunita.util.validateMandatoryField
 import kotlinx.coroutines.Dispatchers
@@ -77,10 +76,7 @@ open class SeminarioDetailFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!OSUtils.isObySamsung()) {
-            exitTransition = MaterialSharedAxis(MaterialSharedAxis.Y, /* forward= */ true)
-            reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Y, /* forward= */ false)
-        }
+        setEnterTransition()
 
         if (savedInstanceState == null) {
             arguments?.let {
@@ -266,6 +262,7 @@ open class SeminarioDetailFragment : Fragment() {
                     viewModel.editMode.value = true
                     true
                 }
+
                 R.id.delete_seminario -> {
                     mMainActivity?.let { mActivity ->
                         SimpleDialogFragment.show(
@@ -283,6 +280,7 @@ open class SeminarioDetailFragment : Fragment() {
                     }
                     true
                 }
+
                 R.id.cancel_change -> {
                     if (viewModel.createMode) {
                         activity?.finishAfterTransition()
@@ -304,10 +302,12 @@ open class SeminarioDetailFragment : Fragment() {
                     }
                     true
                 }
+
                 R.id.confirm_changes -> {
                     confirmChanges()
                     true
                 }
+
                 else -> false
             }
         }
@@ -388,12 +388,14 @@ open class SeminarioDetailFragment : Fragment() {
                                 mAdapterSeminaristi.add(seminaristaItem)
                                 binding.noSeminaristiView.isVisible = false
                             }
+
                             EDIT_SEMINARISTA -> {
                                 mAdapterSeminaristi[viewModel.selectedSeminarista] = seminaristaItem
                                 mAdapterSeminaristi.notifyAdapterItemChanged(viewModel.selectedSeminarista)
                             }
                         }
                     }
+
                     is DialogState.Negative -> {
                         inputdialogViewModel.handled = true
                     }
@@ -420,12 +422,14 @@ open class SeminarioDetailFragment : Fragment() {
                                 mAdapterVisite.notifyAdapterItemInserted(mAdapterVisite.adapterItemCount - 1)
                                 binding.noVisiteView.isVisible = false
                             }
+
                             EDIT_VISITA -> {
                                 mAdapterVisite[viewModel.selectedVisita] = visitaItem
                                 mAdapterVisite.notifyAdapterItemChanged(viewModel.selectedVisita)
                             }
                         }
                     }
+
                     is DialogState.Negative -> {
                         inputdialogViewModel.handled = true
                     }
@@ -445,22 +449,26 @@ open class SeminarioDetailFragment : Fragment() {
                                 binding.noSeminaristiView.isVisible =
                                     mAdapterSeminaristi.itemAdapter.adapterItemCount == 0
                             }
+
                             DELETE_SEMINARIO -> {
                                 simpleDialogViewModel.handled = true
                                 lifecycleScope.launch { deleteSeminario() }
                             }
+
                             DELETE_VISITA -> {
                                 simpleDialogViewModel.handled = true
                                 mAdapterVisite.remove(viewModel.selectedVisita)
                                 binding.noVisiteView.isVisible =
                                     mAdapterVisite.itemAdapter.adapterItemCount == 0
                             }
+
                             UNDO_SEMINARIO -> {
                                 viewModel.editMode.value = false
                                 lifecycleScope.launch { retrieveData() }
                             }
                         }
                     }
+
                     is DialogState.Negative -> {
                         simpleDialogViewModel.handled = true
                     }

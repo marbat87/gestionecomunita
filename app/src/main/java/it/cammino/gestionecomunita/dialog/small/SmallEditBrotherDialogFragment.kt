@@ -20,10 +20,15 @@ import it.cammino.gestionecomunita.dialog.DialogState
 import it.cammino.gestionecomunita.dialog.EditBrotherDialogFragment
 import it.cammino.gestionecomunita.dialog.SimpleDialogFragment
 import it.cammino.gestionecomunita.util.getSerializableWrapper
+import it.cammino.gestionecomunita.util.setEnterTransition
 
 @Suppress("unused")
 class SmallEditBrotherDialogFragment : EditBrotherDialogFragment() {
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setEnterTransition()
+    }
     private val builder: Builder?
         get() = if (arguments?.containsKey(BUILDER_TAG) != true) null else arguments?.getSerializableWrapper(
             BUILDER_TAG,

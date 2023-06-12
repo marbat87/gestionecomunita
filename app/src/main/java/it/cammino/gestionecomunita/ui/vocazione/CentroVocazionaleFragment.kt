@@ -5,13 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.android.material.transition.platform.MaterialSharedAxis
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.databinding.TabsLayoutBinding
 import it.cammino.gestionecomunita.ui.AccountMenuFragment
@@ -19,7 +19,7 @@ import it.cammino.gestionecomunita.ui.vocazione.detail.VocazioneDetailFragment
 import it.cammino.gestionecomunita.ui.vocazione.detail.VocazioneDetailHostActivity
 import it.cammino.gestionecomunita.ui.vocazione.list.VocazioneListFragment
 import it.cammino.gestionecomunita.ui.vocazione.list.VocazioneSectionedListFragment
-import it.cammino.gestionecomunita.util.OSUtils
+import it.cammino.gestionecomunita.util.startActivityWithTransition
 
 class CentroVocazionaleFragment : AccountMenuFragment() {
 
@@ -52,23 +52,7 @@ class CentroVocazionaleFragment : AccountMenuFragment() {
         binding.extendedFabVocazione?.isVisible = true
         binding.extendedFabVocazione?.let { fab ->
             fab.setOnClickListener {
-                if (OSUtils.isObySamsung()) {
-                    startActivity(
-                        Intent(
-                            requireActivity(),
-                            VocazioneDetailHostActivity::class.java
-                        )
-                    )
-                } else {
-                    it.transitionName = "shared_element_vocazione"
-                    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        requireActivity(),
-                        it,
-                        "shared_element_vocazione" // The transition name to be matched in Activity B.
-                    )
-                    val intent = Intent(requireActivity(), VocazioneDetailHostActivity::class.java)
-                    startActivity(intent, options.toBundle())
-                }
+                goToDetails(editMode = true, createMode = true)
             }
         }
 
@@ -91,13 +75,7 @@ class CentroVocazionaleFragment : AccountMenuFragment() {
                         )
                     }
                 } else {
-                    val args = Bundle()
-                    args.putLong(VocazioneDetailFragment.ARG_ITEM_ID, viewModel.clickedId)
-                    args.putBoolean(VocazioneDetailFragment.EDIT_MODE, false)
-                    args.putBoolean(VocazioneDetailFragment.CREATE_MODE, false)
-                    val intent = Intent(requireContext(), VocazioneDetailHostActivity::class.java)
-                    intent.putExtras(args)
-                    startActivity(intent)
+                    goToDetails(editMode = false, createMode = false)
                 }
             }
         }
@@ -114,6 +92,19 @@ class CentroVocazionaleFragment : AccountMenuFragment() {
         }.attach()
 
     }
+
+    private fun goToDetails(editMode: Boolean, createMode: Boolean) {
+        val args = Bundle()
+        args.putLong(VocazioneDetailFragment.ARG_ITEM_ID, viewModel.clickedId)
+        args.putBoolean(VocazioneDetailFragment.EDIT_MODE, editMode)
+        args.putBoolean(VocazioneDetailFragment.CREATE_MODE, createMode)
+        activity?.let { act ->
+            val intent = Intent(act, VocazioneDetailHostActivity::class.java)
+            intent.putExtras(args)
+            act.startActivityWithTransition(intent, MaterialSharedAxis.X)
+        }
+    }
+
 
     private class IndexTabsAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
         override fun getItemCount(): Int = 2

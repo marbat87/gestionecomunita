@@ -5,12 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.android.material.transition.platform.MaterialSharedAxis
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.databinding.TabsLayoutBinding
 import it.cammino.gestionecomunita.ui.AccountMenuFragment
@@ -19,7 +19,7 @@ import it.cammino.gestionecomunita.ui.comunita.detail.CommunityDetailHostActivit
 import it.cammino.gestionecomunita.ui.comunita.list.CommunityListFragment
 import it.cammino.gestionecomunita.ui.comunita.list.CommunityListViewModel
 import it.cammino.gestionecomunita.ui.comunita.list.CommunitySectionedListFragment
-import it.cammino.gestionecomunita.util.OSUtils
+import it.cammino.gestionecomunita.util.startActivityWithTransition
 
 class ComunitaIndexFragment : AccountMenuFragment() {
 
@@ -50,23 +50,7 @@ class ComunitaIndexFragment : AccountMenuFragment() {
 
         binding.extendedFab?.let { fab ->
             fab.setOnClickListener {
-                if (OSUtils.isObySamsung()) {
-                    startActivity(
-                        Intent(
-                            requireActivity(),
-                            CommunityDetailHostActivity::class.java
-                        )
-                    )
-                } else {
-                    it.transitionName = "shared_element_comunita"
-                    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        requireActivity(),
-                        it,
-                        "shared_element_comunita" // The transition name to be matched in Activity B.
-                    )
-                    val intent = Intent(requireActivity(), CommunityDetailHostActivity::class.java)
-                    startActivity(intent, options.toBundle())
-                }
+                goToDetails(editMode = true, createMode = true)
             }
         }
 
@@ -89,13 +73,7 @@ class ComunitaIndexFragment : AccountMenuFragment() {
                         )
                     }
                 } else {
-                    val args = Bundle()
-                    args.putLong(CommunityDetailFragment.ARG_ITEM_ID, viewModel.clickedId)
-                    args.putBoolean(CommunityDetailFragment.EDIT_MODE, false)
-                    args.putBoolean(CommunityDetailFragment.CREATE_MODE, false)
-                    val intent = Intent(requireContext(), CommunityDetailHostActivity::class.java)
-                    intent.putExtras(args)
-                    startActivity(intent)
+                    goToDetails(editMode = false, createMode = false)
                 }
             }
         }
@@ -113,6 +91,18 @@ class ComunitaIndexFragment : AccountMenuFragment() {
             )
         }.attach()
 
+    }
+
+    private fun goToDetails(editMode: Boolean, createMode: Boolean) {
+        val args = Bundle()
+        args.putLong(CommunityDetailFragment.ARG_ITEM_ID, viewModel.clickedId)
+        args.putBoolean(CommunityDetailFragment.EDIT_MODE, editMode)
+        args.putBoolean(CommunityDetailFragment.CREATE_MODE, createMode)
+        activity?.let { act ->
+            val intent = Intent(act, CommunityDetailHostActivity::class.java)
+            intent.putExtras(args)
+            act.startActivityWithTransition(intent, MaterialSharedAxis.X)
+        }
     }
 
     private class IndexTabsAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
