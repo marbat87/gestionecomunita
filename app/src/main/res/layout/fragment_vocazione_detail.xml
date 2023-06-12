@@ -236,9 +236,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:gravity="top"
-                    android:inputType="text|textMultiLine" />
+                    android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -292,7 +290,7 @@
                 android:layout_marginStart="@dimen/container_horizontal_margin"
                 android:layout_marginTop="@dimen/text_field_space"
                 android:layout_marginEnd="@dimen/container_horizontal_margin"
-                android:layout_marginBottom="@dimen/text_field_space"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:enabled="false"
                 android:hint="@string/note"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -300,9 +298,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:gravity="top"
-                    android:inputType="text|textMultiLine" />
+                    android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
