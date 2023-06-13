@@ -68,6 +68,7 @@ open class SeminarioDetailFragment : Fragment() {
     private val mAdapterRettori: FastItemAdapter<ResponsabileListItem> = FastItemAdapter()
     private val mAdapterVice: FastItemAdapter<ResponsabileListItem> = FastItemAdapter()
     private val mAdapterSpirituali: FastItemAdapter<ResponsabileListItem> = FastItemAdapter()
+    private val mAdapterServizi: FastItemAdapter<ServizioSeminarioListItem> = FastItemAdapter()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -209,6 +210,7 @@ open class SeminarioDetailFragment : Fragment() {
         binding.rettoriRecycler.adapter = mAdapterRettori
         binding.vicerettoriRecycler.adapter = mAdapterVice
         binding.spiritualiRecycler.adapter = mAdapterSpirituali
+        binding.serviziRecycler.adapter = mAdapterServizi
 
         binding.addRettore.setOnClickListener {
             mAdapterRettori.add(0, ResponsabileListItem())
@@ -219,10 +221,14 @@ open class SeminarioDetailFragment : Fragment() {
         binding.addSpirituale.setOnClickListener {
             mAdapterSpirituali.add(0, ResponsabileListItem())
         }
+        binding.addServizio.setOnClickListener {
+            mAdapterServizi.add(0, ServizioSeminarioListItem())
+        }
 
         mAdapterRettori.addEventHook(cancellaResponsabileHook)
         mAdapterVice.addEventHook(cancellaResponsabileHook)
         mAdapterSpirituali.addEventHook(cancellaResponsabileHook)
+        mAdapterServizi.addEventHook(cancellaServizioHook)
 
 
         mAdapterSeminaristi.addEventHooks(
@@ -336,6 +342,7 @@ open class SeminarioDetailFragment : Fragment() {
         viewModel.rettori = mAdapterRettori.adapterItems
         viewModel.viceRettori = mAdapterVice.adapterItems
         viewModel.direttoriSpirituali = mAdapterSpirituali.adapterItems
+        viewModel.serviziSeminario = mAdapterServizi.adapterItems
         viewModel.seminaristiItems = mAdapterSeminaristi.adapterItems
         viewModel.visiteItems = mAdapterVisite.adapterItems
     }
@@ -352,6 +359,7 @@ open class SeminarioDetailFragment : Fragment() {
             mAdapterRettori.set(viewModel.rettori)
             mAdapterVice.set(viewModel.viceRettori)
             mAdapterSpirituali.set(viewModel.direttoriSpirituali)
+            mAdapterServizi.set(viewModel.serviziSeminario)
             binding.materialTabs.getTabAt(viewModel.selectedTabIndex)?.select()
         }
     }
@@ -488,6 +496,22 @@ open class SeminarioDetailFragment : Fragment() {
             position: Int,
             fastAdapter: FastAdapter<ResponsabileListItem>,
             item: ResponsabileListItem
+        ) {
+            (fastAdapter as? FastItemAdapter)?.remove(position)
+        }
+    }
+
+    private var cancellaServizioHook = object : ClickEventHook<ServizioSeminarioListItem>() {
+        override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
+            //return the views on which you want to bind this event
+            return viewHolder.itemView.findViewById(R.id.remove_servizio)
+        }
+
+        override fun onClick(
+            v: View,
+            position: Int,
+            fastAdapter: FastAdapter<ServizioSeminarioListItem>,
+            item: ServizioSeminarioListItem
         ) {
             (fastAdapter as? FastItemAdapter)?.remove(position)
         }
@@ -794,6 +818,7 @@ open class SeminarioDetailFragment : Fragment() {
         binding.addRettore.isVisible = editMode
         binding.addVicerettore.isVisible = editMode
         binding.addSpirituale.isVisible = editMode
+        binding.addServizio.isVisible = editMode
         if (!editMode) {
             binding.nomeTextField.error = null
             binding.dataInizioTextField.error = null
@@ -809,6 +834,8 @@ open class SeminarioDetailFragment : Fragment() {
         mAdapterVice.notifyAdapterDataSetChanged()
         mAdapterSpirituali.itemAdapter.adapterItems.forEach { it.editable = editMode }
         mAdapterSpirituali.notifyAdapterDataSetChanged()
+        mAdapterServizi.itemAdapter.adapterItems.forEach { it.editable = editMode }
+        mAdapterServizi.notifyAdapterDataSetChanged()
     }
 
     private fun validateForm(): Boolean {
@@ -817,6 +844,7 @@ open class SeminarioDetailFragment : Fragment() {
         valid = valid && !(mAdapterRettori.adapterItems.any { it.hasError })
         valid = valid && !(mAdapterVice.adapterItems.any { it.hasError })
         valid = valid && !(mAdapterSpirituali.adapterItems.any { it.hasError })
+        valid = valid && !(mAdapterServizi.adapterItems.any { it.hasError })
 
         binding.dataInizioTextField.editText?.let {
             if (!it.text.isNullOrEmpty() &&
@@ -974,6 +1002,17 @@ open class SeminarioDetailFragment : Fragment() {
                         incarico = ResponsabileSeminario.Incarico.DIRETTORE_SPIRITUALE
                     }
                 })
+        db.responsabileSeminarioDao()
+            .insertResponsabili(mAdapterServizi.adapterItems.filter { it.nomeServizio.isNotEmpty() }
+                .map {
+                    ResponsabileSeminario().apply {
+                        idSeminario = id
+                        nome = it.nomeServizio
+                        dataInizioIncarico = it.dataDal
+                        dataFineIncarico = it.dataAl
+                        incarico = ResponsabileSeminario.Incarico.SERVIZIO
+                    }
+                })
     }
 
     private suspend fun retrieveData() {
@@ -1035,6 +1074,17 @@ open class SeminarioDetailFragment : Fragment() {
             .map {
                 responsabileListItem {
                     nomeResponsabile = it.nome
+                    dataDal = it.dataInizioIncarico
+                    dataAl = it.dataFineIncarico
+                    editable = false
+                }
+            })
+
+        mAdapterServizi.set(viewModel.seminario.responsabili.filter { it.incarico == ResponsabileSeminario.Incarico.SERVIZIO }
+            .sortedByDescending { it.dataInizioIncarico }
+            .map {
+                servizioSeminarioListItem {
+                    nomeServizio = it.nome
                     dataDal = it.dataInizioIncarico
                     dataAl = it.dataFineIncarico
                     editable = false

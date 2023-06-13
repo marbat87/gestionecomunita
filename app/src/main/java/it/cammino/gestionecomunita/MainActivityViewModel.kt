@@ -16,6 +16,7 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
 
     var backupCode: String = ""
     var showSnackbar = true
+    var selectedVocazioniIndex = 0
 
     init {
         val mDb = ComunitaDatabase.getInstance(getApplication())

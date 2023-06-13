@@ -1,4 +1,4 @@
-package it.cammino.gestionecomunita.ui.incontri
+package it.cammino.gestionecomunita.ui.vocazione.incontri
 
 import android.os.Bundle
 import android.util.Log
@@ -11,22 +11,21 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.tabs.TabLayout
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.FastItemAdapter
 import com.mikepenz.fastadapter.listeners.ClickEventHook
 import com.mikepenz.itemanimators.SlideRightAlphaAnimator
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.database.ComunitaDatabase
-import it.cammino.gestionecomunita.database.entity.Incontro
-import it.cammino.gestionecomunita.databinding.FragmentMeetingsBinding
+import it.cammino.gestionecomunita.database.entity.IncontroVocazionale
+import it.cammino.gestionecomunita.databinding.FragmentVocazioniMeetingsBinding
 import it.cammino.gestionecomunita.dialog.DialogState
-import it.cammino.gestionecomunita.dialog.EditMeetingDialogFragment
+import it.cammino.gestionecomunita.dialog.EditVocazioneMeetingDialogFragment
 import it.cammino.gestionecomunita.dialog.SimpleDialogFragment
-import it.cammino.gestionecomunita.dialog.large.LargeEditMeetingDialogFragment
-import it.cammino.gestionecomunita.dialog.small.SmallEditMeetingDialogFragment
-import it.cammino.gestionecomunita.item.ExpandableMeetingItem
-import it.cammino.gestionecomunita.item.expandableMeetingItem
+import it.cammino.gestionecomunita.dialog.large.LargeEditVocazioneMeetingDialogFragment
+import it.cammino.gestionecomunita.dialog.small.SmallEditVocazioneMeetingDialogFragment
+import it.cammino.gestionecomunita.item.ExpandableVocazioneMeetingItem
+import it.cammino.gestionecomunita.item.expandableVocazioneMeetingItem
 import it.cammino.gestionecomunita.ui.AccountMenuFragment
 import it.cammino.gestionecomunita.util.setEnterTransition
 import it.cammino.gestionecomunita.util.systemLocale
@@ -35,20 +34,20 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.sql.Date
 
-class IncontriFragment : AccountMenuFragment() {
+class IncontriVocazioneFragment : AccountMenuFragment() {
 
-    private val viewModel: IncontriViewModel by viewModels()
-    private val addNotificationViewModel: EditMeetingDialogFragment.DialogViewModel by viewModels({ requireActivity() })
+    private val viewModel: IncontriVocazioneViewModel by viewModels()
+    private val addNotificationViewModel: EditVocazioneMeetingDialogFragment.DialogViewModel by viewModels(
+        { requireActivity() })
     private val simpleDialogViewModel: SimpleDialogFragment.DialogViewModel by viewModels({ requireActivity() })
 
-    private var _binding: FragmentMeetingsBinding? = null
+    private var _binding: FragmentVocazioniMeetingsBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private var mAdapterTodo: FastItemAdapter<ExpandableMeetingItem> = FastItemAdapter()
-    private var mAdapterDone: FastItemAdapter<ExpandableMeetingItem> = FastItemAdapter()
+    private var mAdapter: FastItemAdapter<ExpandableVocazioneMeetingItem> = FastItemAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +59,7 @@ class IncontriFragment : AccountMenuFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMeetingsBinding.inflate(inflater, container, false)
+        _binding = FragmentVocazioniMeetingsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -72,110 +71,35 @@ class IncontriFragment : AccountMenuFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.incontroTodoRecycler.adapter = mAdapterTodo
-        binding.incontroDoneRecycler.adapter = mAdapterDone
-
-        binding.incontroTodoRecycler.itemAnimator = SlideRightAlphaAnimator()
-        binding.incontroDoneRecycler.itemAnimator = SlideRightAlphaAnimator()
+        binding.incontroRecycler.adapter = mAdapter
+        binding.incontroRecycler.itemAnimator = SlideRightAlphaAnimator()
 
         subscribeUiChanges()
 
-        binding.meetingTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                binding.todoView.isVisible = tab?.position == 0
-                binding.doneView.isVisible = tab?.position == 1
-                tab?.let { viewModel.selectedTabIndex = it.position }
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-        })
-
-        binding.extendedFabIncontro?.let { fab ->
-            mMainActivity?.let { mActivity ->
-                fab.setOnClickListener {
-                    val builder = EditMeetingDialogFragment.Builder(
-                        mActivity, ADD_INCONTRO
-                    )
-                    if (resources.getBoolean(R.bool.large_layout)) {
-                        builder.positiveButton(R.string.save)
-                            .negativeButton(android.R.string.cancel)
-                        LargeEditMeetingDialogFragment.show(
-                            builder,
-                            mActivity.supportFragmentManager
-                        )
-                    } else {
-                        SmallEditMeetingDialogFragment.show(
-                            builder,
-                            mActivity.supportFragmentManager
-                        )
-                    }
-                }
-            }
-        }
-
-        mAdapterTodo.addEventHooks(
+        mAdapter.addEventHooks(
             listOf(
                 cancellaIncontroHook,
                 modificaIncontroHook,
-                expandCollapeHook,
-                doneHook
+                expandCollapeHook
             )
         )
-
-        mAdapterDone.addEventHooks(
-            listOf(
-                cancellaIncontroHook,
-                modificaIncontroHook,
-                expandCollapeHook,
-                toDoHook
-            )
-        )
-
-        binding.meetingTabs.getTabAt(viewModel.selectedTabIndex)?.select()
 
     }
 
     private fun subscribeUiChanges() {
-        viewModel.itemsResultTodo?.observe(viewLifecycleOwner) { incontroList ->
+        viewModel.itemsResult?.observe(viewLifecycleOwner) { incontroList ->
             var lastPosition = 0
-            mAdapterTodo.set(incontroList.map {
-                expandableMeetingItem {
+            mAdapter.set(incontroList.map {
+                expandableVocazioneMeetingItem {
                     id = it.idIncontro
-                    nome = it.nome
-                    cognome = it.cognome
+                    tipo = it.tipo
                     dataIncontro = it.data
                     luogoIncontro = it.luogo
-                    idComunita = it.idComunita
-                    numeroComunita = it.numero
-                    parrocchiaComunita = it.parrocchia
                     note = it.note
-                    done = it.done
                     position = lastPosition++
                 }
             })
-            binding.noIncontriTodo.isVisible = mAdapterTodo.adapterItemCount == 0
-        }
-
-        viewModel.itemsResultDone?.observe(viewLifecycleOwner) { incontroList ->
-            var lastPosition = 0
-            mAdapterDone.set(incontroList.map {
-                expandableMeetingItem {
-                    id = it.idIncontro
-                    nome = it.nome
-                    cognome = it.cognome
-                    dataIncontro = it.data
-                    luogoIncontro = it.luogo
-                    idComunita = it.idComunita
-                    numeroComunita = it.numero
-                    parrocchiaComunita = it.parrocchia
-                    note = it.note
-                    done = it.done
-                    position = lastPosition++
-                }
-            })
-            binding.noIncontriDone.isVisible = mAdapterDone.adapterItemCount == 0
+            binding.noIncontri.isVisible = mAdapter.adapterItemCount == 0
         }
 
         addNotificationViewModel.state.observe(viewLifecycleOwner) {
@@ -188,11 +112,9 @@ class IncontriFragment : AccountMenuFragment() {
                                 addNotificationViewModel.handled = true
                                 lifecycleScope.launch {
                                     addOrUpdateIncontro(
-                                        addNotificationViewModel.nomeText,
-                                        addNotificationViewModel.cognomeText,
+                                        addNotificationViewModel.tipo,
                                         addNotificationViewModel.dataIncontro,
                                         addNotificationViewModel.luogoText,
-                                        addNotificationViewModel.idComunita,
                                         addNotificationViewModel.noteText,
                                         if (addNotificationViewModel.mTag == EDIT_INCONTRO) viewModel.selectedIncontroId else 0,
                                         addNotificationViewModel.mTag == EDIT_INCONTRO
@@ -230,7 +152,7 @@ class IncontriFragment : AccountMenuFragment() {
         }
     }
 
-    private var cancellaIncontroHook = object : ClickEventHook<ExpandableMeetingItem>() {
+    private var cancellaIncontroHook = object : ClickEventHook<ExpandableVocazioneMeetingItem>() {
         override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
             //return the views on which you want to bind this event
             return viewHolder.itemView.findViewById(R.id.cancella_incontro)
@@ -239,8 +161,8 @@ class IncontriFragment : AccountMenuFragment() {
         override fun onClick(
             v: View,
             position: Int,
-            fastAdapter: FastAdapter<ExpandableMeetingItem>,
-            item: ExpandableMeetingItem
+            fastAdapter: FastAdapter<ExpandableVocazioneMeetingItem>,
+            item: ExpandableVocazioneMeetingItem
         ) {
             mMainActivity?.let { mActivity ->
                 viewModel.selectedIncontroId = item.id
@@ -260,7 +182,7 @@ class IncontriFragment : AccountMenuFragment() {
         }
     }
 
-    private var modificaIncontroHook = object : ClickEventHook<ExpandableMeetingItem>() {
+    private var modificaIncontroHook = object : ClickEventHook<ExpandableVocazioneMeetingItem>() {
         override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
             //return the views on which you want to bind this event
             return viewHolder.itemView.findViewById(R.id.modifica_incontro)
@@ -269,30 +191,28 @@ class IncontriFragment : AccountMenuFragment() {
         override fun onClick(
             v: View,
             position: Int,
-            fastAdapter: FastAdapter<ExpandableMeetingItem>,
-            item: ExpandableMeetingItem
+            fastAdapter: FastAdapter<ExpandableVocazioneMeetingItem>,
+            item: ExpandableVocazioneMeetingItem
         ) {
             mMainActivity?.let { mActivity ->
                 viewModel.selectedIncontroId = item.id
-                val builder = EditMeetingDialogFragment.Builder(
+                val builder = EditVocazioneMeetingDialogFragment.Builder(
                     mActivity, EDIT_INCONTRO
                 )
-                    .nomePrefill(item.nome)
-                    .cognomePrefill(item.cognome)
+                    .tipoPrefill(item.tipo)
                     .dataIncontroPrefill(item.dataIncontro)
                     .luogoPrefill(item.luogoIncontro)
-                    .comunitaPrefill(item.idComunita)
                     .notePrefill(item.note)
                     .setEditMode(true)
                 if (mActivity.resources.getBoolean(R.bool.large_layout)) {
                     builder.positiveButton(R.string.save)
                         .negativeButton(android.R.string.cancel)
-                    LargeEditMeetingDialogFragment.show(
+                    LargeEditVocazioneMeetingDialogFragment.show(
                         builder,
                         mActivity.supportFragmentManager
                     )
                 } else {
-                    SmallEditMeetingDialogFragment.show(
+                    SmallEditVocazioneMeetingDialogFragment.show(
                         builder,
                         mActivity.supportFragmentManager
                     )
@@ -301,7 +221,7 @@ class IncontriFragment : AccountMenuFragment() {
         }
     }
 
-    private val expandCollapeHook = object : ClickEventHook<ExpandableMeetingItem>() {
+    private val expandCollapeHook = object : ClickEventHook<ExpandableVocazioneMeetingItem>() {
         override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
             //return the views on which you want to bind this event
             return viewHolder.itemView.findViewById(R.id.title_section)
@@ -310,8 +230,8 @@ class IncontriFragment : AccountMenuFragment() {
         override fun onClick(
             v: View,
             position: Int,
-            fastAdapter: FastAdapter<ExpandableMeetingItem>,
-            item: ExpandableMeetingItem
+            fastAdapter: FastAdapter<ExpandableVocazioneMeetingItem>,
+            item: ExpandableVocazioneMeetingItem
         ) {
             ViewCompat.animate(v.findViewById(R.id.group_indicator))
                 .rotation(if (item.isExpanded) 180f else 0f)
@@ -321,66 +241,26 @@ class IncontriFragment : AccountMenuFragment() {
         }
     }
 
-    private val toDoHook = object : ClickEventHook<ExpandableMeetingItem>() {
-        override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
-            //return the views on which you want to bind this event
-            return viewHolder.itemView.findViewById(R.id.todo_incontro)
-        }
-
-        override fun onClick(
-            v: View,
-            position: Int,
-            fastAdapter: FastAdapter<ExpandableMeetingItem>,
-            item: ExpandableMeetingItem
-        ) {
-            lifecycleScope.launch {
-                updateIncontro(item.id, false)
-            }
-        }
-    }
-
-    private val doneHook = object : ClickEventHook<ExpandableMeetingItem>() {
-        override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
-            //return the views on which you want to bind this event
-            return viewHolder.itemView.findViewById(R.id.done_incontro)
-        }
-
-        override fun onClick(
-            v: View,
-            position: Int,
-            fastAdapter: FastAdapter<ExpandableMeetingItem>,
-            item: ExpandableMeetingItem
-        ) {
-            lifecycleScope.launch {
-                updateIncontro(item.id, true)
-            }
-        }
-    }
-
     private suspend fun addOrUpdateIncontro(
-        nome: String,
-        cognome: String,
+        tipo: IncontroVocazionale.Tipo,
         dataIncontro: Date?,
         luogo: String,
-        comunita: Long,
         note: String,
         idIncontro: Long,
         update: Boolean = false
     ) {
         withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
             val db = ComunitaDatabase.getInstance(requireContext())
-            val incontro = Incontro()
-            incontro.nome = nome
-            incontro.cognome = cognome
+            val incontro = IncontroVocazionale()
+            incontro.tipo = tipo
             incontro.data = dataIncontro
             incontro.luogo = luogo
-            incontro.idComunita = comunita
             incontro.note = note
             if (update) {
                 incontro.idIncontro = idIncontro
-                db.incontroDao().updateIncontro(incontro)
+                db.incontroVocazionaleDao().updateIncontroVocazionale(incontro)
             } else
-                db.incontroDao().insertIncontro(incontro)
+                db.incontroVocazionaleDao().insertIncontroVocazionale(incontro)
         }
         Snackbar.make(
             requireActivity().findViewById(android.R.id.content),
@@ -395,9 +275,9 @@ class IncontriFragment : AccountMenuFragment() {
         withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
             val db = ComunitaDatabase.getInstance(requireContext())
 
-            viewModel.removedIncontro = db.incontroDao().getIncontroById(idIncontro)
+            viewModel.removedIncontro = db.incontroVocazionaleDao().getById(idIncontro)
             viewModel.removedIncontro?.let {
-                db.incontroDao().deleteIncontro(it)
+                db.incontroVocazionaleDao().deleteIncontroVocazionale(it)
                 rimosso = true
             }
         }
@@ -416,35 +296,18 @@ class IncontriFragment : AccountMenuFragment() {
                 .show()
     }
 
-    private suspend fun updateIncontro(idIncontro: Long, done: Boolean) {
+    private suspend fun restoreIncontro(incontro: IncontroVocazionale) {
         withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
-            val db = ComunitaDatabase.getInstance(requireContext())
-
-            val updatedIncontro = db.incontroDao().getIncontroById(idIncontro)
-            updatedIncontro?.let {
-                it.done = done
-                db.incontroDao().updateIncontro(updatedIncontro)
-            }
-        }
-        Snackbar.make(
-            requireActivity().findViewById(android.R.id.content),
-            getString(if (done) R.string.snackbar_done else R.string.snackbar_todo),
-            Snackbar.LENGTH_SHORT
-        ).show()
-    }
-
-    private suspend fun restoreIncontro(incontro: Incontro) {
-        withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
-            ComunitaDatabase.getInstance(requireContext()).incontroDao()
-                .insertIncontro(incontro)
+            ComunitaDatabase.getInstance(requireContext()).incontroVocazionaleDao()
+                .insertIncontroVocazionale(incontro)
         }
     }
 
     companion object {
-        private val TAG = IncontriFragment::class.java.canonicalName
-        const val ADD_INCONTRO = "add_incontro"
-        const val EDIT_INCONTRO = "edit_incontro"
-        const val DELETE_INCONTRO = "delete_incontro"
+        private val TAG = IncontriVocazioneFragment::class.java.canonicalName
+        const val ADD_INCONTRO = "add_incontro_vocazione"
+        const val EDIT_INCONTRO = "edit_incontro_vocazione"
+        const val DELETE_INCONTRO = "delete_incontro_vocazione"
     }
 
 }

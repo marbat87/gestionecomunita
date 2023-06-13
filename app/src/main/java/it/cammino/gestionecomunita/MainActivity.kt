@@ -64,14 +64,17 @@ import it.cammino.gestionecomunita.dialog.AddNotificationDialogFragment
 import it.cammino.gestionecomunita.dialog.BackupCodeDialogFragment
 import it.cammino.gestionecomunita.dialog.DialogState
 import it.cammino.gestionecomunita.dialog.EditMeetingDialogFragment
+import it.cammino.gestionecomunita.dialog.EditVocazioneMeetingDialogFragment
 import it.cammino.gestionecomunita.dialog.InputTextDialogFragment
 import it.cammino.gestionecomunita.dialog.ProfileDialogFragment
 import it.cammino.gestionecomunita.dialog.ProgressDialogFragment
 import it.cammino.gestionecomunita.dialog.SimpleDialogFragment
 import it.cammino.gestionecomunita.dialog.large.LargeAddNotificationDialogFragment
 import it.cammino.gestionecomunita.dialog.large.LargeEditMeetingDialogFragment
+import it.cammino.gestionecomunita.dialog.large.LargeEditVocazioneMeetingDialogFragment
 import it.cammino.gestionecomunita.dialog.small.SmallAddNotificationDialogFragment
 import it.cammino.gestionecomunita.dialog.small.SmallEditMeetingDialogFragment
+import it.cammino.gestionecomunita.dialog.small.SmallEditVocazioneMeetingDialogFragment
 import it.cammino.gestionecomunita.ui.ThemeableActivity
 import it.cammino.gestionecomunita.ui.comunita.detail.CommunityDetailFragment
 import it.cammino.gestionecomunita.ui.comunita.detail.CommunityDetailHostActivity
@@ -80,6 +83,7 @@ import it.cammino.gestionecomunita.ui.seminario.detail.SeminarioDetailFragment
 import it.cammino.gestionecomunita.ui.seminario.detail.SeminarioDetailHostActivity
 import it.cammino.gestionecomunita.ui.vocazione.detail.VocazioneDetailFragment
 import it.cammino.gestionecomunita.ui.vocazione.detail.VocazioneDetailHostActivity
+import it.cammino.gestionecomunita.ui.vocazione.incontri.IncontriVocazioneFragment
 import it.cammino.gestionecomunita.util.StringUtils
 import it.cammino.gestionecomunita.util.getTypedValueResId
 import it.cammino.gestionecomunita.util.startActivityWithTransition
@@ -267,13 +271,32 @@ class MainActivity : ThemeableActivity() {
 
         binding.extendedFabVocazione?.let { fab ->
             fab.setOnClickListener {
-                val args = Bundle()
-                args.putLong(VocazioneDetailFragment.ARG_ITEM_ID, -1)
-                args.putBoolean(VocazioneDetailFragment.EDIT_MODE, true)
-                args.putBoolean(VocazioneDetailFragment.CREATE_MODE, true)
-                val intent = Intent(this, VocazioneDetailHostActivity::class.java)
-                intent.putExtras(args)
-                startActivityWithTransition(intent, MaterialSharedAxis.X)
+                if (viewModel.selectedVocazioniIndex == 2) {
+                    val builder = EditVocazioneMeetingDialogFragment.Builder(
+                        this, IncontriVocazioneFragment.ADD_INCONTRO
+                    )
+                    if (resources.getBoolean(R.bool.large_layout)) {
+                        builder.positiveButton(R.string.save)
+                            .negativeButton(android.R.string.cancel)
+                        LargeEditVocazioneMeetingDialogFragment.show(
+                            builder,
+                            supportFragmentManager
+                        )
+                    } else {
+                        SmallEditVocazioneMeetingDialogFragment.show(
+                            builder,
+                            supportFragmentManager
+                        )
+                    }
+                } else {
+                    val args = Bundle()
+                    args.putLong(VocazioneDetailFragment.ARG_ITEM_ID, -1)
+                    args.putBoolean(VocazioneDetailFragment.EDIT_MODE, true)
+                    args.putBoolean(VocazioneDetailFragment.CREATE_MODE, true)
+                    val intent = Intent(this, VocazioneDetailHostActivity::class.java)
+                    intent.putExtras(args)
+                    startActivityWithTransition(intent, MaterialSharedAxis.X)
+                }
             }
         }
 
@@ -1204,6 +1227,13 @@ class MainActivity : ThemeableActivity() {
             },
             supportFragmentManager
         )
+    }
+
+    fun updateVocazioneSelectedIndex(index: Int) {
+        viewModel.selectedVocazioniIndex = index
+        binding.extendedFabVocazione?.setText(if (viewModel.selectedVocazioniIndex == 2) R.string.nuovo_incontro else R.string.vocazione_new_title)
+        binding.extendedFabVocazione?.contentDescription =
+            getString(if (viewModel.selectedVocazioniIndex == 2) R.string.nuovo_incontro else R.string.vocazione_new_title)
     }
 
     class NoBackupException internal constructor(val resources: Resources) :

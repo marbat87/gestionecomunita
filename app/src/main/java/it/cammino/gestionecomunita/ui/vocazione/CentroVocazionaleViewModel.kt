@@ -7,6 +7,7 @@ class CentroVocazionaleViewModel : ViewModel() {
 
     val itemCLickedState = MutableLiveData(ItemClickState.UNCLICKED)
     var clickedId: Long = 0
+    var selectedTab: Int = 0
 
     enum class ItemClickState {
         CLICKED,

@@ -1,12 +1,10 @@
 package it.cammino.gestionecomunita.ui.notifications
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -49,14 +47,7 @@ class NotificationsFragment : AccountMenuFragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private var mMainActivity: AppCompatActivity? = null
-
     private var mAdapter: FastItemAdapter<PromemoriaItem> = FastItemAdapter()
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mMainActivity = activity as? AppCompatActivity
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,6 +90,7 @@ class NotificationsFragment : AccountMenuFragment() {
                                     )
                                 }
                             }
+
                             CommunityDetailFragment.EDIT_NOTIFICATION -> {
                                 addNotificationViewMode.handled = true
                                 lifecycleScope.launch {
@@ -112,6 +104,7 @@ class NotificationsFragment : AccountMenuFragment() {
                             }
                         }
                     }
+
                     is DialogState.Negative -> {
                         addNotificationViewMode.handled = true
                     }
@@ -237,6 +230,7 @@ class NotificationsFragment : AccountMenuFragment() {
                             }
                         }
                     }
+
                     is DialogState.Negative -> {
                         simpleDialogViewModel.handled = true
                     }

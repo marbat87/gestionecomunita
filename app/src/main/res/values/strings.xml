@@ -56,6 +56,7 @@
     <string name="invalid_date">Data non valida</string>
     <string name="mandatory_field">Campo obbligatorio</string>
     <string name="edit">Modifica</string>
+    <string name="servizio_nome">Coppia/Sorella</string>
     <string name="nome">Nome</string>
     <string name="cognome">Cognome</string>
     <string name="stato_civile">Stato civile</string>
@@ -103,6 +104,7 @@
     <string name="nessun_promemoria">Non hai ancora aggiunto nessun promemoria.</string>
     <string name="nessun_incontro_todo">Non hai nessun incontro da fare.</string>
     <string name="nessun_incontro_done">Non hai nessun incontro completato.</string>
+    <string name="nessun_incontro_convivenza">Non hai inserito nessun incontro/convivenza.</string>
     <string name="promemoria_rimosso">Promemoria rimosso</string>
     <string name="nuovo_incontro">Nuovo incontro</string>
     <string name="modifica_incontro">Modifica incontro</string>
@@ -121,6 +123,7 @@
     <string name="no_fratelli">Non hai aggiunto nessun fratello alla comunità.</string>
     <string name="tutte_vocazioni">Tutte</string>
     <string name="tappa_vocazioni">Elenco per tappa</string>
+    <string name="incontri_tab">Incontri</string>
     <string name="vocazione_filter">Filtra per</string>
     <string name="vocazione_male">Maschio</string>
     <string name="vocazione_female">Femmina</string>
@@ -136,6 +139,9 @@
     <string name="sesso_maschio">Maschio</string>
     <string name="sesso_femmina">Femmina</string>
     <string name="sesso_label">Sesso</string>
+    <string name="tipo_incontro_label">Tipo</string>
+    <string name="tipo_incontro_incontro">Incontro</string>
+    <string name="tipo_incontro_convivenza">Convivenza</string>
     <string name="nessun_passaggio">N.D.</string>
     <string name="num_anni_label">Anni di cammino</string>
     <string name="no_vocazioni">Non hai aggiunto nessuna vocazione.</string>
@@ -150,10 +156,13 @@
     <string name="delete_seminario_dialog">Sei sicuro di voler rimuovere questo seminario?</string>
     <string name="data_dal">Inizio incarico</string>
     <string name="data_al">Fine incarico</string>
+    <string name="servizio_data_dal">Ingresso</string>
+    <string name="servizio_data_al">Uscita</string>
     <string name="rettore">Rettore</string>
     <string name="comunita_assegnazione_label">Comunità di assegnazione</string>
     <string name="vice_rettore">Vice-rettore</string>
     <string name="direttore_spiriturale">Direttore spirituale</string>
+    <string name="servizi_seminario">Servizi al seminario</string>
     <string name="delete_seminarista">Rimuovi seminarista</string>
     <string name="delete_seminarista_dialog">Sei sicuro di voler rimuovere il seminarista?</string>
     <string name="remove">Rimuovi</string>

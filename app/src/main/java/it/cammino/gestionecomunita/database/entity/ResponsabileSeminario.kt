@@ -21,7 +21,7 @@ open class ResponsabileSeminario {
     var incarico: Incarico = Incarico.RETTORE
 
     enum class Incarico {
-        RETTORE, VICE_RETTORE, DIRETTORE_SPIRITUALE
+        RETTORE, VICE_RETTORE, DIRETTORE_SPIRITUALE, SERVIZIO
     }
 
 }

@@ -6,6 +6,7 @@ import it.cammino.gestionecomunita.database.entity.Seminario
 import it.cammino.gestionecomunita.database.item.SeminarioWithDetails
 import it.cammino.gestionecomunita.item.ResponsabileListItem
 import it.cammino.gestionecomunita.item.SeminaristaItem
+import it.cammino.gestionecomunita.item.ServizioSeminarioListItem
 import it.cammino.gestionecomunita.item.VisitaSeminarioItem
 
 class SeminarioDetailViewModel : ViewModel() {
@@ -22,5 +23,6 @@ class SeminarioDetailViewModel : ViewModel() {
     var rettori: List<ResponsabileListItem> = ArrayList()
     var viceRettori: List<ResponsabileListItem> = ArrayList()
     var direttoriSpirituali: List<ResponsabileListItem> = ArrayList()
+    var serviziSeminario: List<ServizioSeminarioListItem> = ArrayList()
 
 }

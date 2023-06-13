@@ -1,6 +1,7 @@
 package it.cammino.gestionecomunita.database.converter
 
 import androidx.room.TypeConverter
+import it.cammino.gestionecomunita.database.entity.IncontroVocazionale
 import it.cammino.gestionecomunita.database.entity.ResponsabileSeminario
 import it.cammino.gestionecomunita.database.entity.Vocazione
 import java.sql.Date
@@ -29,5 +30,11 @@ class Converters {
 
     @TypeConverter
     fun fromIncarico(value: ResponsabileSeminario.Incarico) = value.name
+
+    @TypeConverter
+    fun toIncontroTipo(value: String) = enumValueOf<IncontroVocazionale.Tipo>(value)
+
+    @TypeConverter
+    fun fromIncontroTipo(value: IncontroVocazionale.Tipo) = value.name
 
 }

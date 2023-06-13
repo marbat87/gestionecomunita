@@ -20,8 +20,9 @@ import it.cammino.gestionecomunita.database.entity.*
         (VisitaSeminario::class),
         (ResponsabileSeminario::class),
         (Seminarista::class),
-        (ComunitaSeminarista::class)],
-    version = 4,
+        (ComunitaSeminarista::class),
+        (IncontroVocazionale::class)],
+    version = 5,
     autoMigrations = [
         AutoMigration(
             from = 1,
@@ -35,6 +36,10 @@ import it.cammino.gestionecomunita.database.entity.*
         AutoMigration(
             from = 3,
             to = 4
+        ),
+        AutoMigration(
+            from = 4,
+            to = 5
         )
     ],
     exportSchema = true
@@ -53,6 +58,8 @@ abstract class ComunitaDatabase : RoomDatabase() {
     abstract fun seminarioDao(): SeminarioDao
     abstract fun seminaristaDao(): SeminaristaDao
     abstract fun visitaSeminarioDao(): VisitaSeminarioDao
+
+    abstract fun incontroVocazionaleDao(): IncontroVocazionaleDao
 
     companion object {
 

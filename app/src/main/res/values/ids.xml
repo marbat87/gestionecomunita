@@ -3,10 +3,12 @@
     <item name="fastadapter_community_item_id" type="id" />
     <item name="fastadapter_seminario_item_id" type="id" />
     <item name="fastadapter_responsabile_item_id" type="id" />
+    <item name="fastadapter_servizio_item_id" type="id" />
     <item name="fastadapter_comunita_seminarista_item_id" type="id" />
     <item name="fastadapter_comunita_seminarista_view_item_id" type="id" />
     <item name="fastadapter_expandable_item_id" type="id" />
     <item name="fastadapter_incontro_item_id" type="id" />
+    <item name="fastadapter_incontro_vocazione_item_id" type="id" />
     <item name="fastadapter_sub_item_id" type="id" />
     <item name="community_detail_fragment" type="id" />
     <item name="seminario_detail_fragment" type="id" />

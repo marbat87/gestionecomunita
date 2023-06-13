@@ -30,4 +30,9 @@
         <item>@string/sesso_femmina</item>
     </string-array>
 
+    <string-array name="tipo_incontro_entries">
+        <item>@string/tipo_incontro_incontro</item>
+        <item>@string/tipo_incontro_convivenza</item>
+    </string-array>
+
 </resources>

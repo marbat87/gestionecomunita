@@ -13,7 +13,7 @@ import it.cammino.gestionecomunita.MainActivity
 
 open class AccountMenuFragment : Fragment() {
 
-    private var mMainActivity: MainActivity? = null
+    protected var mMainActivity: MainActivity? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

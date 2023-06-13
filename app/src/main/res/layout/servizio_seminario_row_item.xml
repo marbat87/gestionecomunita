@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="?attr/listPreferredItemHeightLarge"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/serv_nome_text_field"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.PrimaryText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/container_horizontal_margin"
+        android:enabled="false"
+        android:hint="@string/servizio_nome"
+        app:errorEnabled="true"
+        app:layout_constraintEnd_toStartOf="@id/remove_servizio"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginEnd="@dimen/container_horizontal_margin">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/serv_data_dal_text_field"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.PrimaryText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/container_horizontal_margin"
+        android:layout_marginTop="@dimen/text_field_space"
+        android:layout_marginEnd="@dimen/container_horizontal_margin"
+        android:enabled="false"
+        android:hint="@string/servizio_data_dal"
+        app:endIconMode="clear_text"
+        app:errorEnabled="true"
+        app:layout_constraintEnd_toStartOf="@id/serv_data_al_text_field"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/serv_nome_text_field"
+        app:startIconDrawable="@drawable/calendar_today_24px">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="date" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/serv_data_al_text_field"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.PrimaryText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_field_space"
+        android:enabled="false"
+        android:hint="@string/servizio_data_al"
+        app:endIconMode="clear_text"
+        app:errorEnabled="true"
+        app:layout_constraintEnd_toStartOf="@id/remove_servizio"
+        app:layout_constraintStart_toEndOf="@id/serv_data_dal_text_field"
+        app:layout_constraintTop_toBottomOf="@id/serv_nome_text_field"
+        app:layout_goneMarginEnd="@dimen/container_horizontal_margin"
+        app:startIconDrawable="@drawable/calendar_today_24px">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="date" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:dividerInsetEnd="@dimen/container_horizontal_margin"
+        app:dividerInsetStart="@dimen/container_horizontal_margin"
+        app:layout_constraintTop_toBottomOf="@id/serv_data_al_text_field" />
+
+    <Button
+        android:id="@+id/remove_servizio"
+        style="?attr/materialIconButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:icon="@drawable/close_24px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
