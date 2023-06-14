@@ -15,6 +15,9 @@ object Utility {
     private val TAG = Utility::class.java.canonicalName
 
     fun getDateFromString(ctx: Context, inputString: String): Date? {
+        if (inputString.isEmpty())
+            return null
+
         val df = SimpleDateFormat("dd/MM/yyyy", ctx.resources.systemLocale)
 
         val date: java.util.Date?

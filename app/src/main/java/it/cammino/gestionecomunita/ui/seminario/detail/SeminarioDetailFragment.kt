@@ -924,6 +924,7 @@ open class SeminarioDetailFragment : Fragment() {
         val db = ComunitaDatabase.getInstance(requireContext())
 
         viewModel.seminario.seminaristi.forEach {
+            Log.d(TAG, "truncateRelatedTables - seminarista: ${it.idSeminarista}")
             db.comunitaSeminaristaDao().truncateTableBySeminarista(it.idSeminarista)
         }
         db.seminaristaDao().truncateTableBySeminario(id)
@@ -954,7 +955,11 @@ open class SeminarioDetailFragment : Fragment() {
                 note = it.note
             }
             val insertedSeminaristaId = db.seminaristaDao().insertSeminarista(seminarista)
-            it.comunitaList.forEach { com -> com.idSeminarista = insertedSeminaristaId }
+            Log.d(TAG, "insertRelatedTable - seminarista: $insertedSeminaristaId")
+            it.comunitaList.forEach { com ->
+                com.idSeminarista = insertedSeminaristaId
+                Log.d(TAG, " --- insertRelatedTable - comunitaSeminarista: ${com.idSeminarista} - ${com.idComunitaSeminarista}")
+            }
             db.comunitaSeminaristaDao().insertComunita(it.comunitaList)
         }
 
@@ -1013,6 +1018,9 @@ open class SeminarioDetailFragment : Fragment() {
                         incarico = ResponsabileSeminario.Incarico.SERVIZIO
                     }
                 })
+
+        viewModel.seminario = db.seminarioDao()
+            .getByIdWithDetails(viewModel.listId)
     }
 
     private suspend fun retrieveData() {
