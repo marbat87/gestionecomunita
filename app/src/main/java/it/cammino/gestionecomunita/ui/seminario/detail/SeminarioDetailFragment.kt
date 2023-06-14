@@ -775,6 +775,7 @@ open class SeminarioDetailFragment : Fragment() {
             else
                 lifecycleScope.launch {
                     updateSeminario()
+                    retrieveData()
                 }
         } else {
             mMainActivity?.let { mActivity ->
@@ -1018,9 +1019,6 @@ open class SeminarioDetailFragment : Fragment() {
                         incarico = ResponsabileSeminario.Incarico.SERVIZIO
                     }
                 })
-
-        viewModel.seminario = db.seminarioDao()
-            .getByIdWithDetails(viewModel.listId)
     }
 
     private suspend fun retrieveData() {

@@ -11,6 +11,8 @@ object StringUtils {
     private const val CODE_LENGTH = 16
     const val PREFERENCE_BACKUP_CODE = "backup_code"
     internal const val SHARED_AXIS = "shared_axis"
+    val RESPONSABILE = arrayOf("responsabile", "resp")
+    val VICE_RESPONSABILE = arrayOf("vice responsabile", "vice-responsabile", "vice", "viceresp")
 
     fun generateRandomCode(): String {
         val chars = ("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijk"

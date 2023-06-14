@@ -203,6 +203,7 @@ open class CommunityDetailFragment : Fragment() {
                     0 -> {
                         showGeneralOrBrothers(true)
                     }
+
                     1 -> {
                         showGeneralOrBrothers(false)
                     }
@@ -225,6 +226,7 @@ open class CommunityDetailFragment : Fragment() {
                     viewModel.editMode.value = true
                     true
                 }
+
                 R.id.delete_community -> {
                     mMainActivity?.let { mActivity ->
                         SimpleDialogFragment.show(
@@ -242,6 +244,7 @@ open class CommunityDetailFragment : Fragment() {
                     }
                     true
                 }
+
                 R.id.history_community -> {
                     mMainActivity?.let { mActivity ->
                         val builder = CommunityHistoryDialogFragment.Builder(
@@ -263,6 +266,7 @@ open class CommunityDetailFragment : Fragment() {
                     }
                     true
                 }
+
                 R.id.notification_community -> {
                     parentFragmentManager.commit {
                         replace(
@@ -274,6 +278,7 @@ open class CommunityDetailFragment : Fragment() {
                     }
                     true
                 }
+
                 R.id.cancel_change -> {
                     if (viewModel.createMode) {
                         activity?.finishAfterTransition()
@@ -295,10 +300,12 @@ open class CommunityDetailFragment : Fragment() {
                     }
                     true
                 }
+
                 R.id.confirm_changes -> {
                     confirmChanges()
                     true
                 }
+
                 else -> false
             }
         }
@@ -375,7 +382,7 @@ open class CommunityDetailFragment : Fragment() {
             binding.dataVisitaTextField.editText?.setText(instance.getCharSequence("dataVisitaTextField"))
             binding.noteTextField.editText?.setText(instance.getCharSequence("noteTextField"))
             binding.anniTextField.editText?.setText(instance.getCharSequence("anniTextField"))
-            viewModel.elementi?.let { mAdapter.itemAdapter.set(it) }
+            viewModel.elementi?.let { mAdapter.set(it) }
             binding.materialTabs.getTabAt(viewModel.selectedTabIndex)?.select()
         }
     }
@@ -412,11 +419,13 @@ open class CommunityDetailFragment : Fragment() {
                                 viewModel.fratelliPresenti = true
                                 binding.noFratelliView.isVisible = !viewModel.fratelliPresenti
                             }
+
                             EDIT_BROTHER -> {
                                 mAdapter[viewModel.selectedFratello] = fratello
                             }
                         }
                     }
+
                     is DialogState.Negative -> {
                         inputdialogViewModel.handled = true
                     }
@@ -433,14 +442,20 @@ open class CommunityDetailFragment : Fragment() {
                             DELETE_BROTHER -> {
                                 simpleDialogViewModel.handled = true
                                 mAdapter.remove(viewModel.selectedFratello)
+                                var counter = 0
+                                mAdapter.itemAdapter.adapterItems.forEach { fratello ->
+                                    fratello.position = counter++
+                                }
                                 viewModel.fratelliPresenti =
                                     mAdapter.itemAdapter.adapterItemCount > 0
                                 binding.noFratelliView.isVisible = !viewModel.fratelliPresenti
                             }
+
                             DELETE_COMMUNITY -> {
                                 simpleDialogViewModel.handled = true
                                 lifecycleScope.launch { deleteComunita() }
                             }
+
                             UNDO_CHANGE -> {
                                 simpleDialogViewModel.handled = true
                                 viewModel.editMode.value = false
@@ -448,6 +463,7 @@ open class CommunityDetailFragment : Fragment() {
                             }
                         }
                     }
+
                     is DialogState.Negative -> {
                         simpleDialogViewModel.handled = true
                     }
@@ -473,6 +489,7 @@ open class CommunityDetailFragment : Fragment() {
                             }
                         }
                     }
+
                     is DialogState.Negative -> {
                         addNotificationViewMode.handled = true
                     }
@@ -943,36 +960,36 @@ open class CommunityDetailFragment : Fragment() {
 
             binding.noteTextField.editText?.setText(viewModel.comunita.note)
             binding.anniTextField.editText?.setText(if (viewModel.comunita.numAnni > 0) viewModel.comunita.numAnni.toString() else StringUtils.EMPTY_STRING)
-
-            viewModel.elementi?.let {
-                Log.d(TAG, "Lista già valorizzata")
-            } ?: run {
-                Log.d(TAG, "Lista nulla")
-                viewModel.elementi = ArrayList()
-                viewModel.comunitaFratello?.fratelli?.let {
-                    var position = 0
-                    it.forEach { fratello ->
-                        viewModel.elementi?.add(
-                            createBrotherItem(
-                                fratello.nome,
-                                fratello.cognome,
-                                fratello.statoCivile,
-                                fratello.coniuge,
-                                fratello.numFigli,
-                                fratello.tribu,
-                                fratello.annoNascita,
-                                fratello.carisma,
-                                fratello.comunitaOrigine,
-                                fratello.dataArrivo,
-                                fratello.statoAttuale,
-                                fratello.note,
-                                fratello.dataInizioCammino,
-                                position++
-                            )
+//
+//            viewModel.elementi?.let {
+//                Log.d(TAG, "Lista già valorizzata")
+//            } ?: run {
+//                Log.d(TAG, "Lista nulla")
+            viewModel.elementi = ArrayList()
+            viewModel.comunitaFratello?.fratelli?.sorted()?.let {
+                var position = 0
+                it.forEach { fratello ->
+                    viewModel.elementi?.add(
+                        createBrotherItem(
+                            fratello.nome,
+                            fratello.cognome,
+                            fratello.statoCivile,
+                            fratello.coniuge,
+                            fratello.numFigli,
+                            fratello.tribu,
+                            fratello.annoNascita,
+                            fratello.carisma,
+                            fratello.comunitaOrigine,
+                            fratello.dataArrivo,
+                            fratello.statoAttuale,
+                            fratello.note,
+                            fratello.dataInizioCammino,
+                            position++
                         )
-                    }
+                    )
                 }
             }
+//            }
             viewModel.elementi?.forEach { it.editable = false }
             viewModel.elementi?.let { mAdapter.set(it) }
         } else {

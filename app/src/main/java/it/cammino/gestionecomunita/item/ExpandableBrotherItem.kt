@@ -15,7 +15,8 @@ import java.sql.Date
 fun expandableBrotherItem(block: ExpandableBrotherItem.() -> Unit): ExpandableBrotherItem =
     ExpandableBrotherItem().apply(block)
 
-class ExpandableBrotherItem : AbstractBindingItem<FratelloDetailItemBinding>() {
+class ExpandableBrotherItem : AbstractBindingItem<FratelloDetailItemBinding>(),
+    Comparable<ExpandableBrotherItem> {
 
     var nome: String = StringUtils.EMPTY_STRING
     var cognome: String = StringUtils.EMPTY_STRING
@@ -60,7 +61,7 @@ class ExpandableBrotherItem : AbstractBindingItem<FratelloDetailItemBinding>() {
     override fun bindView(binding: FratelloDetailItemBinding, payloads: List<Any>) {
         val ctx = binding.root.context
 
-        binding.groupTitle.text = "$nome $cognome"
+        binding.groupTitle.text = "n.${position + 1} - $nome $cognome"
         binding.textNome.text = nome
         binding.textCognome.text = cognome.ifBlank { StringUtils.DASH }
         binding.textStatoCivile.text = statoCivile.ifBlank { StringUtils.DASH }
@@ -113,4 +114,43 @@ class ExpandableBrotherItem : AbstractBindingItem<FratelloDetailItemBinding>() {
         binding.textDataInizioCammino.text = null
     }
 
+    override fun compareTo(other: ExpandableBrotherItem): Int {
+        if (stato == 0 && other.stato > 0)
+            return -1
+
+        if (stato > 0 && other.stato == 0)
+            return 1
+
+        if (stato == 1 && other.stato == 2)
+            return -1
+
+        if (stato == 2 && other.stato == 1)
+            return 1
+
+        if (StringUtils.RESPONSABILE.contains(carisma.lowercase().trim())
+            && !StringUtils.RESPONSABILE.contains(other.carisma.lowercase().trim())
+        )
+            return -1
+
+        if (!StringUtils.RESPONSABILE.contains(carisma.lowercase().trim())
+            && StringUtils.RESPONSABILE.contains(other.carisma.lowercase().trim())
+        )
+            return 1
+
+        if (StringUtils.VICE_RESPONSABILE.contains(carisma.lowercase().trim())
+            && !StringUtils.VICE_RESPONSABILE.contains(other.carisma.lowercase().trim())
+        )
+            return -1
+
+        if (!StringUtils.VICE_RESPONSABILE.contains(carisma.lowercase().trim())
+            && StringUtils.VICE_RESPONSABILE.contains(other.carisma.lowercase().trim())
+        )
+            return 1
+
+        val thisName = "$nome $cognome"
+        val otherName = "${other.nome} ${other.cognome}"
+
+        return thisName.compareTo(otherName)
+
+    }
 }
