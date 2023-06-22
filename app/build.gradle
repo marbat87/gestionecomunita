@@ -14,7 +14,7 @@ android {
         applicationId "it.cammino.gestionecomunita"
         minSdk 21
         targetSdk 33
-        versionCode 1500
+        versionCode 1501
         versionName "1.5.0"
 
         javaCompileOptions {
@@ -50,7 +50,7 @@ android {
 }
 
 dependencies {
-    def room_version = "2.5.1"
+    def room_version = "2.5.2"
     def fastAdapterVersion = "5.7.0"
 
     implementation 'androidx.core:core-ktx:1.10.1'
