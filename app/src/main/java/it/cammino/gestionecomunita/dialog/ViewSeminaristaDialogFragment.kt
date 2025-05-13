@@ -19,7 +19,6 @@ import it.cammino.gestionecomunita.util.capitalize
 import java.io.Serializable
 import java.sql.Date
 
-@Suppress("unused")
 open class ViewSeminaristaDialogFragment : DialogFragment() {
 
     private val mAdapterComunita: FastItemAdapter<ComunitaSeminaristaViewListItem> =

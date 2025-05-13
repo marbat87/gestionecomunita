@@ -15,7 +15,6 @@ import it.cammino.gestionecomunita.dialog.AddNotificationDialogFragment
 import it.cammino.gestionecomunita.dialog.DialogState
 import it.cammino.gestionecomunita.util.getSerializableWrapper
 
-@Suppress("unused")
 class LargeAddNotificationDialogFragment : AddNotificationDialogFragment() {
 
     private val builder: Builder?

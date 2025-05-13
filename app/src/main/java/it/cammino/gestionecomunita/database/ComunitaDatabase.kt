@@ -65,7 +65,7 @@ abstract class ComunitaDatabase : RoomDatabase() {
 
         private const val TAG = "ComunitaDatabase"
 
-        private const val dbName = "ComunitaDB"
+        private const val DB_NAME = "ComunitaDB"
 
         // For Singleton instantiation
         private val LOCK = Any()
@@ -87,7 +87,7 @@ abstract class ComunitaDatabase : RoomDatabase() {
                     sInstance = Room.databaseBuilder(
                         context.applicationContext,
                         ComunitaDatabase::class.java,
-                        dbName
+                        DB_NAME
                     )
                         .build()
                 }

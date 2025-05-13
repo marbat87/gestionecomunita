@@ -18,14 +18,17 @@ import com.google.android.material.textfield.TextInputLayout
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.database.ComunitaDatabase
 import it.cammino.gestionecomunita.database.entity.Comunita
-import it.cammino.gestionecomunita.util.*
+import it.cammino.gestionecomunita.util.StringUtils
+import it.cammino.gestionecomunita.util.Utility
+import it.cammino.gestionecomunita.util.capitalize
+import it.cammino.gestionecomunita.util.setupDatePicker
+import it.cammino.gestionecomunita.util.validateMandatoryField
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.Serializable
 import java.sql.Date
 
-@Suppress("unused")
 open class EditMeetingDialogFragment : DialogFragment() {
 
     protected val viewModel: DialogViewModel by viewModels({ requireActivity() })

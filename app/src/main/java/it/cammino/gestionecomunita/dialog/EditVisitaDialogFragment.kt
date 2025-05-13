@@ -16,7 +16,6 @@ import it.cammino.gestionecomunita.util.*
 import java.io.Serializable
 import java.sql.Date
 
-@Suppress("unused")
 open class EditVisitaDialogFragment : DialogFragment() {
 
     protected val viewModel: DialogViewModel by viewModels({ requireActivity() })

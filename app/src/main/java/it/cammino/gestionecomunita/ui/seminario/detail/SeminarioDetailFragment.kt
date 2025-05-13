@@ -2,7 +2,6 @@ package it.cammino.gestionecomunita.ui.seminario.detail
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +10,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -28,7 +28,12 @@ import it.cammino.gestionecomunita.database.entity.Seminarista
 import it.cammino.gestionecomunita.database.entity.VisitaSeminario
 import it.cammino.gestionecomunita.database.item.SeminaristaWithComunita
 import it.cammino.gestionecomunita.databinding.FragmentSeminarioDetailBinding
-import it.cammino.gestionecomunita.dialog.*
+import it.cammino.gestionecomunita.dialog.DialogState
+import it.cammino.gestionecomunita.dialog.EditSeminaristaDialogFragment
+import it.cammino.gestionecomunita.dialog.EditVisitaDialogFragment
+import it.cammino.gestionecomunita.dialog.SimpleDialogFragment
+import it.cammino.gestionecomunita.dialog.ViewSeminaristaDialogFragment
+import it.cammino.gestionecomunita.dialog.ViewVisitaDialogFragment
 import it.cammino.gestionecomunita.dialog.large.LargeEditSeminaristaDialogFragment
 import it.cammino.gestionecomunita.dialog.large.LargeEditVisitaDialogFragment
 import it.cammino.gestionecomunita.dialog.large.LargeViewSeminaristaDialogFragment
@@ -37,7 +42,14 @@ import it.cammino.gestionecomunita.dialog.small.SmallEditSeminaristaDialogFragme
 import it.cammino.gestionecomunita.dialog.small.SmallEditVisitaDialogFragment
 import it.cammino.gestionecomunita.dialog.small.SmallViewSeminaristaDialogFragment
 import it.cammino.gestionecomunita.dialog.small.SmallViewVisitaDialogFragment
-import it.cammino.gestionecomunita.item.*
+import it.cammino.gestionecomunita.item.ResponsabileListItem
+import it.cammino.gestionecomunita.item.SeminaristaItem
+import it.cammino.gestionecomunita.item.ServizioSeminarioListItem
+import it.cammino.gestionecomunita.item.VisitaSeminarioItem
+import it.cammino.gestionecomunita.item.responsabileListItem
+import it.cammino.gestionecomunita.item.seminaristaItem
+import it.cammino.gestionecomunita.item.servizioSeminarioListItem
+import it.cammino.gestionecomunita.item.visitaSeminarioItem
 import it.cammino.gestionecomunita.util.Utility
 import it.cammino.gestionecomunita.util.setEnterTransition
 import it.cammino.gestionecomunita.util.setupDatePicker
@@ -106,12 +118,10 @@ open class SeminarioDetailFragment : Fragment() {
         val isTablet = resources.getBoolean(R.bool.tablet_layout)
 
         if (!isTablet)
-            binding.appBarLayout.statusBarForeground = ColorDrawable(
-                ContextCompat.getColor(
-                    requireContext(),
-                    android.R.color.transparent
-                )
-            )
+            binding.appBarLayout.statusBarForeground = ContextCompat.getColor(
+                requireContext(),
+                android.R.color.transparent
+            ).toDrawable()
 
         if (isTablet && !viewModel.createMode)
             binding.appBar.isVisible = false

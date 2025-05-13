@@ -29,7 +29,6 @@ import java.io.Serializable
 import java.sql.Date
 
 
-@Suppress("unused")
 open class AddNotificationDialogFragment : DialogFragment() {
 
     protected val viewModel: DialogViewModel by viewModels({ requireActivity() })

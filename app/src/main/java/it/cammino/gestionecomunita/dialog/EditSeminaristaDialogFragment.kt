@@ -20,11 +20,15 @@ import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.database.entity.ComunitaSeminarista
 import it.cammino.gestionecomunita.item.ComunitaSeminaristaListItem
 import it.cammino.gestionecomunita.item.comunitaSeminaristaListItem
-import it.cammino.gestionecomunita.util.*
+import it.cammino.gestionecomunita.util.StringUtils
+import it.cammino.gestionecomunita.util.Utility
+import it.cammino.gestionecomunita.util.capitalize
+import it.cammino.gestionecomunita.util.setupDatePicker
+import it.cammino.gestionecomunita.util.validateDate
+import it.cammino.gestionecomunita.util.validateMandatoryField
 import java.io.Serializable
 import java.sql.Date
 
-@Suppress("unused")
 open class EditSeminaristaDialogFragment : DialogFragment() {
 
     protected val viewModel: DialogViewModel by viewModels({ requireActivity() })

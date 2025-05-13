@@ -11,7 +11,6 @@ import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.dialog.CommunityHistoryDialogFragment
 import it.cammino.gestionecomunita.util.getSerializableWrapper
 
-@Suppress("unused")
 class LargeCommunityHistoryDialogFragment : CommunityHistoryDialogFragment() {
 
     private val builder: Builder?

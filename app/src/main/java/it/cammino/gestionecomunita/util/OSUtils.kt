@@ -39,10 +39,6 @@ object OSUtils {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
     }
 
-    fun hasM(): Boolean {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-    }
-
     fun hasN(): Boolean {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
     }
@@ -57,6 +53,14 @@ object OSUtils {
 
     fun hasT(): Boolean {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+    }
+
+    fun hasU(): Boolean {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE
+    }
+
+    fun hasV(): Boolean {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM
     }
 
     fun isObySamsung(): Boolean {

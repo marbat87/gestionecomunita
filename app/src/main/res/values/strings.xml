@@ -9,9 +9,9 @@
     <string name="oltre_un_anno_comunita">Data ultima visita</string>
     <string name="tappa_comunita">Elenco per tappa</string>
     <string name="diocesi_comunita">Elenco per diocesi</string>
-    <string name="title_activity_community_detail_host">CommunityDetailHostActivity</string>
-    <string name="title_community_list">Communities</string>
-    <string name="title_community_detail">Community Detail</string>
+<!--    <string name="title_activity_community_detail_host">CommunityDetailHostActivity</string>-->
+<!--    <string name="title_community_list">Communities</string>-->
+<!--    <string name="title_community_detail">Community Detail</string>-->
     <string name="catechesi_iniziali">Catechesi iniziali</string>
     <string name="scrutinio_1">Primo scrutinio</string>
     <string name="shema">Shemà</string>
@@ -55,7 +55,7 @@
     <string name="invalid_number">Il campo deve essere numerico</string>
     <string name="invalid_date">Data non valida</string>
     <string name="mandatory_field">Campo obbligatorio</string>
-    <string name="edit">Modifica</string>
+<!--    <string name="edit">Modifica</string>-->
     <string name="servizio_nome">Coppia/Sorella</string>
     <string name="nome">Nome</string>
     <string name="cognome">Cognome</string>

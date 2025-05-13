@@ -21,7 +21,6 @@ import it.cammino.gestionecomunita.dialog.SimpleDialogFragment
 import it.cammino.gestionecomunita.util.getSerializableWrapper
 import it.cammino.gestionecomunita.util.setEnterTransition
 
-@Suppress("unused")
 class SmallEditSeminaristaDialogFragment : EditSeminaristaDialogFragment() {
 
     private val builder: Builder?

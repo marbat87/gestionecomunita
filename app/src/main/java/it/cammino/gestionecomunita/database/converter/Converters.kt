@@ -6,7 +6,6 @@ import it.cammino.gestionecomunita.database.entity.ResponsabileSeminario
 import it.cammino.gestionecomunita.database.entity.Vocazione
 import java.sql.Date
 
-@Suppress("unused")
 class Converters {
 
     @TypeConverter

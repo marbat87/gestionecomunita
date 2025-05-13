@@ -23,11 +23,11 @@ class SeminarioDetailHostActivity : ThemeableActivity() {
             val args = Bundle()
             args.putBoolean(
                 SeminarioDetailFragment.EDIT_MODE,
-                this.intent.extras?.getBoolean(SeminarioDetailFragment.EDIT_MODE) ?: true
+                this.intent.extras?.getBoolean(SeminarioDetailFragment.EDIT_MODE) != false
             )
             args.putBoolean(
                 SeminarioDetailFragment.CREATE_MODE,
-                this.intent.extras?.getBoolean(SeminarioDetailFragment.CREATE_MODE) ?: true
+                this.intent.extras?.getBoolean(SeminarioDetailFragment.CREATE_MODE) != false
             )
             args.putLong(
                 SeminarioDetailFragment.ARG_ITEM_ID,

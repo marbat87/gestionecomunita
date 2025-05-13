@@ -11,7 +11,6 @@ import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.dialog.ViewVisitaDialogFragment
 import it.cammino.gestionecomunita.util.getSerializableWrapper
 
-@Suppress("unused")
 class LargeViewVisitaDialogFragment : ViewVisitaDialogFragment() {
 
     private val builder: Builder?

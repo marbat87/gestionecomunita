@@ -2,7 +2,6 @@ package it.cammino.gestionecomunita.ui.comunita.detail
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
@@ -12,8 +11,8 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.text.isDigitsOnly
-import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
@@ -33,7 +32,11 @@ import it.cammino.gestionecomunita.database.entity.Fratello
 import it.cammino.gestionecomunita.database.entity.Passaggio
 import it.cammino.gestionecomunita.database.entity.Promemoria
 import it.cammino.gestionecomunita.databinding.FragmentCommunityDetailBinding
-import it.cammino.gestionecomunita.dialog.*
+import it.cammino.gestionecomunita.dialog.AddNotificationDialogFragment
+import it.cammino.gestionecomunita.dialog.CommunityHistoryDialogFragment
+import it.cammino.gestionecomunita.dialog.DialogState
+import it.cammino.gestionecomunita.dialog.EditBrotherDialogFragment
+import it.cammino.gestionecomunita.dialog.SimpleDialogFragment
 import it.cammino.gestionecomunita.dialog.large.LargeCommunityHistoryDialogFragment
 import it.cammino.gestionecomunita.dialog.large.LargeEditBrotherDialogFragment
 import it.cammino.gestionecomunita.dialog.small.SmallCommunityHistoryDialogFragment
@@ -41,14 +44,18 @@ import it.cammino.gestionecomunita.dialog.small.SmallEditBrotherDialogFragment
 import it.cammino.gestionecomunita.item.ExpandableBrotherItem
 import it.cammino.gestionecomunita.item.expandableBrotherItem
 import it.cammino.gestionecomunita.ui.notifications.CommunityNotificationsFragment
-import it.cammino.gestionecomunita.util.*
+import it.cammino.gestionecomunita.util.StringUtils
+import it.cammino.gestionecomunita.util.Utility
+import it.cammino.gestionecomunita.util.setupDatePicker
+import it.cammino.gestionecomunita.util.systemLocale
+import it.cammino.gestionecomunita.util.validateMandatoryField
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.sql.Date
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
 
 
 open class CommunityDetailFragment : Fragment() {
@@ -92,8 +99,7 @@ open class CommunityDetailFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCommunityDetailBinding.inflate(inflater, container, false)
         return binding.root
@@ -105,24 +111,17 @@ open class CommunityDetailFragment : Fragment() {
 
         val isTablet = resources.getBoolean(R.bool.tablet_layout)
 
-        if (!isTablet)
-            binding.appBarLayout.statusBarForeground = ColorDrawable(
-                ContextCompat.getColor(
-                    requireContext(),
-                    android.R.color.transparent
-                )
-            )
+        if (!isTablet) binding.appBarLayout.statusBarForeground = ContextCompat.getColor(
+            requireContext(), android.R.color.transparent
+        ).toDrawable()
 
-        if (isTablet && !viewModel.createMode)
-            binding.appBar.isVisible = false
+        if (isTablet && !viewModel.createMode) binding.appBar.isVisible = false
 
-        if (isTablet && viewModel.createMode)
-            binding.materialTabs.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    android.R.color.transparent
-                )
+        if (isTablet && viewModel.createMode) binding.materialTabs.setBackgroundColor(
+            ContextCompat.getColor(
+                requireContext(), android.R.color.transparent
             )
+        )
 
         binding.appBar.setNavigationOnClickListener {
             activity?.finishAfterTransition()
@@ -139,8 +138,7 @@ open class CommunityDetailFragment : Fragment() {
         binding.salvaComunita.isVisible = viewModel.createMode
         binding.bottomAppBar.isVisible = !viewModel.createMode
 
-        if (savedInstanceState == null)
-            lifecycleScope.launch { retrieveData() }
+        if (savedInstanceState == null) lifecycleScope.launch { retrieveData() }
 
         editMode(viewModel.editMode.value == true || viewModel.createMode)
         viewModel.editMode.observe(viewLifecycleOwner) {
@@ -151,19 +149,15 @@ open class CommunityDetailFragment : Fragment() {
             mMainActivity?.let { mActivity ->
                 val builder = EditBrotherDialogFragment.Builder(
                     mActivity, ADD_BROTHER
-                )
-                    .setEditMode(false)
+                ).setEditMode(false)
                 if (mActivity.resources.getBoolean(R.bool.large_layout)) {
-                    builder.positiveButton(R.string.save)
-                        .negativeButton(android.R.string.cancel)
+                    builder.positiveButton(R.string.save).negativeButton(android.R.string.cancel)
                     LargeEditBrotherDialogFragment.show(
-                        builder,
-                        mActivity.supportFragmentManager
+                        builder, mActivity.supportFragmentManager
                     )
                 } else {
                     SmallEditBrotherDialogFragment.show(
-                        builder,
-                        mActivity.supportFragmentManager
+                        builder, mActivity.supportFragmentManager
                     )
                 }
             }
@@ -174,22 +168,17 @@ open class CommunityDetailFragment : Fragment() {
         }
 
         binding.dataConvivenzaTextField.editText.setupDatePicker(
-            requireActivity(),
-            "dataConvivenzaTextField",
-            R.string.data_convivenza
+            requireActivity(), "dataConvivenzaTextField", R.string.data_convivenza
         )
 
         binding.dataVisitaTextField.editText.setupDatePicker(
-            requireActivity(),
-            "dataVisitaTextField",
-            R.string.data_ultima_visita
+            requireActivity(), "dataVisitaTextField", R.string.data_ultima_visita
         )
 
         binding.calendarToday.setOnClickListener {
             binding.dataVisitaTextField.editText?.setText(
                 Utility.getStringFromDate(
-                    requireContext(),
-                    Date(Calendar.getInstance().time.time)
+                    requireContext(), Date(Calendar.getInstance().time.time)
                 )
             )
         }
@@ -231,11 +220,8 @@ open class CommunityDetailFragment : Fragment() {
                     mMainActivity?.let { mActivity ->
                         SimpleDialogFragment.show(
                             SimpleDialogFragment.Builder(
-                                mActivity,
-                                DELETE_COMMUNITY
-                            )
-                                .title(R.string.delete_community)
-                                .icon(R.drawable.delete_24px)
+                                mActivity, DELETE_COMMUNITY
+                            ).title(R.string.delete_community).icon(R.drawable.delete_24px)
                                 .content(R.string.delete_community_dialog)
                                 .positiveButton(R.string.remove)
                                 .negativeButton(android.R.string.cancel),
@@ -254,13 +240,11 @@ open class CommunityDetailFragment : Fragment() {
                         if (mActivity.resources.getBoolean(R.bool.large_layout)) {
                             builder.positiveButton(android.R.string.ok)
                             LargeCommunityHistoryDialogFragment.show(
-                                builder,
-                                mActivity.supportFragmentManager
+                                builder, mActivity.supportFragmentManager
                             )
                         } else {
                             SmallCommunityHistoryDialogFragment.show(
-                                builder,
-                                mActivity.supportFragmentManager
+                                builder, mActivity.supportFragmentManager
                             )
                         }
                     }
@@ -286,11 +270,8 @@ open class CommunityDetailFragment : Fragment() {
                         mMainActivity?.let { mActivity ->
                             SimpleDialogFragment.show(
                                 SimpleDialogFragment.Builder(
-                                    mActivity,
-                                    UNDO_CHANGE
-                                )
-                                    .title(R.string.annulla_modifiche_title)
-                                    .icon(R.drawable.undo_24px)
+                                    mActivity, UNDO_CHANGE
+                                ).title(R.string.annulla_modifiche_title).icon(R.drawable.undo_24px)
                                     .content(R.string.annulla_modifiche_dialog)
                                     .positiveButton(R.string.annulla_modifiche_confirm)
                                     .negativeButton(android.R.string.cancel),
@@ -316,9 +297,7 @@ open class CommunityDetailFragment : Fragment() {
 
         mAdapter.addEventHooks(
             listOf(
-                cancellaFratelloHook,
-                expandCollapeHook,
-                modificaFratelloHook
+                cancellaFratelloHook, expandCollapeHook, modificaFratelloHook
             )
         )
 
@@ -339,21 +318,18 @@ open class CommunityDetailFragment : Fragment() {
         outState.putCharSequence("catechistiTextField", binding.catechistiTextField.editText?.text)
         outState.putCharSequence("emailTextField", binding.emailTextField.editText?.text)
         outState.putCharSequence(
-            "responsabileTextField",
-            binding.responsabileTextField.editText?.text
+            "responsabileTextField", binding.responsabileTextField.editText?.text
         )
         outState.putCharSequence("telefonoTextField", binding.telefonoTextField.editText?.text)
         outState.putCharSequence("tappaAutcomplete", binding.tappaAutcomplete.text)
         outState.putCharSequence(
-            "dataConvivenzaTextField",
-            binding.dataConvivenzaTextField.editText?.text
+            "dataConvivenzaTextField", binding.dataConvivenzaTextField.editText?.text
         )
         outState.putCharSequence("dataVisitaTextField", binding.dataVisitaTextField.editText?.text)
         outState.putCharSequence("noteTextField", binding.noteTextField.editText?.text)
         outState.putCharSequence("anniTextField", binding.anniTextField.editText?.text)
 
-        viewModel.elementi =
-            mAdapter.itemAdapter.adapterItems as? ArrayList<ExpandableBrotherItem>
+        viewModel.elementi = mAdapter.itemAdapter.adapterItems as? ArrayList<ExpandableBrotherItem>
 
     }
 
@@ -361,8 +337,7 @@ open class CommunityDetailFragment : Fragment() {
         super.onViewStateRestored(savedInstanceState)
         Log.d(TAG, "onViewStateRestored")
         savedInstanceState?.let { instance ->
-            if (viewModel.createMode)
-                binding.lastEditDate.isVisible = false
+            if (viewModel.createMode) binding.lastEditDate.isVisible = false
             else {
                 binding.lastEditDate.text = getString(
                     R.string.data_ultima_modifica,
@@ -514,15 +489,10 @@ open class CommunityDetailFragment : Fragment() {
                 viewModel.selectedFratello = item.position
                 SimpleDialogFragment.show(
                     SimpleDialogFragment.Builder(
-                        mActivity,
-                        DELETE_BROTHER
-                    )
-                        .title(R.string.delete_fratello)
-                        .icon(R.drawable.delete_24px)
-                        .content(R.string.delete_fratello_dialog)
-                        .positiveButton(R.string.remove)
-                        .negativeButton(android.R.string.cancel),
-                    mActivity.supportFragmentManager
+                        mActivity, DELETE_BROTHER
+                    ).title(R.string.delete_fratello).icon(R.drawable.delete_24px)
+                        .content(R.string.delete_fratello_dialog).positiveButton(R.string.remove)
+                        .negativeButton(android.R.string.cancel), mActivity.supportFragmentManager
                 )
             }
         }
@@ -540,9 +510,8 @@ open class CommunityDetailFragment : Fragment() {
             fastAdapter: FastAdapter<ExpandableBrotherItem>,
             item: ExpandableBrotherItem
         ) {
-            ViewCompat.animate(v.findViewById(R.id.group_indicator))
-                .rotation(if (item.isExpanded) 180f else 0f)
-                .start()
+            v.findViewById<View>(R.id.group_indicator).animate()
+                .rotation(if (item.isExpanded) 180f else 0f).start()
             item.isExpanded = !item.isExpanded
             fastAdapter.notifyItemChanged(item.position)
         }
@@ -565,32 +534,22 @@ open class CommunityDetailFragment : Fragment() {
                 viewModel.selectedFratello = item.position
                 val builder = EditBrotherDialogFragment.Builder(
                     mActivity, EDIT_BROTHER
-                )
-                    .nomePrefill(item.nome)
-                    .cognomePrefill(item.cognome)
-                    .statoCivilePrefill(item.statoCivile)
-                    .setConiugePrefill(item.coniuge)
-                    .numeroFigliPrefill(item.numFigli)
-                    .setDataNascitaPrefill(item.annoNascita)
-                    .setCarismaPrefill(item.carisma)
-                    .setTribuPrefill(item.tribu)
+                ).nomePrefill(item.nome).cognomePrefill(item.cognome)
+                    .statoCivilePrefill(item.statoCivile).setConiugePrefill(item.coniuge)
+                    .numeroFigliPrefill(item.numFigli).setDataNascitaPrefill(item.annoNascita)
+                    .setCarismaPrefill(item.carisma).setTribuPrefill(item.tribu)
                     .setComunitaOriginePrefill(item.comunitaOrigine)
-                    .setDataArrivoPrefill(item.dataArrivo)
-                    .setStatoPrefill(item.stato)
-                    .setNotePrefill(item.note)
-                    .dataInizioCamminoPrefill(item.dataInizioCammino)
+                    .setDataArrivoPrefill(item.dataArrivo).setStatoPrefill(item.stato)
+                    .setNotePrefill(item.note).dataInizioCamminoPrefill(item.dataInizioCammino)
                     .setEditMode(true)
                 if (mActivity.resources.getBoolean(R.bool.large_layout)) {
-                    builder.positiveButton(R.string.save)
-                        .negativeButton(android.R.string.cancel)
+                    builder.positiveButton(R.string.save).negativeButton(android.R.string.cancel)
                     LargeEditBrotherDialogFragment.show(
-                        builder,
-                        mActivity.supportFragmentManager
+                        builder, mActivity.supportFragmentManager
                     )
                 } else {
                     SmallEditBrotherDialogFragment.show(
-                        builder,
-                        mActivity.supportFragmentManager
+                        builder, mActivity.supportFragmentManager
                     )
                 }
             }
@@ -627,27 +586,20 @@ open class CommunityDetailFragment : Fragment() {
             )
             viewModel.comunita.note =
                 binding.noteTextField.editText?.text?.toString().orEmpty().trim()
-            viewModel.comunita.dataUltimaModifica =
-                Date(Calendar.getInstance().time.time)
+            viewModel.comunita.dataUltimaModifica = Date(Calendar.getInstance().time.time)
 
-            if (viewModel.createMode)
-                lifecycleScope.launch { saveComunita() }
-            else
-                lifecycleScope.launch {
-                    updateComunita()
-                    retrieveData()
-                }
+            if (viewModel.createMode) lifecycleScope.launch { saveComunita() }
+            else lifecycleScope.launch {
+                updateComunita()
+                retrieveData()
+            }
         } else {
             mMainActivity?.let { mActivity ->
                 SimpleDialogFragment.show(
                     SimpleDialogFragment.Builder(
-                        mActivity,
-                        ERROR_DIALOG
-                    )
-                        .title(R.string.error)
-                        .icon(R.drawable.error_24px)
-                        .content(R.string.campi_non_compilati)
-                        .positiveButton(android.R.string.ok),
+                        mActivity, ERROR_DIALOG
+                    ).title(R.string.error).icon(R.drawable.error_24px)
+                        .content(R.string.campi_non_compilati).positiveButton(android.R.string.ok),
                     mActivity.supportFragmentManager
                 )
             }
@@ -727,8 +679,7 @@ open class CommunityDetailFragment : Fragment() {
     }
 
     private fun getTimestampFormatted(dateTimestamp: Date?): String {
-        if (dateTimestamp == null)
-            return ""
+        if (dateTimestamp == null) return ""
         val df = DateFormat.getDateTimeInstance(
             DateFormat.SHORT, DateFormat.MEDIUM, requireContext().resources.systemLocale
         )
@@ -737,54 +688,43 @@ open class CommunityDetailFragment : Fragment() {
             val pattern = df.toPattern().replace("y+".toRegex(), "yyyy")
             df.applyPattern(pattern)
             df.format(dateTimestamp)
-        } else
-            df.format(dateTimestamp)
+        } else df.format(dateTimestamp)
     }
 
     private fun validateForm(): Boolean {
         var valid = true
 
-        if (!requireContext().validateMandatoryField(binding.numeroTextField))
-            valid = false
+        if (!requireContext().validateMandatoryField(binding.numeroTextField)) valid = false
 
-        if (!requireContext().validateMandatoryField(binding.parrocchiaTextField))
-            valid = false
+        if (!requireContext().validateMandatoryField(binding.parrocchiaTextField)) valid = false
 
-        if (!requireContext().validateMandatoryField(binding.tappaTextField))
-            valid = false
+        if (!requireContext().validateMandatoryField(binding.tappaTextField)) valid = false
 
         binding.emailTextField.editText?.let {
             if (!it.text.isNullOrEmpty() && !Patterns.EMAIL_ADDRESS.matcher(it.text).matches()) {
                 binding.emailTextField.error = getString(R.string.invalid_email)
                 valid = false
-            } else
-                binding.emailTextField.error = null
+            } else binding.emailTextField.error = null
         }
 
         binding.dataConvivenzaTextField.editText?.let {
-            if (!it.text.isNullOrEmpty() &&
-                Utility.getDateFromString(
-                    requireContext(),
-                    it.text.toString()
+            if (!it.text.isNullOrEmpty() && Utility.getDateFromString(
+                    requireContext(), it.text.toString()
                 ) == null
             ) {
                 binding.dataConvivenzaTextField.error = getString(R.string.invalid_date)
                 valid = false
-            } else
-                binding.dataConvivenzaTextField.error = null
+            } else binding.dataConvivenzaTextField.error = null
         }
 
         binding.dataVisitaTextField.editText?.let {
-            if (!it.text.isNullOrEmpty() &&
-                Utility.getDateFromString(
-                    requireContext(),
-                    it.text.toString()
+            if (!it.text.isNullOrEmpty() && Utility.getDateFromString(
+                    requireContext(), it.text.toString()
                 ) == null
             ) {
                 binding.dataVisitaTextField.error = getString(R.string.invalid_date)
                 valid = false
-            } else
-                binding.dataVisitaTextField.error = null
+            } else binding.dataVisitaTextField.error = null
         }
 
 
@@ -825,8 +765,7 @@ open class CommunityDetailFragment : Fragment() {
         withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
             val db = ComunitaDatabase.getInstance(requireContext())
             updateHistory(viewModel.listId)
-            db.comunitaDao()
-                .updateComnuita(viewModel.comunita)
+            db.comunitaDao().updateComnuita(viewModel.comunita)
             db.fratelloDao().truncateTableByComunita(viewModel.listId)
             val fratelli = ArrayList<Fratello>()
             viewModel.elementi =
@@ -882,8 +821,7 @@ open class CommunityDetailFragment : Fragment() {
             fragment?.let {
                 mMainActivity?.supportFragmentManager?.beginTransaction()?.remove(it)?.commit()
             }
-        } else
-            activity?.finishAfterTransition()
+        } else activity?.finishAfterTransition()
     }
 
     private suspend fun addPromemoria(idComunita: Long, data: Date?, descrizione: String) {
@@ -899,19 +837,16 @@ open class CommunityDetailFragment : Fragment() {
             requireActivity().findViewById(android.R.id.content),
             getString(R.string.promemoria_aggiunto),
             Snackbar.LENGTH_SHORT
-        )
-            .show()
+        ).show()
     }
 
     private suspend fun retrieveData() {
         Log.d(TAG, "createMode ${viewModel.createMode}")
         if (!viewModel.createMode) {
             withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
-                val comunitaFratello =
-                    ComunitaDatabase.getInstance(requireContext()).fratelloDao()
-                        .getComunitaWithFratelli(viewModel.listId)
-                if (comunitaFratello != null)
-                    viewModel.comunita = comunitaFratello.comunita
+                val comunitaFratello = ComunitaDatabase.getInstance(requireContext()).fratelloDao()
+                    .getComunitaWithFratelli(viewModel.listId)
+                if (comunitaFratello != null) viewModel.comunita = comunitaFratello.comunita
                 viewModel.comunitaFratello = comunitaFratello
             }
             binding.lastEditDate.text = getString(
@@ -927,11 +862,10 @@ open class CommunityDetailFragment : Fragment() {
             binding.responsabileTextField.editText?.setText(viewModel.comunita.responsabile)
             binding.telefonoTextField.editText?.setText(viewModel.comunita.telefono)
 
-            if (viewModel.comunita.idTappa != -1)
-                binding.tappaAutcomplete.setText(
-                    requireContext().resources.getTextArray(R.array.passaggi_entries)[viewModel.comunita.idTappa],
-                    false
-                )
+            if (viewModel.comunita.idTappa != -1) binding.tappaAutcomplete.setText(
+                requireContext().resources.getTextArray(R.array.passaggi_entries)[viewModel.comunita.idTappa],
+                false
+            )
             else {
                 binding.tappaAutcomplete.text = null
             }
@@ -939,8 +873,7 @@ open class CommunityDetailFragment : Fragment() {
             viewModel.comunita.dataConvivenza?.let {
                 binding.dataConvivenzaTextField.editText?.setText(
                     Utility.getStringFromDate(
-                        requireContext(),
-                        it
+                        requireContext(), it
                     )
                 )
             } ?: run {
@@ -950,8 +883,7 @@ open class CommunityDetailFragment : Fragment() {
             viewModel.comunita.dataUltimaVisita?.let {
                 binding.dataVisitaTextField.editText?.setText(
                     Utility.getStringFromDate(
-                        requireContext(),
-                        it
+                        requireContext(), it
                     )
                 )
             } ?: run {
@@ -993,14 +925,12 @@ open class CommunityDetailFragment : Fragment() {
             viewModel.elementi?.forEach { it.editable = false }
             viewModel.elementi?.let { mAdapter.set(it) }
         } else {
-            if (viewModel.elementi == null)
-                viewModel.elementi = ArrayList()
+            if (viewModel.elementi == null) viewModel.elementi = ArrayList()
             viewModel.elementi?.let { mAdapter.set(it) }
             binding.lastEditDate.isVisible = false
             val passaggio = requireContext().resources.getTextArray(R.array.passaggi_entries)[0]
             binding.tappaAutcomplete.setText(
-                passaggio,
-                false
+                passaggio, false
             )
         }
         viewModel.fratelliPresenti = viewModel.elementi.orEmpty().isNotEmpty()

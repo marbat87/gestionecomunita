@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -56,9 +55,7 @@ class IncontriFragment : AccountMenuFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMeetingsBinding.inflate(inflater, container, false)
         return binding.root
@@ -102,13 +99,11 @@ class IncontriFragment : AccountMenuFragment() {
                         builder.positiveButton(R.string.save)
                             .negativeButton(android.R.string.cancel)
                         LargeEditMeetingDialogFragment.show(
-                            builder,
-                            mActivity.supportFragmentManager
+                            builder, mActivity.supportFragmentManager
                         )
                     } else {
                         SmallEditMeetingDialogFragment.show(
-                            builder,
-                            mActivity.supportFragmentManager
+                            builder, mActivity.supportFragmentManager
                         )
                     }
                 }
@@ -117,19 +112,13 @@ class IncontriFragment : AccountMenuFragment() {
 
         mAdapterTodo.addEventHooks(
             listOf(
-                cancellaIncontroHook,
-                modificaIncontroHook,
-                expandCollapeHook,
-                doneHook
+                cancellaIncontroHook, modificaIncontroHook, expandCollapeHook, doneHook
             )
         )
 
         mAdapterDone.addEventHooks(
             listOf(
-                cancellaIncontroHook,
-                modificaIncontroHook,
-                expandCollapeHook,
-                toDoHook
+                cancellaIncontroHook, modificaIncontroHook, expandCollapeHook, toDoHook
             )
         )
 
@@ -246,15 +235,11 @@ class IncontriFragment : AccountMenuFragment() {
                 viewModel.selectedIncontroId = item.id
                 SimpleDialogFragment.show(
                     SimpleDialogFragment.Builder(
-                        mActivity,
-                        DELETE_INCONTRO
-                    )
-                        .title(R.string.delete_incontro)
-                        .icon(R.drawable.delete_24px)
+                        mActivity, DELETE_INCONTRO
+                    ).title(R.string.delete_incontro).icon(R.drawable.delete_24px)
                         .content(R.string.delete_incontro_dialog)
                         .positiveButton(R.string.delete_confirm)
-                        .negativeButton(android.R.string.cancel),
-                    mActivity.supportFragmentManager
+                        .negativeButton(android.R.string.cancel), mActivity.supportFragmentManager
                 )
             }
         }
@@ -276,25 +261,17 @@ class IncontriFragment : AccountMenuFragment() {
                 viewModel.selectedIncontroId = item.id
                 val builder = EditMeetingDialogFragment.Builder(
                     mActivity, EDIT_INCONTRO
-                )
-                    .nomePrefill(item.nome)
-                    .cognomePrefill(item.cognome)
-                    .dataIncontroPrefill(item.dataIncontro)
-                    .luogoPrefill(item.luogoIncontro)
-                    .comunitaPrefill(item.idComunita)
-                    .notePrefill(item.note)
-                    .setEditMode(true)
+                ).nomePrefill(item.nome).cognomePrefill(item.cognome)
+                    .dataIncontroPrefill(item.dataIncontro).luogoPrefill(item.luogoIncontro)
+                    .comunitaPrefill(item.idComunita).notePrefill(item.note).setEditMode(true)
                 if (mActivity.resources.getBoolean(R.bool.large_layout)) {
-                    builder.positiveButton(R.string.save)
-                        .negativeButton(android.R.string.cancel)
+                    builder.positiveButton(R.string.save).negativeButton(android.R.string.cancel)
                     LargeEditMeetingDialogFragment.show(
-                        builder,
-                        mActivity.supportFragmentManager
+                        builder, mActivity.supportFragmentManager
                     )
                 } else {
                     SmallEditMeetingDialogFragment.show(
-                        builder,
-                        mActivity.supportFragmentManager
+                        builder, mActivity.supportFragmentManager
                     )
                 }
             }
@@ -313,9 +290,8 @@ class IncontriFragment : AccountMenuFragment() {
             fastAdapter: FastAdapter<ExpandableMeetingItem>,
             item: ExpandableMeetingItem
         ) {
-            ViewCompat.animate(v.findViewById(R.id.group_indicator))
-                .rotation(if (item.isExpanded) 180f else 0f)
-                .start()
+            v.findViewById<View>(R.id.group_indicator).animate()
+                .rotation(if (item.isExpanded) 180f else 0f).start()
             item.isExpanded = !item.isExpanded
             fastAdapter.notifyItemChanged(item.position)
         }
@@ -379,15 +355,13 @@ class IncontriFragment : AccountMenuFragment() {
             if (update) {
                 incontro.idIncontro = idIncontro
                 db.incontroDao().updateIncontro(incontro)
-            } else
-                db.incontroDao().insertIncontro(incontro)
+            } else db.incontroDao().insertIncontro(incontro)
         }
         Snackbar.make(
             requireActivity().findViewById(android.R.id.content),
             getString(if (update) R.string.incontro_modificato else R.string.incontro_aggiunto),
             Snackbar.LENGTH_SHORT
-        )
-            .show()
+        ).show()
     }
 
     private suspend fun removeIncontro(idIncontro: Long) {
@@ -401,19 +375,17 @@ class IncontriFragment : AccountMenuFragment() {
                 rimosso = true
             }
         }
-        if (rimosso)
-            Snackbar.make(
-                requireActivity().findViewById(android.R.id.content),
-                getString(R.string.incontro_cancellato),
-                Snackbar.LENGTH_SHORT
-            ).setAction(getString(android.R.string.cancel).uppercase(resources.systemLocale)) {
-                viewModel.removedIncontro?.let {
-                    lifecycleScope.launch {
-                        restoreIncontro(it)
-                    }
+        if (rimosso) Snackbar.make(
+            requireActivity().findViewById(android.R.id.content),
+            getString(R.string.incontro_cancellato),
+            Snackbar.LENGTH_SHORT
+        ).setAction(getString(android.R.string.cancel).uppercase(resources.systemLocale)) {
+            viewModel.removedIncontro?.let {
+                lifecycleScope.launch {
+                    restoreIncontro(it)
                 }
             }
-                .show()
+        }.show()
     }
 
     private suspend fun updateIncontro(idIncontro: Long, done: Boolean) {
@@ -435,8 +407,7 @@ class IncontriFragment : AccountMenuFragment() {
 
     private suspend fun restoreIncontro(incontro: Incontro) {
         withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
-            ComunitaDatabase.getInstance(requireContext()).incontroDao()
-                .insertIncontro(incontro)
+            ComunitaDatabase.getInstance(requireContext()).incontroDao().insertIncontro(incontro)
         }
     }
 

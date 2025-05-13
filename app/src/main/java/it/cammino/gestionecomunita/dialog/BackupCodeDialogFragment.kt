@@ -24,7 +24,6 @@ import it.cammino.gestionecomunita.util.getSerializableWrapper
 import java.io.Serializable
 
 
-@Suppress("unused")
 class BackupCodeDialogFragment : DialogFragment() {
 
     private val builder: Builder?

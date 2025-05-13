@@ -23,11 +23,11 @@ class CommunityDetailHostActivity : ThemeableActivity() {
             val args = Bundle()
             args.putBoolean(
                 CommunityDetailFragment.EDIT_MODE,
-                this.intent.extras?.getBoolean(CommunityDetailFragment.EDIT_MODE) ?: true
+                this.intent.extras?.getBoolean(CommunityDetailFragment.EDIT_MODE) != false
             )
             args.putBoolean(
                 CommunityDetailFragment.CREATE_MODE,
-                this.intent.extras?.getBoolean(CommunityDetailFragment.CREATE_MODE) ?: true
+                this.intent.extras?.getBoolean(CommunityDetailFragment.CREATE_MODE) != false
             )
             args.putLong(
                 CommunityDetailFragment.ARG_ITEM_ID,

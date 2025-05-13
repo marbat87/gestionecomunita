@@ -1,9 +1,6 @@
-@file:Suppress("unused")
-
 package it.cammino.gestionecomunita.util
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
@@ -12,7 +9,6 @@ import android.os.Build
 import android.text.InputType
 import android.util.TypedValue
 import android.view.MotionEvent
-import android.view.View
 import android.view.WindowManager
 import android.widget.EditText
 import androidx.annotation.RequiresApi
@@ -23,27 +19,30 @@ import com.google.android.material.elevation.SurfaceColors
 import com.google.android.material.textfield.TextInputLayout
 import it.cammino.gestionecomunita.R
 import java.sql.Date
-import java.util.*
+import java.util.Locale
 
 @Suppress("DEPRECATION")
 private fun Configuration.getSystemLocaleLegacy(): Locale {
     return locale
 }
 
-@TargetApi(Build.VERSION_CODES.N)
+@RequiresApi(Build.VERSION_CODES.N)
 private fun Configuration.getSystemLocaleN(): Locale {
     return locales.get(0)
 }
 
 val Resources.systemLocale: Locale
     get() {
-        return if (OSUtils.hasN())
-            configuration.getSystemLocaleN()
-        else
-            configuration.getSystemLocaleLegacy()
+        return if (OSUtils.hasN()) configuration.getSystemLocaleN()
+        else configuration.getSystemLocaleLegacy()
     }
 
 fun Activity.setupNavBarColor() {
+    if (!OSUtils.hasV()) setupNavBarColorLegacy()
+}
+
+@Suppress("DEPRECATION")
+fun Activity.setupNavBarColorLegacy() {
     if (OSUtils.hasO()) {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         if (!isDarkMode) setLightNavigationBar()
@@ -54,30 +53,14 @@ fun Activity.setupNavBarColor() {
 @RequiresApi(Build.VERSION_CODES.O)
 fun Activity.setLightNavigationBar() {
     WindowInsetsControllerCompat(
-        window,
-        window.decorView
+        window, window.decorView
     ).isAppearanceLightNavigationBars = true
 }
 
 fun Activity.setLigthStatusBar(light: Boolean) {
     WindowInsetsControllerCompat(
-        window,
-        window.decorView
+        window, window.decorView
     ).isAppearanceLightStatusBars = light
-    setLighStatusBarFlag(light)
-}
-
-private fun Activity.setLighStatusBarFlag(light: Boolean) {
-    if (OSUtils.hasM())
-        setLighStatusBarFlagM(light)
-}
-
-@Suppress("DEPRECATION")
-@RequiresApi(Build.VERSION_CODES.M)
-private fun Activity.setLighStatusBarFlagM(light: Boolean) {
-    if (light)
-        window
-            .decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
 }
 
 fun Context.validateMandatoryField(textInput: TextInputLayout, showError: Boolean = true): Boolean {
@@ -120,23 +103,16 @@ fun EditText?.setupDatePicker(activity: FragmentActivity, tag: String, titleId: 
     this?.setOnKeyListener(null)
     this?.setOnTouchListener { _, motionEvent ->
         if (motionEvent.action == MotionEvent.ACTION_UP) {
-            val picker =
-                MaterialDatePicker.Builder.datePicker()
-                    .setSelection(
-                        if (this.text.isNullOrBlank()) MaterialDatePicker.todayInUtcMilliseconds() else
-                            Utility.getDateFromString(
-                                context,
-                                this.text?.toString() ?: ""
-                            )?.time
-                    )
-                    .setTitleText(titleId)
-                    .build()
+            val picker = MaterialDatePicker.Builder.datePicker().setSelection(
+                if (this.text.isNullOrBlank()) MaterialDatePicker.todayInUtcMilliseconds() else Utility.getDateFromString(
+                    context, this.text?.toString() ?: ""
+                )?.time
+            ).setTitleText(titleId).build()
             picker.show(activity.supportFragmentManager, "${tag}Picker")
             picker.addOnPositiveButtonClickListener {
                 this.setText(
                     Utility.getStringFromDate(
-                        context,
-                        Date(it)
+                        context, Date(it)
                     )
                 )
             }
@@ -147,10 +123,8 @@ fun EditText?.setupDatePicker(activity: FragmentActivity, tag: String, titleId: 
 
 fun TextInputLayout?.validateDate(): Boolean {
     this?.editText?.let {
-        if (!it.text.isNullOrEmpty() &&
-            Utility.getDateFromString(
-                context,
-                it.text.toString()
+        if (!it.text.isNullOrEmpty() && Utility.getDateFromString(
+                context, it.text.toString()
             ) == null
         ) {
             this.error = context.getString(R.string.invalid_date)

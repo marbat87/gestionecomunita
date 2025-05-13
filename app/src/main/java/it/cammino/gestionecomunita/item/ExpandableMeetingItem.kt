@@ -3,7 +3,6 @@ package it.cammino.gestionecomunita.item
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import com.mikepenz.fastadapter.binding.AbstractBindingItem
 import it.cammino.gestionecomunita.R
@@ -46,8 +45,7 @@ class ExpandableMeetingItem : AbstractBindingItem<IncontroExpandableItemBinding>
         get() = R.id.fastadapter_incontro_item_id
 
     override fun createBinding(
-        inflater: LayoutInflater,
-        parent: ViewGroup?
+        inflater: LayoutInflater, parent: ViewGroup?
     ): IncontroExpandableItemBinding {
         return IncontroExpandableItemBinding.inflate(inflater, parent, false)
     }
@@ -63,26 +61,22 @@ class ExpandableMeetingItem : AbstractBindingItem<IncontroExpandableItemBinding>
         binding.textCognome.text = cognome.ifBlank { StringUtils.DASH }
         binding.textLuogo.text = luogoIncontro.ifBlank { StringUtils.DASH }
         binding.textComunita.text = if (idComunita != (-1).toLong()) ctx.getString(
-            R.string.comunita_item_name,
-            numeroComunita,
-            parrocchiaComunita
+            R.string.comunita_item_name, numeroComunita, parrocchiaComunita
         ) else StringUtils.DASH
         binding.textNote.text = note.ifBlank { StringUtils.DASH }
         dataIncontro?.let {
             binding.textData.text = Utility.getStringFromDate(ctx, it)
             binding.incontroData.text = ctx.getString(
-                R.string.data_passaggio_dots,
-                Utility.getStringFromDate(ctx, it)
+                R.string.data_passaggio_dots, Utility.getStringFromDate(ctx, it)
             )
         } ?: run {
             binding.textData.text = StringUtils.DASH
             binding.incontroData.text = ctx.getString(
-                R.string.data_passaggio_dots,
-                StringUtils.ND
+                R.string.data_passaggio_dots, StringUtils.ND
             )
         }
 
-        ViewCompat.animate(binding.incontroIndicator).rotation(if (isExpanded) 0f else 180f).start()
+        binding.incontroIndicator.animate().rotation(if (isExpanded) 0f else 180f).start()
         binding.expansion.isVisible = isExpanded
         binding.todoIncontro.isVisible = isExpanded && done
         binding.doneIncontro.isVisible = isExpanded && !done

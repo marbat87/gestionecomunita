@@ -3,7 +3,6 @@ package it.cammino.gestionecomunita.item
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import com.mikepenz.fastadapter.binding.AbstractBindingItem
 import it.cammino.gestionecomunita.R
@@ -40,8 +39,7 @@ class ExpandableVocazioneMeetingItem :
         get() = R.id.fastadapter_incontro_vocazione_item_id
 
     override fun createBinding(
-        inflater: LayoutInflater,
-        parent: ViewGroup?
+        inflater: LayoutInflater, parent: ViewGroup?
     ): IncontroVocazioneExpandableItemBinding {
         return IncontroVocazioneExpandableItemBinding.inflate(inflater, parent, false)
     }
@@ -59,18 +57,16 @@ class ExpandableVocazioneMeetingItem :
         dataIncontro?.let {
             binding.textData.text = Utility.getStringFromDate(ctx, it)
             binding.incontroData.text = ctx.getString(
-                R.string.data_passaggio_dots,
-                Utility.getStringFromDate(ctx, it)
+                R.string.data_passaggio_dots, Utility.getStringFromDate(ctx, it)
             )
         } ?: run {
             binding.textData.text = StringUtils.DASH
             binding.incontroData.text = ctx.getString(
-                R.string.data_passaggio_dots,
-                StringUtils.ND
+                R.string.data_passaggio_dots, StringUtils.ND
             )
         }
 
-        ViewCompat.animate(binding.incontroIndicator).rotation(if (isExpanded) 0f else 180f).start()
+        binding.incontroIndicator.animate().rotation(if (isExpanded) 0f else 180f).start()
         binding.expansion.isVisible = isExpanded
 
     }

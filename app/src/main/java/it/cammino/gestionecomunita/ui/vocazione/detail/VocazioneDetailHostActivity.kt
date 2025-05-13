@@ -23,11 +23,11 @@ class VocazioneDetailHostActivity : ThemeableActivity() {
             val args = Bundle()
             args.putBoolean(
                 VocazioneDetailFragment.EDIT_MODE,
-                this.intent.extras?.getBoolean(VocazioneDetailFragment.EDIT_MODE) ?: true
+                this.intent.extras?.getBoolean(VocazioneDetailFragment.EDIT_MODE) != false
             )
             args.putBoolean(
                 VocazioneDetailFragment.CREATE_MODE,
-                this.intent.extras?.getBoolean(VocazioneDetailFragment.CREATE_MODE) ?: true
+                this.intent.extras?.getBoolean(VocazioneDetailFragment.CREATE_MODE) != false
             )
             args.putLong(
                 VocazioneDetailFragment.ARG_ITEM_ID,

@@ -14,11 +14,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.material.textfield.TextInputLayout
 import it.cammino.gestionecomunita.R
-import it.cammino.gestionecomunita.util.*
+import it.cammino.gestionecomunita.util.StringUtils
+import it.cammino.gestionecomunita.util.Utility
+import it.cammino.gestionecomunita.util.capitalize
+import it.cammino.gestionecomunita.util.setupDatePicker
+import it.cammino.gestionecomunita.util.validateMandatoryField
 import java.io.Serializable
 import java.sql.Date
 
-@Suppress("unused")
 open class EditBrotherDialogFragment : DialogFragment() {
 
     protected val viewModel: DialogViewModel by viewModels({ requireActivity() })

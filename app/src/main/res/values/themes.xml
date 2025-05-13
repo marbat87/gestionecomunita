@@ -40,7 +40,7 @@
     </style>
 
     <style name="Gestionecomunita.Theme" parent="Base.Gestionecomunita.Theme">
-        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
     <style name="Base.Gestionecomunita.Theme" parent="Theme.Gestionecomunita">

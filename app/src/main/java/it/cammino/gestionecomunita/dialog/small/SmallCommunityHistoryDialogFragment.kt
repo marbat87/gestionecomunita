@@ -18,7 +18,6 @@ import it.cammino.gestionecomunita.dialog.CommunityHistoryDialogFragment
 import it.cammino.gestionecomunita.util.getSerializableWrapper
 import it.cammino.gestionecomunita.util.setEnterTransition
 
-@Suppress("unused")
 class SmallCommunityHistoryDialogFragment : CommunityHistoryDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -3,7 +3,6 @@ package it.cammino.gestionecomunita.item
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import com.mikepenz.fastadapter.binding.AbstractBindingItem
 import it.cammino.gestionecomunita.R
@@ -91,7 +90,7 @@ class ExpandableBrotherItem : AbstractBindingItem<FratelloDetailItemBinding>(),
             binding.textDataInizioCammino.text = StringUtils.DASH
         }
 
-        ViewCompat.animate(binding.groupIndicator).rotation(if (isExpanded) 0f else 180f).start()
+        binding.groupIndicator.animate().rotation(if (isExpanded) 0f else 180f).start()
         binding.texts.isVisible = isExpanded
         binding.buttons.isVisible = editable && isExpanded
 

@@ -3,7 +3,6 @@ package it.cammino.gestionecomunita.item
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.view.ViewCompat
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.IAdapter
 import com.mikepenz.fastadapter.IClickable
@@ -36,12 +35,12 @@ class ExpandableItem : AbstractExpandableItem<ExpandableItem.ViewHolder>(),
         { v: View?, adapter: IAdapter<ExpandableItem>, item: ExpandableItem, position: Int ->
             v?.let {
                 if (!item.isExpanded) {
-                    ViewCompat.animate(it.findViewById(R.id.group_indicator)).rotation(180f).start()
+                    it.findViewById<View>(R.id.group_indicator).animate().rotation(180f).start()
                 } else {
-                    ViewCompat.animate(it.findViewById(R.id.group_indicator)).rotation(0f).start()
+                    it.findViewById<View>(R.id.group_indicator).animate().rotation(0f).start()
                 }
             }
-            mOnClickListener?.invoke(v, adapter, item, position) ?: true
+            mOnClickListener?.invoke(v, adapter, item, position) != false
         }
         set(onClickListener) {
             this.mOnClickListener = onClickListener // on purpose

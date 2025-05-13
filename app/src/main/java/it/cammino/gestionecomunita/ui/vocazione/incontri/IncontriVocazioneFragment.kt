@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -55,9 +54,7 @@ class IncontriVocazioneFragment : AccountMenuFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentVocazioniMeetingsBinding.inflate(inflater, container, false)
         return binding.root
@@ -78,9 +75,7 @@ class IncontriVocazioneFragment : AccountMenuFragment() {
 
         mAdapter.addEventHooks(
             listOf(
-                cancellaIncontroHook,
-                modificaIncontroHook,
-                expandCollapeHook
+                cancellaIncontroHook, modificaIncontroHook, expandCollapeHook
             )
         )
 
@@ -168,15 +163,11 @@ class IncontriVocazioneFragment : AccountMenuFragment() {
                 viewModel.selectedIncontroId = item.id
                 SimpleDialogFragment.show(
                     SimpleDialogFragment.Builder(
-                        mActivity,
-                        DELETE_INCONTRO
-                    )
-                        .title(R.string.delete_incontro)
-                        .icon(R.drawable.delete_24px)
+                        mActivity, DELETE_INCONTRO
+                    ).title(R.string.delete_incontro).icon(R.drawable.delete_24px)
                         .content(R.string.delete_incontro_dialog)
                         .positiveButton(R.string.delete_confirm)
-                        .negativeButton(android.R.string.cancel),
-                    mActivity.supportFragmentManager
+                        .negativeButton(android.R.string.cancel), mActivity.supportFragmentManager
                 )
             }
         }
@@ -198,23 +189,16 @@ class IncontriVocazioneFragment : AccountMenuFragment() {
                 viewModel.selectedIncontroId = item.id
                 val builder = EditVocazioneMeetingDialogFragment.Builder(
                     mActivity, EDIT_INCONTRO
-                )
-                    .tipoPrefill(item.tipo)
-                    .dataIncontroPrefill(item.dataIncontro)
-                    .luogoPrefill(item.luogoIncontro)
-                    .notePrefill(item.note)
-                    .setEditMode(true)
+                ).tipoPrefill(item.tipo).dataIncontroPrefill(item.dataIncontro)
+                    .luogoPrefill(item.luogoIncontro).notePrefill(item.note).setEditMode(true)
                 if (mActivity.resources.getBoolean(R.bool.large_layout)) {
-                    builder.positiveButton(R.string.save)
-                        .negativeButton(android.R.string.cancel)
+                    builder.positiveButton(R.string.save).negativeButton(android.R.string.cancel)
                     LargeEditVocazioneMeetingDialogFragment.show(
-                        builder,
-                        mActivity.supportFragmentManager
+                        builder, mActivity.supportFragmentManager
                     )
                 } else {
                     SmallEditVocazioneMeetingDialogFragment.show(
-                        builder,
-                        mActivity.supportFragmentManager
+                        builder, mActivity.supportFragmentManager
                     )
                 }
             }
@@ -233,9 +217,8 @@ class IncontriVocazioneFragment : AccountMenuFragment() {
             fastAdapter: FastAdapter<ExpandableVocazioneMeetingItem>,
             item: ExpandableVocazioneMeetingItem
         ) {
-            ViewCompat.animate(v.findViewById(R.id.group_indicator))
-                .rotation(if (item.isExpanded) 180f else 0f)
-                .start()
+            v.findViewById<View>(R.id.group_indicator).animate()
+                .rotation(if (item.isExpanded) 180f else 0f).start()
             item.isExpanded = !item.isExpanded
             fastAdapter.notifyItemChanged(item.position)
         }
@@ -259,15 +242,13 @@ class IncontriVocazioneFragment : AccountMenuFragment() {
             if (update) {
                 incontro.idIncontro = idIncontro
                 db.incontroVocazionaleDao().updateIncontroVocazionale(incontro)
-            } else
-                db.incontroVocazionaleDao().insertIncontroVocazionale(incontro)
+            } else db.incontroVocazionaleDao().insertIncontroVocazionale(incontro)
         }
         Snackbar.make(
             requireActivity().findViewById(android.R.id.content),
             getString(if (update) R.string.incontro_modificato else R.string.incontro_aggiunto),
             Snackbar.LENGTH_SHORT
-        )
-            .show()
+        ).show()
     }
 
     private suspend fun removeIncontro(idIncontro: Long) {
@@ -281,19 +262,17 @@ class IncontriVocazioneFragment : AccountMenuFragment() {
                 rimosso = true
             }
         }
-        if (rimosso)
-            Snackbar.make(
-                requireActivity().findViewById(android.R.id.content),
-                getString(R.string.incontro_cancellato),
-                Snackbar.LENGTH_SHORT
-            ).setAction(getString(android.R.string.cancel).uppercase(resources.systemLocale)) {
-                viewModel.removedIncontro?.let {
-                    lifecycleScope.launch {
-                        restoreIncontro(it)
-                    }
+        if (rimosso) Snackbar.make(
+            requireActivity().findViewById(android.R.id.content),
+            getString(R.string.incontro_cancellato),
+            Snackbar.LENGTH_SHORT
+        ).setAction(getString(android.R.string.cancel).uppercase(resources.systemLocale)) {
+            viewModel.removedIncontro?.let {
+                lifecycleScope.launch {
+                    restoreIncontro(it)
                 }
             }
-                .show()
+        }.show()
     }
 
     private suspend fun restoreIncontro(incontro: IncontroVocazionale) {

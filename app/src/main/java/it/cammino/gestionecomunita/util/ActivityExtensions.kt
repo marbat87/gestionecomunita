@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.ActivityManager
 import android.content.Intent
 import android.os.Build
+import androidx.annotation.AnimRes
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.os.bundleOf
@@ -11,8 +12,6 @@ import com.google.android.material.color.MaterialColors
 import com.google.android.material.transition.platform.MaterialSharedAxis
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.util.StringUtils.SHARED_AXIS
-import java.io.*
-import java.util.*
 
 fun Activity.createTaskDescription(tag: String): ActivityManager.TaskDescription {
     return when (true) {
@@ -56,10 +55,28 @@ private fun Activity.createTaskDescriptionLegacy(tag: String): ActivityManager.T
 }
 
 fun Activity.slideInRight() {
-    overridePendingTransition(
+    overrideOpenTransition(
         R.anim.animate_slide_in_right, R.anim.animate_slide_out_left
     )
 }
+
+fun Activity.overrideOpenTransition(@AnimRes enterAnim: Int, @AnimRes exitAnim: Int) {
+    if (OSUtils.hasU()) overrideOpenTransitionU(enterAnim, exitAnim)
+    else overrideOpenTransitionLegacy(enterAnim, exitAnim)
+}
+
+@RequiresApi(34)
+fun Activity.overrideOpenTransitionU(@AnimRes enterAnim: Int, @AnimRes exitAnim: Int) {
+    overrideActivityTransition(Activity.OVERRIDE_TRANSITION_OPEN, enterAnim, exitAnim)
+}
+
+@Suppress("DEPRECATION")
+fun Activity.overrideOpenTransitionLegacy(@AnimRes enterAnim: Int, @AnimRes exitAnim: Int) {
+    overridePendingTransition(
+        enterAnim, exitAnim
+    )
+}
+
 fun Activity.startActivityWithTransition(intent: Intent, axis: Int) {
     if (OSUtils.isObySamsung()) {
         startActivity(intent)

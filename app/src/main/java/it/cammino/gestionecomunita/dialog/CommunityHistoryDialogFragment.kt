@@ -20,7 +20,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.Serializable
 
-@Suppress("unused")
 open class CommunityHistoryDialogFragment : DialogFragment() {
 
     private val mAdapter: FastItemAdapter<CommunityHistoryListItem> = FastItemAdapter()
