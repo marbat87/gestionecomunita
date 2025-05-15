@@ -15,8 +15,8 @@ android {
         applicationId "it.cammino.gestionecomunita"
         minSdk 23
         targetSdk 35
-        versionCode 1501
-        versionName "1.5.0"
+        versionCode 1600
+        versionName "1.6.0"
     }
 
     buildTypes {
