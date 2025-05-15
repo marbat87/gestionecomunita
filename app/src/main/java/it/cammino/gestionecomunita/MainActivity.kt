@@ -6,16 +6,16 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.isVisible
+import androidx.credentials.ClearCredentialStateRequest
+import androidx.credentials.CredentialManager
+import androidx.credentials.CredentialOption
+import androidx.credentials.GetCredentialRequest
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -23,15 +23,11 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.color.DynamicColors
-import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.platform.MaterialSharedAxis
 import com.google.firebase.auth.FirebaseAuth
@@ -44,7 +40,7 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import com.squareup.picasso.Picasso
+import it.cammino.gestionecomunita.MainActivityViewModel.ProfileAction
 import it.cammino.gestionecomunita.database.ComunitaDatabase
 import it.cammino.gestionecomunita.database.entity.Comunita
 import it.cammino.gestionecomunita.database.entity.ComunitaSeminarista
@@ -85,7 +81,7 @@ import it.cammino.gestionecomunita.ui.vocazione.detail.VocazioneDetailFragment
 import it.cammino.gestionecomunita.ui.vocazione.detail.VocazioneDetailHostActivity
 import it.cammino.gestionecomunita.ui.vocazione.incontri.IncontriVocazioneFragment
 import it.cammino.gestionecomunita.util.StringUtils
-import it.cammino.gestionecomunita.util.getTypedValueResId
+import it.cammino.gestionecomunita.util.Utility
 import it.cammino.gestionecomunita.util.startActivityWithTransition
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -109,10 +105,13 @@ class MainActivity : ThemeableActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
 
-    private var acct: GoogleSignInAccount? = null
-    private var mSignInClient: GoogleSignInClient? = null
+    private lateinit var mCredentialCacheManager: CredentialCacheManager
+
+    private lateinit var mCredentialManager: CredentialManager
+    private var mCredentialRequest: GetCredentialRequest? = null
     private lateinit var auth: FirebaseAuth
     private var profileItem: MenuItem? = null
+    private var profileUiManager: ProfileUiManager? = null
     private var profilePhotoUrl: String = StringUtils.EMPTY_STRING
     private var profileName: String = StringUtils.EMPTY_STRING
     private var profileEmail: String = StringUtils.EMPTY_STRING
@@ -127,20 +126,9 @@ class MainActivity : ThemeableActivity() {
 
         setSupportActionBar(binding.mainToolbar)
 
-        // [START configure_signin]
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            // Your server's client ID, not your Android client ID.
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .build()
+        mCredentialManager = CredentialManager.create(this)
 
-        // [END configure_signin]
-
-        // [START build_client]
-        mSignInClient = GoogleSignIn.getClient(this, gso)
-        // [END build_client]
+        mCredentialCacheManager = CredentialCacheManager(viewModel, this, mCredentialManager)
 
         // Initialize Firebase Auth
         auth = Firebase.auth
@@ -163,6 +151,10 @@ class MainActivity : ThemeableActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        Utility.fixSystemBarPadding(
+            binding.navHostFragmentActivityMain
+        )
 
         navView.getOrCreateBadge(R.id.navigation_notifications)
         navView.getOrCreateBadge(R.id.navigation_incontri)
@@ -230,19 +222,15 @@ class MainActivity : ThemeableActivity() {
             fab.setOnClickListener {
                 val builder = AddNotificationDialogFragment.Builder(
                     this, CommunityDetailFragment.ADD_NOTIFICATION
-                )
-                    .setFreeMode(true)
+                ).setFreeMode(true)
                 if (resources.getBoolean(R.bool.large_layout)) {
-                    builder.positiveButton(R.string.save)
-                        .negativeButton(android.R.string.cancel)
+                    builder.positiveButton(R.string.save).negativeButton(android.R.string.cancel)
                     LargeAddNotificationDialogFragment.show(
-                        builder,
-                        supportFragmentManager
+                        builder, supportFragmentManager
                     )
                 } else {
                     SmallAddNotificationDialogFragment.show(
-                        builder,
-                        supportFragmentManager
+                        builder, supportFragmentManager
                     )
                 }
             }
@@ -254,16 +242,13 @@ class MainActivity : ThemeableActivity() {
                     this, IncontriFragment.ADD_INCONTRO
                 )
                 if (resources.getBoolean(R.bool.large_layout)) {
-                    builder.positiveButton(R.string.save)
-                        .negativeButton(android.R.string.cancel)
+                    builder.positiveButton(R.string.save).negativeButton(android.R.string.cancel)
                     LargeEditMeetingDialogFragment.show(
-                        builder,
-                        supportFragmentManager
+                        builder, supportFragmentManager
                     )
                 } else {
                     SmallEditMeetingDialogFragment.show(
-                        builder,
-                        supportFragmentManager
+                        builder, supportFragmentManager
                     )
                 }
             }
@@ -279,13 +264,11 @@ class MainActivity : ThemeableActivity() {
                         builder.positiveButton(R.string.save)
                             .negativeButton(android.R.string.cancel)
                         LargeEditVocazioneMeetingDialogFragment.show(
-                            builder,
-                            supportFragmentManager
+                            builder, supportFragmentManager
                         )
                     } else {
                         SmallEditVocazioneMeetingDialogFragment.show(
-                            builder,
-                            supportFragmentManager
+                            builder, supportFragmentManager
                         )
                     }
                 } else {
@@ -316,26 +299,19 @@ class MainActivity : ThemeableActivity() {
 
     }
 
+    private suspend fun logout() {
+        mCredentialManager.clearCredentialState(ClearCredentialStateRequest())
+        mCredentialCacheManager.clearCache()
+        updateUI(false)
+        Toast.makeText(this, R.string.disconnected, Toast.LENGTH_SHORT).show()
+    }
+
     override fun onStart() {
         super.onStart()
-        val task = mSignInClient?.silentSignIn()
-        task?.let {
-            if (it.isSuccessful) {
-                // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
-                // and the GoogleSignInResult will be available instantly.
-                Log.d(TAG, "Got cached sign-in")
-                handleSignInResult(task)
-            } else {
-                // If the user has not previously signed in on this device or the sign-in has expired,
-                // this asynchronous branch will attempt to sign in the user silently.  Cross-device
-                // single sign-on will occur in this branch.
-                showProgressDialog()
-
-                task.addOnCompleteListener { mTask: Task<GoogleSignInAccount> ->
-                    Log.d(TAG, "Reconnected")
-                    handleSignInResult(mTask)
-                }
-            }
+        if (PreferenceManager.getDefaultSharedPreferences(this)
+                .getBoolean(Utility.SIGNED_IN, false)
+        ) {
+            signIn(lastAccount = true)
         }
     }
 
@@ -382,38 +358,20 @@ class MainActivity : ThemeableActivity() {
                         when (simpleDialogViewModel.mTag) {
                             BACKUP_NEW_CODE -> {
                                 simpleDialogViewModel.handled = true
-                                ProgressDialogFragment.show(
-                                    ProgressDialogFragment.Builder(this, BACKUP_RUNNING)
-                                        .title(R.string.backup_running_title)
-                                        .icon(R.drawable.cloud_upload_24px)
-                                        .content(R.string.backup_running_content),
-                                    supportFragmentManager
-                                )
-                                lifecycleScope.launch { backupDbPrefs() }
+                                viewModel.profileAction = ProfileAction.BACKUP_NEW_CODE
+                                mCredentialCacheManager.validateToken()
                             }
 
                             BACKUP_OLD_CODE -> {
                                 simpleDialogViewModel.handled = true
-                                ProgressDialogFragment.show(
-                                    ProgressDialogFragment.Builder(this, BACKUP_RUNNING)
-                                        .title(R.string.backup_running_title)
-                                        .icon(R.drawable.cloud_upload_24px)
-                                        .content(R.string.backup_running_content),
-                                    supportFragmentManager
-                                )
-                                lifecycleScope.launch { backupDbPrefs(false) }
+                                viewModel.profileAction = ProfileAction.BACKUP_OLD_CODE
+                                mCredentialCacheManager.validateToken()
                             }
 
                             RESTORE_OLD_CODE -> {
                                 simpleDialogViewModel.handled = true
-                                ProgressDialogFragment.show(
-                                    ProgressDialogFragment.Builder(this, RESTORE_RUNNING)
-                                        .title(R.string.restore_running_title)
-                                        .icon(R.drawable.cloud_download_24px)
-                                        .content(R.string.restore_running_content),
-                                    supportFragmentManager
-                                )
-                                lifecycleScope.launch { restoreDbPrefs(false) }
+                                viewModel.profileAction = ProfileAction.RESTORE_OLD_CODE
+                                mCredentialCacheManager.validateToken()
                             }
 
                             SIGNOUT -> {
@@ -476,15 +434,9 @@ class MainActivity : ThemeableActivity() {
                     when (inputDialogViewModel.mTag) {
                         RESTORE_NEW_CODE -> {
                             simpleDialogViewModel.handled = true
-                            ProgressDialogFragment.show(
-                                ProgressDialogFragment.Builder(this, RESTORE_RUNNING)
-                                    .title(R.string.restore_running_title)
-                                    .icon(R.drawable.cloud_download_24px)
-                                    .content(R.string.restore_running_content),
-                                supportFragmentManager
-                            )
                             viewModel.backupCode = inputDialogViewModel.outputText
-                            lifecycleScope.launch { restoreDbPrefs() }
+                            viewModel.profileAction = ProfileAction.RESTORE_NEW_CODE
+                            mCredentialCacheManager.validateToken()
                         }
                     }
                     profileDialogViewModel.handled = true
@@ -492,109 +444,235 @@ class MainActivity : ThemeableActivity() {
             }
         }
 
+        viewModel.backupRestoreState.observe(this) { state ->
+            state?.let {
+                when (it) {
+                    MainActivityViewModel.BakupRestoreState.RESTORE_STARTED -> {
+                        Log.d(TAG, "MainActivityViewModel.BakupRestoreState.RESTORE_STARTED")
+                        ProgressDialogFragment.show(
+                            ProgressDialogFragment.Builder(this, RESTORE_RUNNING)
+                                .title(R.string.restore_running_title)
+                                .icon(R.drawable.cloud_download_24px)
+                                .content(R.string.restore_running_content), supportFragmentManager
+                        )
+                    }
+
+                    MainActivityViewModel.BakupRestoreState.RESTORE_COMPLETED -> {
+                        Log.d(TAG, "MainActivityViewModel.BakupRestoreState.RESTORE_COMPLETED")
+                        dismissProgressDialog(
+                            RESTORE_RUNNING
+                        )
+                    }
+
+                    MainActivityViewModel.BakupRestoreState.BACKUP_STARTED -> {
+                        Log.d(TAG, "MainActivityViewModel.BakupRestoreState.BACKUP_STARTED")
+                        ProgressDialogFragment.show(
+                            ProgressDialogFragment.Builder(this, BACKUP_RUNNING)
+                                .title(R.string.backup_running_title)
+                                .icon(R.drawable.cloud_upload_24px)
+                                .content(R.string.backup_running_content), supportFragmentManager
+                        )
+                    }
+
+                    MainActivityViewModel.BakupRestoreState.BACKUP_COMPLETED -> {
+                        Log.d(TAG, "MainActivityViewModel.BakupRestoreState.BACKUP_STARTED")
+                        dismissProgressDialog(
+                            BACKUP_RUNNING
+                        )
+                    }
+
+                    MainActivityViewModel.BakupRestoreState.NONE -> {}
+                }
+            }
+        }
+
+        viewModel.httpRequestState.observe(this) { state ->
+            Log.d(TAG, "httpRequestState -> state:$state")
+            state?.let {
+                when (it) {
+                    MainActivityViewModel.ClientState.COMPLETED -> {
+                        Log.d(TAG, "httpRequestState -> mViewModel.sub:${viewModel.sub}")
+                        if (viewModel.sub.isNotEmpty()) {
+                            firebaseAuthWithGoogle()
+                        } else {
+                            signIn(lastAccount = true, forceRefresh = true)
+                        }
+                    }
+
+                    MainActivityViewModel.ClientState.STARTED -> {}
+                }
+            }
+        }
+
+        viewModel.loginState.observe(this) { state ->
+            state?.let {
+                when (it) {
+                    MainActivityViewModel.LOGIN_STATE_STARTED -> {}
+                    MainActivityViewModel.LOGIN_STATE_OK_SILENT -> {
+                        updateUI(true)
+                    }
+
+                    MainActivityViewModel.LOGIN_STATE_OK -> {
+                        handleSignInResult()
+                    }
+
+                    else -> handleErrorResult(it)
+                }
+            }
+        }
+
     }
 
     // [START signIn]
-    private fun signIn() {
-        val signInIntent = mSignInClient?.signInIntent
-        startSignInForResult.launch(signInIntent)
+    private fun signIn(
+        lastAccount: Boolean, forceRefresh: Boolean = false
+    ) {
+        Log.d(TAG, "signIn -> lastAccount: $lastAccount / forceRefresh: $forceRefresh")
+        // [START build_client]
+        buildCredentialRequest(if (lastAccount) buildLastAccountCredentialOption() else buildGoogleCredentialOption())
+        // [END build_client]
+
+        mCredentialRequest?.let {
+            lifecycleScope.launch {
+                mCredentialRequest?.let {
+                    mCredentialCacheManager.getCredential(it, forceRefresh)
+                }
+            }
+        }
     }
 
-    private val startSignInForResult =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-            handleSignInResult(GoogleSignIn.getSignedInAccountFromIntent(result.data))
-        }
+    private fun buildCredentialRequest(credOption: CredentialOption) {
+        mCredentialRequest = GetCredentialRequest.Builder().addCredentialOption(credOption).build()
+    }
+
+    private fun buildLastAccountCredentialOption(): CredentialOption {
+        return GetGoogleIdOption.Builder().setFilterByAuthorizedAccounts(true)
+            .setServerClientId(getString(R.string.default_web_client_id)).setAutoSelectEnabled(true)
+            .build()
+    }
+
+    private fun buildGoogleCredentialOption(): CredentialOption {
+        return GetSignInWithGoogleOption.Builder(getString(R.string.default_web_client_id)).build()
+    }
 
     // [START signOut]
     private fun signOut() {
-        PreferenceManager.getDefaultSharedPreferences(this)
-            .edit { putBoolean(SIGN_IN_REQUESTED, false) }
         FirebaseAuth.getInstance().signOut()
-        mSignInClient?.signOut()?.addOnCompleteListener {
-            updateUI(false)
-            Toast.makeText(this, R.string.disconnected, Toast.LENGTH_SHORT)
-                .show()
+        lifecycleScope.launch {
+            logout()
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
         profileItem = menu.findItem(R.id.account_manager)
+        profileUiManager = ProfileUiManager(
+            this, supportFragmentManager, profileItem?.actionView, ::signIn
+        )
         return super.onCreateOptionsMenu(menu)
     }
 
     // [START revokeAccess]
     private fun revokeAccess() {
-        PreferenceManager.getDefaultSharedPreferences(this)
-            .edit { putBoolean(SIGN_IN_REQUESTED, false) }
         FirebaseAuth.getInstance().signOut()
-        mSignInClient?.revokeAccess()?.addOnCompleteListener {
-            updateUI(false)
-            Toast.makeText(this, R.string.disconnected, Toast.LENGTH_SHORT)
-                .show()
-        }
     }
 
-    // [START handleSignInResult]
-    private fun handleSignInResult(task: Task<GoogleSignInAccount>) {
-        //    Log.d(getClass().getName(), "handleSignInResult:" + result.isSuccess());
-        Log.d(TAG, "handleSignInResult:" + task.isSuccessful)
-        if (task.isSuccessful) {
-            // Signed in successfully, show authenticated UI.
-            acct = GoogleSignIn.getLastSignedInAccount(this)
-            firebaseAuthWithGoogle()
-        } else {
-            // Sign in failed, handle failure and update UI
-            Log.w(TAG, "handleSignInResult:failure", task.exception)
-            if (PreferenceManager.getDefaultSharedPreferences(this)
-                    .getBoolean(SIGN_IN_REQUESTED, false)
-            )
-                Toast.makeText(
-                    this, getString(
-                        R.string.login_failed,
-                        task.exception?.message
-                    ), Toast.LENGTH_SHORT
-                )
-                    .show()
-            acct = null
-            updateUI(false)
-        }
+    private fun handleSignInResult() {
+        // Handle the successfully returned credential.
+        Toast.makeText(
+            this, getString(
+                R.string.connected_as,
+                mCredentialCacheManager.getCachedCredential()?.getDisplayName()
+            ), Toast.LENGTH_SHORT
+        ).show()
+        mCredentialCacheManager.validateToken()
+    }
+
+    private fun handleErrorResult(message: String) {
+        Toast.makeText(
+            this, getString(
+                R.string.login_failed, -1, message
+            ), Toast.LENGTH_SHORT
+        ).show()
+        viewModel.sub = ""
+        updateUI(false)
     }
 
     private fun firebaseAuthWithGoogle() {
-        Log.d(TAG, "firebaseAuthWithGoogle: ${acct?.idToken}")
-
-        val credential = GoogleAuthProvider.getCredential(acct?.idToken, null)
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
+        Log.d(
+            TAG, "firebaseAuthWithGoogle: ${
+                mCredentialCacheManager.getCachedCredential()?.getAccountIdToken()
+            }"
+        )
+        mCredentialCacheManager.getCachedCredential()?.let { account ->
+            val credential = GoogleAuthProvider.getCredential(account.getAccountIdToken(), null)
+            auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "firebaseAuthWithGoogle:success")
-                    if (viewModel.showSnackbar) {
-                        Toast.makeText(
-                            this,
-                            getString(R.string.connected_as, acct?.displayName),
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
-                        viewModel.showSnackbar = false
-                    }
                     updateUI(true)
+                    when (viewModel.profileAction) {
+                        ProfileAction.BACKUP_NEW_CODE -> {
+                            lifecycleScope.launch { backupDbPrefs() }
+                            viewModel.profileAction = ProfileAction.NONE
+                        }
+
+                        ProfileAction.BACKUP_OLD_CODE -> {
+                            lifecycleScope.launch { backupDbPrefs(false) }
+                            viewModel.profileAction = ProfileAction.NONE
+                        }
+
+                        ProfileAction.RESTORE_OLD_CODE -> {
+                            lifecycleScope.launch { restoreDbPrefs(false) }
+                            viewModel.profileAction = ProfileAction.NONE
+                        }
+
+                        ProfileAction.RESTORE_NEW_CODE -> {
+                            lifecycleScope.launch { restoreDbPrefs() }
+                            viewModel.profileAction = ProfileAction.NONE
+                        }
+
+                        ProfileAction.NONE -> {}
+                    }
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
-                    if (PreferenceManager.getDefaultSharedPreferences(this)
-                            .getBoolean(SIGN_IN_REQUESTED, false)
-                    )
-                        Toast.makeText(
-                            this, getString(
-                                R.string.login_failed,
-                                task.exception?.message
-                            ), Toast.LENGTH_SHORT
-                        )
-                            .show()
+                    updateUI(false)
+                    Toast.makeText(
+                        this, getString(
+                            R.string.login_failed, -1, task.exception?.localizedMessage
+                        ), Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
+        } ?: {
+            Log.w(TAG, "signInWithCredential:failure")
+            updateUI(false)
+            Toast.makeText(
+                this, getString(
+                    R.string.login_failed, -1, "null account"
+                ), Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    private fun updateUI(signedIn: Boolean) {
+        Log.d(TAG, "updateUI:signedIn = $signedIn")
+        // Use a more descriptive name for the shared preferences
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+
+        // Update sign-in status in shared preferences
+        sharedPreferences.edit {
+            putBoolean(Utility.SIGNED_IN, signedIn)
+        }
+        if (signedIn) {
+            updateProfileInfo(mCredentialCacheManager.getCachedCredential())
+        } else {
+            clearProfileInfo()
+        }
+
+        updateProfileImage()
+//        hideProgressDialog()
     }
 
     private fun dismissProgressDialog(tag: String) {
@@ -602,100 +680,59 @@ class MainActivity : ThemeableActivity() {
         sFragment?.dismiss()
     }
 
-    private fun updateUI(signedIn: Boolean) {
-        PreferenceManager.getDefaultSharedPreferences(this)
-            .edit { putBoolean(SIGNED_IN, signedIn) }
-        if (signedIn)
-            PreferenceManager.getDefaultSharedPreferences(this)
-                .edit { putBoolean(SIGN_IN_REQUESTED, true) }
-        if (signedIn) {
-            profileName = acct?.displayName.orEmpty()
-            profileEmail = acct?.email.orEmpty()
-            val profilePhoto = acct?.photoUrl
-            if (profilePhoto != null) {
-                var personPhotoUrl = profilePhoto.toString()
-                Log.d(TAG, "personPhotoUrl BEFORE $personPhotoUrl")
-                personPhotoUrl = personPhotoUrl.replace(OLD_PHOTO_RES, NEW_PHOTO_RES)
-                Log.d(TAG, "personPhotoUrl AFTER $personPhotoUrl")
-                profilePhotoUrl = personPhotoUrl
-            } else {
-                profilePhotoUrl = StringUtils.EMPTY_STRING
-            }
-        } else {
-            profileName = StringUtils.EMPTY_STRING
-            profileEmail = StringUtils.EMPTY_STRING
-            profilePhotoUrl = StringUtils.EMPTY_STRING
-        }
-        updateProfileImage()
-        hideProgressDialog()
-    }
-
     fun updateProfileImage() {
-        val loggedListener = View.OnClickListener {
-            ProfileDialogFragment.show(
-                ProfileDialogFragment.Builder(
-                    this,
-                    PROFILE_DIALOG
-                )
-                    .profileName(profileName)
-                    .profileEmail(profileEmail)
-                    .profileImageSrc(profilePhotoUrl),
-                supportFragmentManager
+        profileUiManager?.updateProfileUi(profilePhotoUrl, profileName, profileEmail)
+    }
+
+    /**
+     * Updates the profile information (name, email, photo URL) based on the user's account.
+     *
+     * @param account The user's account information.
+     */
+    private fun updateProfileInfo(account: CredendialObject?) { // Replace YourAccountType with the actual type
+        profileName = account?.getDisplayName().orEmpty()
+        Log.d(TAG, "LOGIN profileName: $profileName")
+
+        profileEmail = account?.getAccountId().orEmpty()
+        Log.d(TAG, "LOGIN profileEmail: $profileEmail")
+
+        profilePhotoUrl = account?.getProfilePictureUri()?.let { uri ->
+            Log.d(TAG, "personPhotoUrl BEFORE: $uri")
+            val modifiedUrl = uri.replace(
+                OLD_PHOTO_RES, NEW_PHOTO_RES
             )
-        }
-
-        val notLoggedListener = View.OnClickListener {
-            PreferenceManager.getDefaultSharedPreferences(this)
-                .edit { putBoolean(SIGN_IN_REQUESTED, true) }
-            viewModel.showSnackbar = true
-            signIn()
-        }
-
-        if (profilePhotoUrl.isEmpty()) {
-            profileItem?.actionView?.findViewById<ShapeableImageView>(R.id.profile_icon)
-                ?.setImageResource(R.drawable.account_circle_56px)
-            profileItem?.actionView?.findViewById<ShapeableImageView>(R.id.profile_icon)?.background =
-                null
-        } else {
-            AppCompatResources.getDrawable(this, R.drawable.account_circle_56px)?.let {
-                Picasso.get().load(profilePhotoUrl)
-                    .placeholder(it)
-                    .into(profileItem?.actionView?.findViewById<ShapeableImageView>(R.id.profile_icon))
-            }
-            AppCompatResources.getDrawable(
-                this,
-                getTypedValueResId(android.R.attr.selectableItemBackgroundBorderless)
-            )?.let {
-                profileItem?.actionView?.findViewById<ShapeableImageView>(R.id.profile_icon)?.background =
-                    it
-            }
-        }
-
-        profileItem?.actionView?.findViewById<ShapeableImageView>(R.id.profile_icon)
-            ?.setOnClickListener(
-                if (PreferenceManager.getDefaultSharedPreferences(this)
-                        .getBoolean(SIGNED_IN, false)
-                ) loggedListener else notLoggedListener
-            )
+            Log.d(TAG, "personPhotoUrl AFTER: $modifiedUrl")
+            modifiedUrl
+        } ?: StringUtils.EMPTY
     }
 
-    private fun showProgressDialog() {
-        binding.loadingBar.isVisible = true
+    /**
+     * Clears the profile information (name, email, photo URL).
+     */
+    private fun clearProfileInfo() {
+        profileName = StringUtils.EMPTY
+        profileEmail = StringUtils.EMPTY
+        profilePhotoUrl = StringUtils.EMPTY
     }
 
-    private fun hideProgressDialog() {
-        binding.loadingBar.isVisible = false
-    }
+//    private fun showProgressDialog() {
+//        binding.loadingBar.isVisible = true
+//    }
+//
+//    private fun hideProgressDialog() {
+//        binding.loadingBar.isVisible = false
+//    }
 
     private suspend fun backupDbPrefs(generateNewCode: Boolean = true) {
+        Log.d(TAG, "backupDbPrefs -> generateNewCode:$generateNewCode")
         try {
 
-            if (generateNewCode)
-                viewModel.backupCode = StringUtils.generateRandomCode()
-            else
-                viewModel.backupCode = PreferenceManager.getDefaultSharedPreferences(this)
-                    .getString(StringUtils.PREFERENCE_BACKUP_CODE, StringUtils.EMPTY_STRING)
-                    .orEmpty()
+            viewModel.backupRestoreState.value =
+                MainActivityViewModel.BakupRestoreState.BACKUP_STARTED
+
+            if (generateNewCode) viewModel.backupCode = StringUtils.generateRandomCode()
+            else viewModel.backupCode = PreferenceManager.getDefaultSharedPreferences(this)
+                .getString(StringUtils.PREFERENCE_BACKUP_CODE, StringUtils.EMPTY_STRING).orEmpty()
 
             withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
                 backupDatabase(viewModel.backupCode)
@@ -704,17 +741,19 @@ class MainActivity : ThemeableActivity() {
             PreferenceManager.getDefaultSharedPreferences(this)
                 .edit { putString(StringUtils.PREFERENCE_BACKUP_CODE, viewModel.backupCode) }
 
-            dismissProgressDialog(BACKUP_RUNNING)
+            viewModel.backupRestoreState.value =
+                MainActivityViewModel.BakupRestoreState.BACKUP_COMPLETED
             BackupCodeDialogFragment.show(
                 BackupCodeDialogFragment.Builder(this, BACKUP_OK).apply {
                     mTitle = R.string.backup_ok_title
                     positiveButton(R.string.ok)
                     mBackupCode = viewModel.backupCode
-                },
-                supportFragmentManager
+                }, supportFragmentManager
             )
         } catch (e: Exception) {
             Log.e(TAG, "Exception: " + e.localizedMessage, e)
+            viewModel.backupRestoreState.value =
+                MainActivityViewModel.BakupRestoreState.BACKUP_COMPLETED
             Snackbar.make(
                 findViewById(android.R.id.content),
                 "error: " + e.localizedMessage,
@@ -724,9 +763,13 @@ class MainActivity : ThemeableActivity() {
     }
 
     private suspend fun restoreDbPrefs(useNewCode: Boolean = true) {
+        Log.d(TAG, "restoreDbPrefs -> useNewCode:$useNewCode")
         try {
-            if (!useNewCode)
-                viewModel.backupCode = PreferenceManager.getDefaultSharedPreferences(this)
+            viewModel.backupRestoreState.value =
+                MainActivityViewModel.BakupRestoreState.RESTORE_STARTED
+
+            if (!useNewCode) viewModel.backupCode =
+                PreferenceManager.getDefaultSharedPreferences(this)
                     .getString(StringUtils.PREFERENCE_BACKUP_CODE, StringUtils.EMPTY_STRING)
                     .orEmpty()
 
@@ -738,13 +781,12 @@ class MainActivity : ThemeableActivity() {
             }
 
             if (!codeOk) {
-                dismissProgressDialog(RESTORE_RUNNING)
+                viewModel.backupRestoreState.value =
+                    MainActivityViewModel.BakupRestoreState.RESTORE_COMPLETED
                 SimpleDialogFragment.show(
                     SimpleDialogFragment.Builder(this, RESTORE_KO)
-                        .title(R.string.error_dialog_title)
-                        .content(R.string.codice_errato)
-                        .positiveButton(R.string.ok),
-                    supportFragmentManager
+                        .title(R.string.error_dialog_title).content(R.string.codice_errato)
+                        .positiveButton(R.string.ok), supportFragmentManager
                 )
                 return
             }
@@ -756,30 +798,29 @@ class MainActivity : ThemeableActivity() {
             PreferenceManager.getDefaultSharedPreferences(this)
                 .edit { putString(StringUtils.PREFERENCE_BACKUP_CODE, viewModel.backupCode) }
 
-            dismissProgressDialog(RESTORE_RUNNING)
+            viewModel.backupRestoreState.value =
+                MainActivityViewModel.BakupRestoreState.RESTORE_COMPLETED
             SimpleDialogFragment.show(
-                SimpleDialogFragment.Builder(this, RESTORE_OK)
-                    .title(R.string.restore_ok_title)
+                SimpleDialogFragment.Builder(this, RESTORE_OK).title(R.string.restore_ok_title)
                     .content(getString(R.string.restore_ok_code, viewModel.backupCode))
-                    .positiveButton(R.string.ok),
-                supportFragmentManager
+                    .positiveButton(R.string.ok), supportFragmentManager
             )
         } catch (e: Exception) {
             Log.e(TAG, "Exception: " + e.localizedMessage, e)
+            viewModel.backupRestoreState.value =
+                MainActivityViewModel.BakupRestoreState.RESTORE_COMPLETED
             Snackbar.make(
                 findViewById(android.R.id.content),
                 "error: " + e.localizedMessage,
                 Snackbar.LENGTH_LONG
-            )
-                .show()
+            ).show()
         }
     }
 
     private fun backupDatabase(backupCode: String?) {
         Log.d(TAG, "backupDatabase $backupCode")
 
-        if (backupCode == null)
-            throw NoIdException()
+        if (backupCode == null) throw NoIdException()
 
         val storageRef = Firebase.storage.reference
 
@@ -835,13 +876,10 @@ class MainActivity : ThemeableActivity() {
             deleteExistingFile(storageRef, VISITASEMINARIO_FILE_NAME, backupCode)
         val visitaSeminarioList = comunitaDb.visitaSeminarioDao().all
         Log.d(
-            TAG,
-            "visitaSeminarioList size ${visitaSeminarioList.size}"
+            TAG, "visitaSeminarioList size ${visitaSeminarioList.size}"
         )
         putFileToFirebase(
-            visitaSeminarioRef,
-            visitaSeminarioList,
-            VISITASEMINARIO_FILE_NAME
+            visitaSeminarioRef, visitaSeminarioList, VISITASEMINARIO_FILE_NAME
         )
 
         //BACKUP RESPONSABILE SEMINARIO LINK
@@ -870,18 +908,14 @@ class MainActivity : ThemeableActivity() {
         val comunitaSeminaristaList = comunitaDb.comunitaSeminaristaDao().all
         Log.d(TAG, "comunitaSeminaristaList size ${comunitaSeminaristaList.size}")
         putFileToFirebase(
-            comunitaSeminaristaRef,
-            comunitaSeminaristaList,
-            COMUNITASEMINARISTA_FILE_NAME
+            comunitaSeminaristaRef, comunitaSeminaristaList, COMUNITASEMINARISTA_FILE_NAME
         )
 
         Log.d(TAG, "BACKUP DB COMPLETATO")
     }
 
     private fun deleteExistingFile(
-        storageRef: StorageReference,
-        fileName: String,
-        backupCode: String
+        storageRef: StorageReference, fileName: String, backupCode: String
     ): StorageReference {
         val fileRef = storageRef.child("camminodatabase_$backupCode/$fileName.json")
 
@@ -889,17 +923,16 @@ class MainActivity : ThemeableActivity() {
             Tasks.await(fileRef.delete())
             Log.d(TAG, "Backup esistente cancellato!")
         } catch (e: ExecutionException) {
-            if (e.cause is StorageException && (e.cause as? StorageException)?.errorCode == StorageException.ERROR_OBJECT_NOT_FOUND)
-                Log.d(TAG, "Backup non trovato!")
-            else
-                throw e
+            if (e.cause is StorageException && (e.cause as? StorageException)?.errorCode == StorageException.ERROR_OBJECT_NOT_FOUND) Log.d(
+                TAG, "Backup non trovato!"
+            )
+            else throw e
         }
         return fileRef
     }
 
     private fun deleteControlFile(
-        storageRef: StorageReference,
-        backupCode: String
+        storageRef: StorageReference, backupCode: String
     ): StorageReference {
         val fileRef = storageRef.child("camminodatabase_$backupCode/lock")
 
@@ -907,17 +940,16 @@ class MainActivity : ThemeableActivity() {
             Tasks.await(fileRef.delete())
             Log.d(TAG, "Backup esistente cancellato!")
         } catch (e: ExecutionException) {
-            if (e.cause is StorageException && (e.cause as? StorageException)?.errorCode == StorageException.ERROR_OBJECT_NOT_FOUND)
-                Log.d(TAG, "Backup non trovato!")
-            else
-                throw e
+            if (e.cause is StorageException && (e.cause as? StorageException)?.errorCode == StorageException.ERROR_OBJECT_NOT_FOUND) Log.d(
+                TAG, "Backup non trovato!"
+            )
+            else throw e
         }
         return fileRef
     }
 
     private fun checkControlFile(
-        storageRef: StorageReference,
-        backupCode: String
+        storageRef: StorageReference, backupCode: String
     ): Boolean {
         return try {
 
@@ -927,10 +959,8 @@ class MainActivity : ThemeableActivity() {
 
         } catch (e: ExecutionException) {
             Log.e(TAG, e.localizedMessage, e)
-            if (e.cause is StorageException && (e.cause as? StorageException)?.errorCode == StorageException.ERROR_OBJECT_NOT_FOUND)
-                false
-            else
-                throw e
+            if (e.cause is StorageException && (e.cause as? StorageException)?.errorCode == StorageException.ERROR_OBJECT_NOT_FOUND) false
+            else throw e
         }
     }
 
@@ -962,10 +992,9 @@ class MainActivity : ThemeableActivity() {
     }
 
     private fun restoreDatabase(backupCode: String?) {
-        Log.d(TAG, "backupDatabase $backupCode")
+        Log.d(TAG, "restoreDatabase $backupCode")
 
-        if (backupCode == null)
-            throw NoIdException()
+        if (backupCode == null) throw NoIdException()
 
         val storageRef = FirebaseStorage.getInstance().reference
         val gson =
@@ -976,9 +1005,7 @@ class MainActivity : ThemeableActivity() {
         val backupComunita: List<Comunita> = gson.fromJson(
             InputStreamReader(
                 getFileFromFirebase(
-                    storageRef,
-                    COMUNITA_FILE_NAME,
-                    backupCode
+                    storageRef, COMUNITA_FILE_NAME, backupCode
                 )
             ), object : TypeToken<List<Comunita>>() {}.type
         )
@@ -991,9 +1018,7 @@ class MainActivity : ThemeableActivity() {
         val backupPassaggioList: List<Passaggio> = gson.fromJson(
             InputStreamReader(
                 getFileFromFirebase(
-                    storageRef,
-                    PASSAGGIO_FILE_NAME,
-                    backupCode
+                    storageRef, PASSAGGIO_FILE_NAME, backupCode
                 )
             ), object : TypeToken<List<Passaggio>>() {}.type
         )
@@ -1006,9 +1031,7 @@ class MainActivity : ThemeableActivity() {
         val backupPromemoriaList: List<Promemoria> = gson.fromJson(
             InputStreamReader(
                 getFileFromFirebase(
-                    storageRef,
-                    PROMEMORIA_FILE_NAME,
-                    backupCode
+                    storageRef, PROMEMORIA_FILE_NAME, backupCode
                 )
             ), object : TypeToken<List<Promemoria>>() {}.type
         )
@@ -1021,9 +1044,7 @@ class MainActivity : ThemeableActivity() {
         val backupFratelloList: List<Fratello> = gson.fromJson(
             InputStreamReader(
                 getFileFromFirebase(
-                    storageRef,
-                    FRATELLO_FILE_NAME,
-                    backupCode
+                    storageRef, FRATELLO_FILE_NAME, backupCode
                 )
             ), object : TypeToken<List<Fratello>>() {}.type
         )
@@ -1036,9 +1057,7 @@ class MainActivity : ThemeableActivity() {
         val backupIncontroList: List<Incontro> = gson.fromJson(
             InputStreamReader(
                 getFileFromFirebase(
-                    storageRef,
-                    INCONTRO_FILE_NAME,
-                    backupCode
+                    storageRef, INCONTRO_FILE_NAME, backupCode
                 )
             ), object : TypeToken<List<Incontro>>() {}.type
         )
@@ -1051,9 +1070,7 @@ class MainActivity : ThemeableActivity() {
         val backupVocazioni: List<Vocazione> = gson.fromJson(
             InputStreamReader(
                 getFileFromFirebase(
-                    storageRef,
-                    VOCAZIONE_FILE_NAME,
-                    backupCode
+                    storageRef, VOCAZIONE_FILE_NAME, backupCode
                 )
             ), object : TypeToken<List<Vocazione>>() {}.type
         )
@@ -1066,9 +1083,7 @@ class MainActivity : ThemeableActivity() {
         val backupSeminari: List<Seminario> = gson.fromJson(
             InputStreamReader(
                 getFileFromFirebase(
-                    storageRef,
-                    SEMINARIO_FILE_NAME,
-                    backupCode
+                    storageRef, SEMINARIO_FILE_NAME, backupCode
                 )
             ), object : TypeToken<List<Seminario>>() {}.type
         )
@@ -1081,9 +1096,7 @@ class MainActivity : ThemeableActivity() {
         val backupVisitaSeminaro: List<VisitaSeminario> = gson.fromJson(
             InputStreamReader(
                 getFileFromFirebase(
-                    storageRef,
-                    VISITASEMINARIO_FILE_NAME,
-                    backupCode
+                    storageRef, VISITASEMINARIO_FILE_NAME, backupCode
                 )
             ), object : TypeToken<List<VisitaSeminario>>() {}.type
         )
@@ -1096,9 +1109,7 @@ class MainActivity : ThemeableActivity() {
         val backupResponsabileSeminario: List<ResponsabileSeminario> = gson.fromJson(
             InputStreamReader(
                 getFileFromFirebase(
-                    storageRef,
-                    RESPONSABILESEMINARIO_FILE_NAME,
-                    backupCode
+                    storageRef, RESPONSABILESEMINARIO_FILE_NAME, backupCode
                 )
             ), object : TypeToken<List<ResponsabileSeminario>>() {}.type
         )
@@ -1111,9 +1122,7 @@ class MainActivity : ThemeableActivity() {
         val backupSeminarista: List<Seminarista> = gson.fromJson(
             InputStreamReader(
                 getFileFromFirebase(
-                    storageRef,
-                    SEMINARISTA_FILE_NAME,
-                    backupCode
+                    storageRef, SEMINARISTA_FILE_NAME, backupCode
                 )
             ), object : TypeToken<List<Seminarista>>() {}.type
         )
@@ -1126,9 +1135,7 @@ class MainActivity : ThemeableActivity() {
         val backupComunitaSeminarista: List<ComunitaSeminarista> = gson.fromJson(
             InputStreamReader(
                 getFileFromFirebase(
-                    storageRef,
-                    COMUNITASEMINARISTA_FILE_NAME,
-                    backupCode
+                    storageRef, COMUNITASEMINARISTA_FILE_NAME, backupCode
                 )
             ), object : TypeToken<List<ComunitaSeminarista>>() {}.type
         )
@@ -1141,9 +1148,7 @@ class MainActivity : ThemeableActivity() {
     }
 
     private fun getFileFromFirebase(
-        storageRef: StorageReference,
-        fileName: String,
-        backupCode: String
+        storageRef: StorageReference, fileName: String, backupCode: String
     ): InputStream {
         try {
 
@@ -1153,10 +1158,10 @@ class MainActivity : ThemeableActivity() {
 
         } catch (e: ExecutionException) {
             Log.e(TAG, e.localizedMessage, e)
-            if (e.cause is StorageException && (e.cause as? StorageException)?.errorCode == StorageException.ERROR_OBJECT_NOT_FOUND)
-                throw NoBackupException(resources)
-            else
-                throw e
+            if (e.cause is StorageException && (e.cause as? StorageException)?.errorCode == StorageException.ERROR_OBJECT_NOT_FOUND) throw NoBackupException(
+                resources
+            )
+            else throw e
         }
     }
 
@@ -1165,9 +1170,7 @@ class MainActivity : ThemeableActivity() {
             InputTextDialogFragment.show(
                 InputTextDialogFragment.Builder(
                     this, RESTORE_NEW_CODE
-                )
-                    .title(R.string.restore_code_confirm)
-                    .positiveButton(R.string.restore_code_confirm)
+                ).title(R.string.restore_code_confirm).positiveButton(R.string.restore_code_confirm)
                     .negativeButton(android.R.string.cancel), supportFragmentManager
             )
             return
@@ -1182,8 +1185,7 @@ class MainActivity : ThemeableActivity() {
                                 R.string.upload_old_code_content,
                                 PreferenceManager.getDefaultSharedPreferences(this@MainActivity)
                                     .getString(
-                                        StringUtils.PREFERENCE_BACKUP_CODE,
-                                        StringUtils.EMPTY_STRING
+                                        StringUtils.PREFERENCE_BACKUP_CODE, StringUtils.EMPTY_STRING
                                     ).orEmpty()
                             )
                         )
@@ -1203,8 +1205,7 @@ class MainActivity : ThemeableActivity() {
                                 R.string.restore_old_code_content,
                                 PreferenceManager.getDefaultSharedPreferences(this@MainActivity)
                                     .getString(
-                                        StringUtils.PREFERENCE_BACKUP_CODE,
-                                        StringUtils.EMPTY_STRING
+                                        StringUtils.PREFERENCE_BACKUP_CODE, StringUtils.EMPTY_STRING
                                     ).orEmpty()
                             )
                         )
@@ -1224,8 +1225,7 @@ class MainActivity : ThemeableActivity() {
                     }
                 }
                 negativeButton(android.R.string.cancel)
-            },
-            supportFragmentManager
+            }, supportFragmentManager
         )
     }
 
@@ -1242,9 +1242,6 @@ class MainActivity : ThemeableActivity() {
     class NoIdException internal constructor() : Exception("no ID linked to this Account")
 
     companion object {
-        const val SIGN_IN_REQUESTED = "sign_id_requested"
-        const val SIGNED_IN = "signed_id"
-        const val PROFILE_DIALOG = "PROFILE_DIALOG"
         private const val OLD_PHOTO_RES = "s96-c"
         private const val NEW_PHOTO_RES = "s400-c"
         private const val RESTORE_RUNNING = "RESTORE_RUNNING"

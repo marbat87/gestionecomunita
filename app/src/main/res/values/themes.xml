@@ -209,4 +209,8 @@
         <item name="android:textColor">@color/primary_textfield_autocomplete_text_color</item>
     </style>
 
+    <style name="Widget.Material3.Button.IconButton.ColoredIcon">
+        <item name="iconTint">@null</item>
+    </style>
+
 </resources>

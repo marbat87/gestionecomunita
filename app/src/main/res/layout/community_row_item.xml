@@ -25,9 +25,9 @@
 
         <TextView
             android:id="@+id/text_comunita"
+            style="?textAppearanceListItem"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?textAppearanceListItem"
             app:layout_constraintBottom_toTopOf="@id/text_responsabile"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -36,9 +36,9 @@
 
         <TextView
             android:id="@+id/text_responsabile"
+            style="?textAppearanceListItemSecondary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?textAppearanceListItemSecondary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

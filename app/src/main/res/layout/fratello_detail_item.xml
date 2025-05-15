@@ -32,7 +32,7 @@
                 android:id="@+id/group_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textAppearance="?textAppearanceTitleMedium"
+                style="?textAppearanceTitleMedium"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/group_indicator"
@@ -78,7 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/divider"
             tools:text="Rossi" />
 
@@ -87,7 +87,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/nome"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/text_nome" />
 
         <TextView
@@ -95,7 +95,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/text_nome_label"
             tools:text="Marco" />
 
@@ -104,7 +104,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/cognome"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/text_cognome" />
 
         <TextView
@@ -112,7 +112,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/text_cognome_label"
             tools:text="sposato" />
 
@@ -121,7 +121,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/stato_civile"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/text_stato_civile" />
 
         <TextView
@@ -129,7 +129,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/text_stato_civile_label"
             tools:text="Maria" />
 
@@ -138,7 +138,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/coniuge"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/text_coniuge" />
 
         <TextView
@@ -146,7 +146,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/text_coniuge_label"
             tools:text="4" />
 
@@ -155,7 +155,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/num_figli"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/text_num_figli" />
 
         <TextView
@@ -163,7 +163,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/text_num_figli_label"
             tools:text="Kampala" />
 
@@ -172,7 +172,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/tribu"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/text_tribu" />
 
         <TextView
@@ -180,7 +180,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/text_tribu_label"
             tools:text="04/09/1987" />
 
@@ -189,7 +189,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/data_nascita"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/text_anno_nascita" />
 
         <TextView
@@ -197,7 +197,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/text_anno_nascita_label"
             tools:text="-" />
 
@@ -206,7 +206,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/carisma"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/text_carisma" />
 
         <TextView
@@ -214,7 +214,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/text_carisma_label"
             tools:text="13/12/2000" />
 
@@ -223,7 +223,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/data_inizio_cammino"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/text_data_inizio_cammino" />
 
         <TextView
@@ -231,7 +231,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/text_data_inizio_cammino_label"
             tools:text="san gerardo" />
 
@@ -240,7 +240,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/comunita_provenienza"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/text_comunita_provenienza" />
 
         <TextView
@@ -248,7 +248,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/text_comunita_provenienza_label"
             tools:text="13/12/2010" />
 
@@ -257,7 +257,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/data_arrivo"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/text_data_arrivo" />
 
         <TextView
@@ -265,7 +265,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/text_data_arrivo_label"
             tools:text="Attivo" />
 
@@ -274,7 +274,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/stato_attuale"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/text_stato" />
 
         <TextView
@@ -282,7 +282,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/text_stato_label"
             tools:text="Test" />
 
@@ -298,7 +298,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/note"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintBottom_toTopOf="@id/cancella_fratello"
             app:layout_constraintTop_toBottomOf="@id/text_note"
             app:layout_goneMarginBottom="@dimen/activity_vertical_margin" />

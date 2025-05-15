@@ -198,7 +198,7 @@
     <string name="dialog_acc_disconn_text">Sei sicuro di voler disconnettere l\'app dal tuo account Google?</string>
     <string name="dialog_acc_revoke_text">Sei sicuro di voler disconnettere l\'app dal tuo account Google e di volerle revocare tutti i permessi Google concessi?</string>
     <string name="disconnected">Disconnesso da Google</string>
-    <string name="login_failed">Login fallito: %1$s</string>
+    <string name="login_failed">Login fallito: %1$+d - %2$s</string>
     <string name="no_restore_found">Nessun dato trovato per questo codice</string>
     <string name="backup_ok_code">Il codice da condividere per l\'accesso ai dati è:</string>
     <string name="backup_ok_title">Caricamento completato!</string>

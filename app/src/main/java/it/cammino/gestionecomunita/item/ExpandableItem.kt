@@ -1,61 +1,42 @@
 package it.cammino.gestionecomunita.item
 
+import android.annotation.SuppressLint
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import com.mikepenz.fastadapter.FastAdapter
-import com.mikepenz.fastadapter.IAdapter
-import com.mikepenz.fastadapter.IClickable
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.color.MaterialColors
 import com.mikepenz.fastadapter.ISubItem
+import com.mikepenz.fastadapter.expandable.ExpandableExtension
 import com.mikepenz.fastadapter.expandable.items.AbstractExpandableItem
 import com.mikepenz.fastadapter.ui.utils.StringHolder
 import it.cammino.gestionecomunita.R
+import it.cammino.gestionecomunita.util.Utility.helperSetString
+import it.cammino.gestionecomunita.util.setSelectableRippleBackground
 
-fun expandableItem(block: ExpandableItem.() -> Unit): ExpandableItem =
-    ExpandableItem().apply(block)
+fun expandableItem(block: ExpandableItem.() -> Unit): ExpandableItem = ExpandableItem().apply(block)
 
 class ExpandableItem : AbstractExpandableItem<ExpandableItem.ViewHolder>(),
-    IClickable<ExpandableItem>, ISubItem<ExpandableItem.ViewHolder> {
+    ISubItem<ExpandableItem.ViewHolder> {
 
     var title: StringHolder? = null
         private set
-    var setTitle: String? = null
+    var setTitle: Any? = null
         set(value) {
-            title = StringHolder(value)
+            title = helperSetString(value)
         }
 
     var totItems: Int = 0
 
     var position: Int = 0
 
-    private var mOnClickListener: ((v: View?, adapter: IAdapter<ExpandableItem>, item: ExpandableItem, position: Int) -> Boolean)? =
-        null
-
-    override var onItemClickListener: ((v: View?, adapter: IAdapter<ExpandableItem>, item: ExpandableItem, position: Int) -> Boolean)? =
-        { v: View?, adapter: IAdapter<ExpandableItem>, item: ExpandableItem, position: Int ->
-            v?.let {
-                if (!item.isExpanded) {
-                    it.findViewById<View>(R.id.group_indicator).animate().rotation(180f).start()
-                } else {
-                    it.findViewById<View>(R.id.group_indicator).animate().rotation(0f).start()
-                }
-            }
-            mOnClickListener?.invoke(v, adapter, item, position) != false
-        }
-        set(onClickListener) {
-            this.mOnClickListener = onClickListener // on purpose
-            field = onClickListener
-        }
-
-    override var onPreItemClickListener: ((v: View?, adapter: IAdapter<ExpandableItem>, item: ExpandableItem, position: Int) -> Boolean)? =
-        null
-
-    override//this might not be true for your application
-    var isSelectable: Boolean
-        get() = false
+    var id: Int = 0
         set(value) {
-            super.isSelectable = value
+            identifier = value.toLong()
+            field = value
         }
+
+    var group: Int = 0
 
     override val type: Int
         get() = R.id.fastadapter_expandable_item_id
@@ -63,38 +44,87 @@ class ExpandableItem : AbstractExpandableItem<ExpandableItem.ViewHolder>(),
     override val layoutRes: Int
         get() = R.layout.list_group_item
 
+    @SuppressLint("SetTextI18n")
+    override fun bindView(holder: ViewHolder, payloads: List<Any>) {
+        super.bindView(holder, payloads)
+
+        //get the context
+        val ctx = holder.itemView.context
+
+        val p = payloads.mapNotNull { it as? String }.lastOrNull()
+        if (p != null) {
+            // Check if this was an expanding or collapsing action by checking the payload.
+            // If it is we need to animate the changes
+            if (p == ExpandableExtension.PAYLOAD_EXPAND) {
+                holder.mIndicator.animate().rotation(0f).start()
+                holder.mIndicator.setColorFilter(
+                    MaterialColors.getColor(
+                        ctx, androidx.appcompat.R.attr.colorPrimary, TAG
+                    )
+                )
+                holder.mTitle.setTextColor(
+                    MaterialColors.getColor(
+                        ctx, androidx.appcompat.R.attr.colorPrimary, TAG
+                    )
+                )
+                return
+            } else if (p == ExpandableExtension.PAYLOAD_COLLAPSE) {
+                holder.mIndicator.animate().rotation(180f).start()
+                holder.mIndicator.setColorFilter(
+                    MaterialColors.getColor(
+                        ctx, com.google.android.material.R.attr.colorOnSurface, TAG
+                    )
+                )
+                holder.mTitle.setTextColor(
+                    MaterialColors.getColor(
+                        ctx, com.google.android.material.R.attr.colorOnSurface, TAG
+                    )
+                )
+                return
+            }
+        }
+
+        holder.mContainer.setSelectableRippleBackground(com.google.android.material.R.attr.colorSecondaryContainer)
+
+        //set the background for the item
+        holder.view.clearAnimation()
+        holder.mTitle.text = "${title?.getText(ctx)} (${totItems})"
+
+        holder.mIndicator.rotation = if (isExpanded) 0f else 180f
+        holder.mIndicator.setColorFilter(
+            MaterialColors.getColor(
+                ctx,
+                if (isExpanded) androidx.appcompat.R.attr.colorPrimary else com.google.android.material.R.attr.colorOnSurface,
+                TAG
+            )
+        )
+        holder.mTitle.setTextColor(
+            MaterialColors.getColor(
+                ctx,
+                if (isExpanded) androidx.appcompat.R.attr.colorPrimary else com.google.android.material.R.attr.colorOnSurface,
+                TAG
+            )
+        )
+    }
+
+    override fun unbindView(holder: ViewHolder) {
+        super.unbindView(holder)
+        holder.mTitle.text = null
+        //make sure all animations are stopped
+        holder.mIndicator.clearAnimation()
+    }
+
     override fun getViewHolder(v: View): ViewHolder {
         return ViewHolder(v)
     }
 
-    class ViewHolder(var view: View) : FastAdapter.ViewHolder<ExpandableItem>(view) {
+    class ViewHolder(var view: View) : RecyclerView.ViewHolder(view) {
+        var mTitle: TextView = view.findViewById(R.id.group_title)
+        var mIndicator: ImageView = view.findViewById(R.id.group_indicator)
+        var mContainer: View = view.findViewById(R.id.list_view_item_container)
+    }
 
-        private var mTitle: TextView? = null
-        private var mIndicator: ImageView? = null
-
-        override fun bindView(item: ExpandableItem, payloads: List<Any>) {
-            val ctx = itemView.context
-
-            // set the text for the name
-            val title = item.title?.getText(ctx)
-            val newTitle = "${if (!title.isNullOrEmpty()) title else "N.D."} (${item.totItems})"
-            mTitle?.text = newTitle
-
-            if (item.isExpanded)
-                mIndicator?.rotation = 0f
-            else
-                mIndicator?.rotation = 180f
-        }
-
-        override fun unbindView(item: ExpandableItem) {
-            mTitle?.text = null
-            // make sure all animations are stopped
-            mIndicator?.clearAnimation()
-        }
-
-        init {
-            mTitle = view.findViewById(R.id.group_title)
-            mIndicator = view.findViewById(R.id.group_indicator)
-        }
+    companion object {
+        private val TAG = ExpandableItem::class.java.canonicalName
     }
 }

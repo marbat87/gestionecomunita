@@ -290,7 +290,7 @@ class IncontriFragment : AccountMenuFragment() {
             fastAdapter: FastAdapter<ExpandableMeetingItem>,
             item: ExpandableMeetingItem
         ) {
-            v.findViewById<View>(R.id.group_indicator).animate()
+            v.findViewById<View>(R.id.incontro_indicator).animate()
                 .rotation(if (item.isExpanded) 180f else 0f).start()
             item.isExpanded = !item.isExpanded
             fastAdapter.notifyItemChanged(item.position)

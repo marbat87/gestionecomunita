@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Pablo" />
 
@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/nome_cognome_label"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/nome_text" />
 
         <TextView
@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/nome_label"
             tools:text="15/12/2022" />
 
@@ -42,7 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/data_nascita"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/data_nascita_text" />
 
         <TextView
@@ -50,7 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/data_nascita_label"
             tools:text="Italia" />
 
@@ -59,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/nazione_label"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/nazione_text" />
 
         <com.google.android.material.divider.MaterialDivider
@@ -74,7 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/provenienza_divider_start"
             tools:text="1 - borgonuovo" />
 
@@ -83,7 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/comunita_provenienza"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/comunita_provenienza_text" />
 
         <TextView
@@ -91,7 +91,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/comunita_provenienza_label"
             tools:text="Daniele" />
 
@@ -100,7 +100,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/catechesi_iniziali"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/catechisti_text" />
 
         <TextView
@@ -108,7 +108,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/catechisti_label"
             tools:text="Secondo Passaggio" />
 
@@ -117,7 +117,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/tappa_provenienza"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/tappa_text" />
 
         <com.google.android.material.divider.MaterialDivider
@@ -132,7 +132,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/provenienza_divider_end"
             tools:text="15/12/1988" />
 
@@ -141,7 +141,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/data_entrata_seminario"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/data_ingresso_text" />
 
         <TextView
@@ -149,7 +149,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/data_ingresso_label"
             tools:text="15/12/1988" />
 
@@ -158,7 +158,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/data_uscita_seminario"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/data_uscita_text" />
 
         <TextView
@@ -166,7 +166,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/data_uscita_label"
             tools:text="Boh" />
 
@@ -175,7 +175,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/motivo_uscita_seminario"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/motivo_text" />
 
         <com.google.android.material.divider.MaterialDivider
@@ -191,7 +191,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:text="@string/comunita_assegnazione_label"
-            android:textAppearance="?textAppearanceTitleMedium"
+            style="?textAppearanceTitleMedium"
             app:layout_constraintTop_toBottomOf="@id/date_seminario_divider_end" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -214,7 +214,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/comunita_divider_end"
             tools:text="15/12/2000" />
 
@@ -223,7 +223,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/admissio_label"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/admissio_text" />
 
         <TextView
@@ -231,7 +231,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/admissio_label"
             tools:text="15/12/2000" />
 
@@ -240,7 +240,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/accolitato_label"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/accolitato_text" />
 
         <TextView
@@ -248,7 +248,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/accolitato_label"
             tools:text="15/12/2000" />
 
@@ -257,7 +257,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/lettorato_label"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/lettorato_text" />
 
         <TextView
@@ -265,7 +265,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/lettorato_label"
             tools:text="15/12/2000" />
 
@@ -274,7 +274,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/diaconato_label"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/diaconato_text" />
 
         <TextView
@@ -282,7 +282,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/diaconato_label"
             tools:text="15/12/2000" />
 
@@ -291,7 +291,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/presbiterato_label"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/presbiterato_text" />
 
         <TextView
@@ -299,7 +299,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/presbiterato_label"
             tools:text="varie note di prova" />
 
@@ -308,7 +308,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/note_label"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/note_text" />
 

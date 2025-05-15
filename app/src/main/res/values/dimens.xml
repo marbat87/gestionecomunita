@@ -16,4 +16,11 @@
     <dimen name="activity_min_top_margin">10dip</dimen>
     <dimen name="m3_btn_icon_only_default_size" tools:override="true">24dp</dimen>
     <dimen name="recycler_fab_padding_bottom">88dp</dimen>
+    <dimen name="listLeadingItemPaddingStart">8dp</dimen>
+    <dimen name="listItemMarginStart">8dp</dimen>
+    <dimen name="listTrailingItemPaddingEnd">24dp</dimen>
+    <dimen name="listItemPaddingTopBottom">8dp</dimen>
+    <dimen name="listItemMarginTop">4dp</dimen>
+    <dimen name="oneLineListPreferredItemHeight">56dp</dimen>
+    <dimen name="listItemBackgroundCornerSize">12dp</dimen>
 </resources>

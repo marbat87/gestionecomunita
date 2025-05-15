@@ -24,7 +24,7 @@
             android:id="@+id/nome_comunita_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="2a borgonuovo" />
 
@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/comunita_assegnazione_label"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/nome_comunita_text" />
 
         <TextView
@@ -41,7 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/nome_comunita_label"
             tools:text="12/05/2022" />
 
@@ -50,7 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/data"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/data_comunita_text" />
 
         <TextView
@@ -58,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/data_comunita_label"
             tools:text="Primo passaggio" />
 
@@ -67,7 +67,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/tappa"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tappa_comunita_text" />
 

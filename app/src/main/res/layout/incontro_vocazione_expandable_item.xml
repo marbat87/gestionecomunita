@@ -33,7 +33,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:textAppearance="?textAppearanceTitleMedium"
+                style="?textAppearanceTitleMedium"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/incontro_indicator"
                 app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +44,7 @@
                 android:id="@+id/incontro_data"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceBodyMedium"
+                style="?textAppearanceBodyMedium"
                 android:textColor="?android:attr/textColorSecondary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/incontro_title"
@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:textAppearance="?attr/textAppearanceBodyMedium"
+                style="?textAppearanceBodyMedium"
                 android:textColor="?android:attr/textColorSecondary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -93,7 +93,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/divider"
             tools:text="31/12/2022" />
 
@@ -102,7 +102,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/data"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/text_data" />
 
         <TextView
@@ -110,7 +110,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/text_data_label"
             tools:text="Verona" />
 
@@ -119,7 +119,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/luogo"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/text_luogo" />
 
         <TextView
@@ -127,7 +127,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_view_vertical_margin"
-            android:textAppearance="?textAppearanceBodyLarge"
+            style="?textAppearanceBodyLarge"
             app:layout_constraintTop_toBottomOf="@id/text_luogo_label"
             tools:text="note prova prova" />
 
@@ -136,7 +136,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/note"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintBottom_toTopOf="@id/cancella_incontro"
             app:layout_constraintTop_toBottomOf="@id/text_note" />
 

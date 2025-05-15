@@ -24,7 +24,7 @@
             android:id="@+id/nome_seminarista"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?attr/textAppearanceListItem"
+            style="?textAppearanceListItem"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Giovanni Rossi" />
@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/nome"
-            android:textAppearance="?textAppearanceLabelMedium"
+            style="?textAppearanceLabelMedium"
             app:layout_constraintTop_toBottomOf="@id/nome_seminarista" />
 
         <Button

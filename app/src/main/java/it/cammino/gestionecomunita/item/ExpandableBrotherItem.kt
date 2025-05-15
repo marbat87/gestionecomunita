@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import com.google.android.material.color.MaterialColors
 import com.mikepenz.fastadapter.binding.AbstractBindingItem
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.databinding.FratelloDetailItemBinding
@@ -50,8 +51,7 @@ class ExpandableBrotherItem : AbstractBindingItem<FratelloDetailItemBinding>(),
         get() = R.id.fastadapter_expandable_item_id
 
     override fun createBinding(
-        inflater: LayoutInflater,
-        parent: ViewGroup?
+        inflater: LayoutInflater, parent: ViewGroup?
     ): FratelloDetailItemBinding {
         return FratelloDetailItemBinding.inflate(inflater, parent, false)
     }
@@ -91,6 +91,20 @@ class ExpandableBrotherItem : AbstractBindingItem<FratelloDetailItemBinding>(),
         }
 
         binding.groupIndicator.animate().rotation(if (isExpanded) 0f else 180f).start()
+        binding.groupIndicator.setColorFilter(
+            MaterialColors.getColor(
+                ctx,
+                if (isExpanded) androidx.appcompat.R.attr.colorPrimary else com.google.android.material.R.attr.colorOnSurface,
+                TAG
+            )
+        )
+        binding.groupTitle.setTextColor(
+            MaterialColors.getColor(
+                ctx,
+                if (isExpanded) androidx.appcompat.R.attr.colorPrimary else com.google.android.material.R.attr.colorOnSurface,
+                TAG
+            )
+        )
         binding.texts.isVisible = isExpanded
         binding.buttons.isVisible = editable && isExpanded
 
@@ -114,37 +128,33 @@ class ExpandableBrotherItem : AbstractBindingItem<FratelloDetailItemBinding>(),
     }
 
     override fun compareTo(other: ExpandableBrotherItem): Int {
-        if (stato == 0 && other.stato > 0)
-            return -1
+        if (stato == 0 && other.stato > 0) return -1
 
-        if (stato > 0 && other.stato == 0)
-            return 1
+        if (stato > 0 && other.stato == 0) return 1
 
-        if (stato == 1 && other.stato == 2)
-            return -1
+        if (stato == 1 && other.stato == 2) return -1
 
-        if (stato == 2 && other.stato == 1)
-            return 1
+        if (stato == 2 && other.stato == 1) return 1
 
-        if (StringUtils.RESPONSABILE.contains(carisma.lowercase().trim())
-            && !StringUtils.RESPONSABILE.contains(other.carisma.lowercase().trim())
-        )
-            return -1
+        if (StringUtils.RESPONSABILE.contains(
+                carisma.lowercase().trim()
+            ) && !StringUtils.RESPONSABILE.contains(other.carisma.lowercase().trim())
+        ) return -1
 
-        if (!StringUtils.RESPONSABILE.contains(carisma.lowercase().trim())
-            && StringUtils.RESPONSABILE.contains(other.carisma.lowercase().trim())
-        )
-            return 1
+        if (!StringUtils.RESPONSABILE.contains(
+                carisma.lowercase().trim()
+            ) && StringUtils.RESPONSABILE.contains(other.carisma.lowercase().trim())
+        ) return 1
 
-        if (StringUtils.VICE_RESPONSABILE.contains(carisma.lowercase().trim())
-            && !StringUtils.VICE_RESPONSABILE.contains(other.carisma.lowercase().trim())
-        )
-            return -1
+        if (StringUtils.VICE_RESPONSABILE.contains(
+                carisma.lowercase().trim()
+            ) && !StringUtils.VICE_RESPONSABILE.contains(other.carisma.lowercase().trim())
+        ) return -1
 
-        if (!StringUtils.VICE_RESPONSABILE.contains(carisma.lowercase().trim())
-            && StringUtils.VICE_RESPONSABILE.contains(other.carisma.lowercase().trim())
-        )
-            return 1
+        if (!StringUtils.VICE_RESPONSABILE.contains(
+                carisma.lowercase().trim()
+            ) && StringUtils.VICE_RESPONSABILE.contains(other.carisma.lowercase().trim())
+        ) return 1
 
         val thisName = "$nome $cognome"
         val otherName = "${other.nome} ${other.cognome}"
@@ -152,4 +162,9 @@ class ExpandableBrotherItem : AbstractBindingItem<FratelloDetailItemBinding>(),
         return thisName.compareTo(otherName)
 
     }
+
+    companion object {
+        private val TAG = ExpandableBrotherItem::class.java.canonicalName
+    }
+
 }

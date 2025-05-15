@@ -4,11 +4,15 @@ import android.content.Context
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import com.mikepenz.fastadapter.IAdapter
 import com.mikepenz.fastadapter.adapters.FastItemAdapter
 import it.cammino.gestionecomunita.R
@@ -24,6 +28,8 @@ open class CommunityListFragment : Fragment() {
     private val viewModel: CommunityListViewModel by viewModels()
     private val indexViewModel: ComunitaIndexViewModel by viewModels({ requireParentFragment() })
 
+    private var menuProvider: MenuProvider? = null
+
     private var _binding: FragmentCommunityListBinding? = null
 
     // This property is only valid between onCreateView and
@@ -32,17 +38,13 @@ open class CommunityListFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        viewModel.indexType =
-            arguments?.getSerializableWrapper(
-                CommunityListViewModel.INDEX_TYPE,
-                CommunityListViewModel.IndexType::class.java
-            ) as? CommunityListViewModel.IndexType
-                ?: CommunityListViewModel.IndexType.TUTTE
+        viewModel.indexType = arguments?.getSerializableWrapper(
+            CommunityListViewModel.INDEX_TYPE, CommunityListViewModel.IndexType::class.java
+        ) as? CommunityListViewModel.IndexType ?: CommunityListViewModel.IndexType.TUTTE
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCommunityListBinding.inflate(inflater, container, false)
         return binding.root
@@ -55,6 +57,45 @@ open class CommunityListFragment : Fragment() {
 
     private val mAdapter: FastItemAdapter<CommunityListItem> = FastItemAdapter()
     private var mLastClickTime: Long = 0
+
+    override fun onStop() {
+        super.onStop()
+        menuProvider?.let {
+            Log.d(TAG, "removeMenu")
+            activity?.removeMenuProvider(it)
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        menuProvider = object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                // Add menu items here
+                menuInflater.inflate(R.menu.sort_community_menu, menu)
+                menu.findItem(viewModel.selectedSort).isChecked = true
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                // Handle the menu selection
+                return when (menuItem.itemId) {
+                    R.id.sort_alphabet, R.id.sort_itineranti -> {
+                        menuItem.isChecked = true
+                        viewModel.selectedSort = menuItem.itemId
+                        sortList()
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+        }
+        menuProvider?.let {
+            Log.d(TAG, "addMenu")
+            if (viewModel.indexType == CommunityListViewModel.IndexType.TUTTE) {
+                activity?.addMenuProvider(it)
+            }
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -75,29 +116,29 @@ open class CommunityListFragment : Fragment() {
                 consume
             }
 
-        if (viewModel.indexType == CommunityListViewModel.IndexType.TUTTE) {
-            activity?.addMenuProvider(object : MenuProvider {
-                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                    // Add menu items here
-                    menuInflater.inflate(R.menu.sort_community_menu, menu)
-                    menu.findItem(viewModel.selectedSort).isChecked = true
-                }
-
-                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                    // Handle the menu selection
-                    return when (menuItem.itemId) {
-                        R.id.sort_alphabet,
-                        R.id.sort_itineranti -> {
-                            menuItem.isChecked = true
-                            viewModel.selectedSort = menuItem.itemId
-                            sortList()
-                            true
-                        }
-                        else -> false
-                    }
-                }
-            }, viewLifecycleOwner, Lifecycle.State.RESUMED)
-        }
+//        if (viewModel.indexType == CommunityListViewModel.IndexType.TUTTE) {
+//            activity?.addMenuProvider(object : MenuProvider {
+//                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+//                    // Add menu items here
+//                    menuInflater.inflate(R.menu.sort_community_menu, menu)
+//                    menu.findItem(viewModel.selectedSort).isChecked = true
+//                }
+//
+//                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+//                    // Handle the menu selection
+//                    return when (menuItem.itemId) {
+//                        R.id.sort_alphabet,
+//                        R.id.sort_itineranti -> {
+//                            menuItem.isChecked = true
+//                            viewModel.selectedSort = menuItem.itemId
+//                            sortList()
+//                            true
+//                        }
+//                        else -> false
+//                    }
+//                }
+//            }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+//        }
 
         subscribeUiChanges()
 
@@ -114,22 +155,21 @@ open class CommunityListFragment : Fragment() {
         viewModel.itemsResult?.observe(viewLifecycleOwner) { comunita ->
             val orderedComunita =
                 if (viewModel.indexType == CommunityListViewModel.IndexType.VISITATE_OLTRE_ANNO) comunita.sortedBy { it.dataUltimaVisita } else comunita
-            mAdapter.set(orderedComunita
-                .map {
-                    Log.d(TAG, "get id: ${it.id}")
-                    communityListItem {
-                        setNumeroComunita = it.numero
-                        setParrocchia = it.parrocchia
-                        setResponsabile = it.responsabile
-                        setCatechisti = it.catechisti
-                        id = it.id
-                        setDataUltimaVisita = it.dataUltimaVisita
-                        setDateMode =
-                            viewModel.indexType == CommunityListViewModel.IndexType.VISITATE_OLTRE_ANNO
-                    }
-                })
-            if (viewModel.indexType == CommunityListViewModel.IndexType.TUTTE)
-                sortList()
+            mAdapter.set(
+                orderedComunita.map {
+                        Log.d(TAG, "get id: ${it.id}")
+                        communityListItem {
+                            setNumeroComunita = it.numero
+                            setParrocchia = it.parrocchia
+                            setResponsabile = it.responsabile
+                            setCatechisti = it.catechisti
+                            id = it.id
+                            setDataUltimaVisita = it.dataUltimaVisita
+                            setDateMode =
+                                viewModel.indexType == CommunityListViewModel.IndexType.VISITATE_OLTRE_ANNO
+                        }
+                    })
+            if (viewModel.indexType == CommunityListViewModel.IndexType.TUTTE) sortList()
         }
     }
 

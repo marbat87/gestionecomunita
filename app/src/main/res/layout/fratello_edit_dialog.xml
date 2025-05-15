@@ -205,7 +205,7 @@
                 android:paddingStart="@dimen/container_horizontal_margin"
                 android:paddingEnd="@dimen/container_horizontal_margin"
                 android:text="@string/preveniente_da"
-                android:textAppearance="?textAppearanceBodyMedium"
+                style="?textAppearanceBodyMedium"
                 app:layout_constraintTop_toBottomOf="@id/carisma_text_field" />
 
             <com.google.android.material.textfield.TextInputLayout

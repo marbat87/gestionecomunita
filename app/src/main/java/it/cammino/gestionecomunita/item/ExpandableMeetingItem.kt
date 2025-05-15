@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import com.google.android.material.color.MaterialColors
 import com.mikepenz.fastadapter.binding.AbstractBindingItem
 import it.cammino.gestionecomunita.R
 import it.cammino.gestionecomunita.databinding.IncontroExpandableItemBinding
@@ -77,6 +78,20 @@ class ExpandableMeetingItem : AbstractBindingItem<IncontroExpandableItemBinding>
         }
 
         binding.incontroIndicator.animate().rotation(if (isExpanded) 0f else 180f).start()
+        binding.incontroIndicator.setColorFilter(
+            MaterialColors.getColor(
+                ctx,
+                if (isExpanded) androidx.appcompat.R.attr.colorPrimary else com.google.android.material.R.attr.colorOnSurface,
+                TAG
+            )
+        )
+        binding.incontroTitle.setTextColor(
+            MaterialColors.getColor(
+                ctx,
+                if (isExpanded) androidx.appcompat.R.attr.colorPrimary else com.google.android.material.R.attr.colorOnSurface,
+                TAG
+            )
+        )
         binding.expansion.isVisible = isExpanded
         binding.todoIncontro.isVisible = isExpanded && done
         binding.doneIncontro.isVisible = isExpanded && !done
@@ -91,6 +106,10 @@ class ExpandableMeetingItem : AbstractBindingItem<IncontroExpandableItemBinding>
         binding.textNote.text = null
         binding.textData.text = null
         binding.textLuogo.text = null
+    }
+
+    companion object {
+        private val TAG = ExpandableMeetingItem::class.java.canonicalName
     }
 
 }

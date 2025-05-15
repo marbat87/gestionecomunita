@@ -206,7 +206,7 @@
             android:layout_marginTop="@dimen/text_field_space_no_error"
             android:layout_marginEnd="@dimen/container_horizontal_margin"
             android:text="@string/comunita_assegnazione_label"
-            android:textAppearance="?textAppearanceTitleMedium"
+            style="?textAppearanceTitleMedium"
             app:layout_constraintTop_toBottomOf="@id/date_seminario_divider_end" />
 
         <Button

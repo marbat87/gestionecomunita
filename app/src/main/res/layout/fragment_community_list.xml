@@ -39,7 +39,7 @@
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:gravity="center_horizontal"
             android:text="@string/no_vocazioni"
-            android:textAppearance="?textAppearanceBodyMedium"
+            style="?textAppearanceBodyMedium"
             android:textColor="?android:textColorSecondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

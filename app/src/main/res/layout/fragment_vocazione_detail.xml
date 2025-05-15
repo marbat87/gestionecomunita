@@ -54,7 +54,7 @@
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:paddingStart="@dimen/container_horizontal_margin"
                 android:paddingEnd="@dimen/container_horizontal_margin"
-                android:textAppearance="?textAppearanceBodyMedium"
+                style="?textAppearanceBodyMedium"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -206,7 +206,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/n_d"
-                    android:textAppearance="?textAppearanceBodyLarge"
+                    style="?textAppearanceBodyLarge"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="@string/n_d" />
@@ -216,7 +216,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/eta_label"
-                    android:textAppearance="?textAppearanceLabelMedium"
+                    style="?textAppearanceLabelMedium"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/text_eta" />
 
@@ -334,7 +334,7 @@
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:gravity="center_horizontal"
             android:text="@string/no_fratelli"
-            android:textAppearance="?textAppearanceBodyMedium"
+            style="?textAppearanceBodyMedium"
             android:textColor="?android:textColorSecondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

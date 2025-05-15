@@ -3,12 +3,16 @@ package it.cammino.gestionecomunita.ui.vocazione.list
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import com.mikepenz.fastadapter.adapters.FastItemAdapter
 import it.cammino.gestionecomunita.MainActivity
 import it.cammino.gestionecomunita.R
@@ -24,6 +28,8 @@ open class VocazioneListFragment : Fragment() {
     private val viewModel: VocazioneListViewModel by viewModels()
     private val indexViewModel: CentroVocazionaleViewModel by viewModels({ requireParentFragment() })
 
+    private var menuProvider: MenuProvider? = null
+
     private var _binding: FragmentCommunityListBinding? = null
 
     // This property is only valid between onCreateView and
@@ -31,8 +37,7 @@ open class VocazioneListFragment : Fragment() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCommunityListBinding.inflate(inflater, container, false)
         return binding.root
@@ -46,26 +51,17 @@ open class VocazioneListFragment : Fragment() {
     private val mAdapter: FastItemAdapter<VocazioneListItem> = FastItemAdapter()
     private var mLastClickTime: Long = 0
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onStop() {
+        super.onStop()
+        menuProvider?.let {
+            Log.d(TAG, "removeMenu")
+            activity?.removeMenuProvider(it)
+        }
+    }
 
-        binding.communityList.setHasFixedSize(true)
-        binding.communityList.adapter = mAdapter
-
-        mAdapter.onClickListener =
-            { _, _, item, _ ->
-                var consume = false
-                if (SystemClock.elapsedRealtime() - mLastClickTime >= Utility.CLICK_DELAY) {
-                    mLastClickTime = SystemClock.elapsedRealtime()
-                    indexViewModel.clickedId = item.id
-                    indexViewModel.itemCLickedState.value =
-                        CentroVocazionaleViewModel.ItemClickState.CLICKED
-                    consume = true
-                }
-                consume
-            }
-
-        activity?.addMenuProvider(object : MenuProvider {
+    override fun onStart() {
+        super.onStart()
+        menuProvider = object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 // Add menu items here
                 menuInflater.inflate(R.menu.filter_vocation_menu, menu)
@@ -76,18 +72,64 @@ open class VocazioneListFragment : Fragment() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 // Handle the menu selection
                 return when (menuItem.itemId) {
-                    R.id.filter_male,
-                    R.id.filter_female,
-                    R.id.filter_all -> {
+                    R.id.filter_male, R.id.filter_female, R.id.filter_all -> {
                         menuItem.isChecked = true
                         viewModel.selectedFilter = menuItem.itemId
                         filterList()
                         true
                     }
+
                     else -> false
                 }
             }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+        }
+        menuProvider?.let {
+            Log.d(TAG, "addMenu")
+            activity?.addMenuProvider(it)
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.communityList.setHasFixedSize(true)
+        binding.communityList.adapter = mAdapter
+
+        mAdapter.onClickListener = { _, _, item, _ ->
+            var consume = false
+            if (SystemClock.elapsedRealtime() - mLastClickTime >= Utility.CLICK_DELAY) {
+                mLastClickTime = SystemClock.elapsedRealtime()
+                indexViewModel.clickedId = item.id
+                indexViewModel.itemCLickedState.value =
+                    CentroVocazionaleViewModel.ItemClickState.CLICKED
+                consume = true
+            }
+            consume
+        }
+
+//        activity?.addMenuProvider(object : MenuProvider {
+//            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+//                // Add menu items here
+//                menuInflater.inflate(R.menu.filter_vocation_menu, menu)
+//                menu.findItem(viewModel.selectedFilter).isChecked = true
+//                (activity as? MainActivity)?.updateProfileImage()
+//            }
+//
+//            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+//                // Handle the menu selection
+//                return when (menuItem.itemId) {
+//                    R.id.filter_male,
+//                    R.id.filter_female,
+//                    R.id.filter_all -> {
+//                        menuItem.isChecked = true
+//                        viewModel.selectedFilter = menuItem.itemId
+//                        filterList()
+//                        true
+//                    }
+//                    else -> false
+//                }
+//            }
+//        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
         subscribeUiChanges()
 
@@ -103,8 +145,7 @@ open class VocazioneListFragment : Fragment() {
 
     private fun subscribeUiChanges() {
         viewModel.vocazioniLiveList?.observe(viewLifecycleOwner) { vocazioni ->
-            viewModel.vocazioniList = vocazioni
-                .map {
+            viewModel.vocazioniList = vocazioni.map {
                     Log.d(TAG, "get id: ${it.idVocazione}")
                     vocazioneListItem {
                         setNome = it.nome

@@ -14,11 +14,16 @@ object StringUtils {
     val RESPONSABILE = arrayOf("responsabile", "resp")
     val VICE_RESPONSABILE = arrayOf("vice responsabile", "vice-responsabile", "vice", "viceresp")
 
+    const val EMPTY = ""
+    const val UNEXPECTED_CREDENTIAL = "Unexpected type of credential"
+
     fun generateRandomCode(): String {
         val chars = ("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijk"
                 + "lmnopqrstuvwxyz!@#$%&")
         val sb = StringBuilder(CODE_LENGTH)
-        for (i in 0 until CODE_LENGTH) sb.append(chars[Random.nextInt(chars.length)])
+        (0 until CODE_LENGTH).forEach { i ->
+            sb.append(chars[Random.nextInt(chars.length)])
+        }
         return sb.toString()
     }
 
