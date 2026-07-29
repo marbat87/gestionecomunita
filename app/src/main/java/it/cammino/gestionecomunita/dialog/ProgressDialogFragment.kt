@@ -10,7 +10,6 @@ import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
@@ -39,7 +38,7 @@ class ProgressDialogFragment : DialogFragment() {
         get() = if (arguments?.containsKey(BUILDER_TAG) != true) null else arguments?.getSerializableWrapper(
             BUILDER_TAG,
             Builder::class.java
-        ) as? Builder
+        )
 
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -159,9 +158,9 @@ class ProgressDialogFragment : DialogFragment() {
 
         private fun newInstance(builder: Builder): ProgressDialogFragment {
             return newInstance().apply {
-                arguments = bundleOf(
-                    Pair(BUILDER_TAG, builder)
-                )
+                arguments = Bundle().apply {
+                    putSerializable(BUILDER_TAG, builder)
+                }
             }
         }
 

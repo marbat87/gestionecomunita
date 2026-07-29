@@ -32,12 +32,12 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.platform.MaterialSharedAxis
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.auth.auth
+import com.google.firebase.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageException
 import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.ktx.storage
+import com.google.firebase.storage.storage
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import it.cammino.gestionecomunita.MainActivityViewModel.ProfileAction
@@ -734,7 +734,7 @@ class MainActivity : ThemeableActivity() {
             else viewModel.backupCode = PreferenceManager.getDefaultSharedPreferences(this)
                 .getString(StringUtils.PREFERENCE_BACKUP_CODE, StringUtils.EMPTY_STRING).orEmpty()
 
-            withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+            withContext(Dispatchers.IO) {
                 backupDatabase(viewModel.backupCode)
             }
 
@@ -775,7 +775,7 @@ class MainActivity : ThemeableActivity() {
 
             var codeOk: Boolean
 
-            withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+            withContext(Dispatchers.IO) {
                 val storageRef = Firebase.storage.reference
                 codeOk = checkControlFile(storageRef, viewModel.backupCode)
             }
@@ -791,7 +791,7 @@ class MainActivity : ThemeableActivity() {
                 return
             }
 
-            withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+            withContext(Dispatchers.IO) {
                 restoreDatabase(viewModel.backupCode)
             }
 

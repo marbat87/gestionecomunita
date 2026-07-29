@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import androidx.activity.addCallback
-import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import com.google.android.material.appbar.MaterialToolbar
@@ -24,7 +23,7 @@ class SmallViewSeminaristaDialogFragment : ViewSeminaristaDialogFragment() {
         get() = if (arguments?.containsKey(BUILDER_TAG) != true) null else arguments?.getSerializableWrapper(
             BUILDER_TAG,
             Builder::class.java
-        ) as? Builder
+        )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,9 +69,9 @@ class SmallViewSeminaristaDialogFragment : ViewSeminaristaDialogFragment() {
 
         private fun newInstance(builder: Builder): SmallViewSeminaristaDialogFragment {
             return newInstance().apply {
-                arguments = bundleOf(
-                    Pair(BUILDER_TAG, builder)
-                )
+                arguments = Bundle().apply {
+                    putSerializable(BUILDER_TAG, builder)
+                }
             }
         }
 

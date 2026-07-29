@@ -6,10 +6,13 @@ import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
+import android.os.Bundle
 import android.text.InputType
 import android.view.MotionEvent
-import android.view.WindowManager
 import android.widget.EditText
+import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
+import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.FragmentActivity
@@ -17,46 +20,32 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.elevation.SurfaceColors
 import com.google.android.material.textfield.TextInputLayout
 import it.cammino.gestionecomunita.R
+import java.io.Serializable
 import java.sql.Date
 import java.util.Locale
 
-@Suppress("DEPRECATION")
-private fun Configuration.getSystemLocaleLegacy(): Locale {
-    return locale
-}
-
-@RequiresApi(Build.VERSION_CODES.N)
-private fun Configuration.getSystemLocaleN(): Locale {
-    return locales.get(0)
-}
-
 val Resources.systemLocale: Locale
     get() {
-        return if (OSUtils.hasN()) configuration.getSystemLocaleN()
-        else configuration.getSystemLocaleLegacy()
+        return configuration.locales.get(0)
     }
 
 fun Activity.setupNavBarColor() {
-    if (!OSUtils.hasV()) setupNavBarColorLegacy()
-}
-
-@Suppress("DEPRECATION")
-fun Activity.setupNavBarColorLegacy() {
-    if (OSUtils.hasO()) {
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        if (!isDarkMode) setLightNavigationBar()
-        window.navigationBarColor = SurfaceColors.SURFACE_2.getColor(this)
+    if (this is ComponentActivity) {
+        val navBarColor = SurfaceColors.SURFACE_2.getColor(this)
+        enableEdgeToEdge(
+            navigationBarStyle = SystemBarStyle.auto(navBarColor, navBarColor)
+        )
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
-fun Activity.setLightNavigationBar() {
-    WindowInsetsControllerCompat(
-        window, window.decorView
-    ).isAppearanceLightNavigationBars = true
-}
+//fun Activity.setLightNavigationBar(light: Boolean) {
+//    WindowInsetsControllerCompat(
+//        window,
+//        window.decorView
+//    ).isAppearanceLightNavigationBars = light
+//}
 
-fun Activity.setLigthStatusBar(light: Boolean) {
+fun Activity.setLightStatusBar(light: Boolean) {
     WindowInsetsControllerCompat(
         window, window.decorView
     ).isAppearanceLightStatusBars = light
@@ -134,4 +123,26 @@ fun TextInputLayout?.validateDate(): Boolean {
         }
     }
     return true
+}
+
+fun <T : Serializable> Bundle.getSerializableWrapper(key: String, clazz: Class<T>): T? {
+    return if (OSUtils.hasT()) {
+        this.getSerializableT(key, clazz)
+    } else {
+        this.getSerializableLegacy(key)
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+private fun <T : Serializable> Bundle.getSerializableT(key: String, clazz: Class<T>): T? {
+    return this.getSerializable(
+        key, clazz
+    )
+}
+
+@Suppress("UNCHECKED_CAST", "DEPRECATION")
+private fun <T : Serializable> Bundle.getSerializableLegacy(key: String): T? {
+    return this.getSerializable(
+        key
+    ) as? T
 }

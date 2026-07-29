@@ -51,7 +51,7 @@ class ExpandableItem : AbstractExpandableItem<ExpandableItem.ViewHolder>(),
         //get the context
         val ctx = holder.itemView.context
 
-        val p = payloads.mapNotNull { it as? String }.lastOrNull()
+        val p = payloads.filterIsInstance<String>().lastOrNull()
         if (p != null) {
             // Check if this was an expanding or collapsing action by checking the payload.
             // If it is we need to animate the changes

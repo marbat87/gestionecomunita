@@ -4,7 +4,6 @@ package it.cammino.gestionecomunita.dialog.large
 import android.app.Dialog
 import android.os.Bundle
 import android.view.KeyEvent
-import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import it.cammino.gestionecomunita.R
@@ -17,7 +16,7 @@ class LargeCommunityHistoryDialogFragment : CommunityHistoryDialogFragment() {
         get() = if (arguments?.containsKey(BUILDER_TAG) != true) null else arguments?.getSerializableWrapper(
             BUILDER_TAG,
             Builder::class.java
-        ) as? Builder
+        )
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val mBuilder = builder
@@ -30,7 +29,7 @@ class LargeCommunityHistoryDialogFragment : CommunityHistoryDialogFragment() {
 
         dialog.setTitle(R.string.history)
 
-        mBuilder.mPositiveButton?.let { it ->
+        mBuilder.mPositiveButton?.let {
             dialog.setPositiveButton(it) { _, _ -> }
         }
 
@@ -56,9 +55,9 @@ class LargeCommunityHistoryDialogFragment : CommunityHistoryDialogFragment() {
 
         private fun newInstance(builder: Builder): LargeCommunityHistoryDialogFragment {
             return newInstance().apply {
-                arguments = bundleOf(
-                    Pair(BUILDER_TAG, builder)
-                )
+                arguments = Bundle().apply {
+                    putSerializable(BUILDER_TAG, builder)
+                }
             }
         }
 

@@ -10,7 +10,6 @@ import android.view.Window
 import android.widget.Button
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
@@ -32,7 +31,7 @@ class SmallEditBrotherDialogFragment : EditBrotherDialogFragment() {
         get() = if (arguments?.containsKey(BUILDER_TAG) != true) null else arguments?.getSerializableWrapper(
             BUILDER_TAG,
             Builder::class.java
-        ) as? Builder
+        )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -106,9 +105,9 @@ class SmallEditBrotherDialogFragment : EditBrotherDialogFragment() {
 
         private fun newInstance(builder: Builder): SmallEditBrotherDialogFragment {
             return newInstance().apply {
-                arguments = bundleOf(
-                    Pair(BUILDER_TAG, builder)
-                )
+                arguments = Bundle().apply {
+                    putSerializable(BUILDER_TAG, builder)
+                }
             }
         }
 

@@ -42,7 +42,7 @@
         android:layout_marginBottom="@dimen/m3_bottom_nav_min_height"
         android:background="?android:colorBackground"
         app:defaultNavHost="true"
-        app:layout_behavior=".ui.FABAwareScrollingViewBehavior"
+        app:layout_behavior="it.cammino.gestionecomunita.ui.FABAwareScrollingViewBehavior"
         app:navGraph="@navigation/mobile_navigation"
         tools:ignore="PrivateResource" />
 

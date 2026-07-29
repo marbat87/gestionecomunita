@@ -133,8 +133,6 @@ class CommunityListItem : AbstractBindingItem<CommunityRowItemBinding>(),
             return 1
         if (numeroComunita < other.numeroComunita)
             return -1
-        if (parrocchia > other.parrocchia)
-            return 1
 
         return 0
     }

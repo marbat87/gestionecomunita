@@ -732,7 +732,7 @@ open class CommunityDetailFragment : Fragment() {
     }
 
     private suspend fun saveComunita() {
-        withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             val db = ComunitaDatabase.getInstance(requireContext())
             val insertedId = db.comunitaDao().insertComunita(viewModel.comunita)
             Log.d(TAG, "save insertedId : $insertedId")
@@ -762,7 +762,7 @@ open class CommunityDetailFragment : Fragment() {
     }
 
     private suspend fun updateComunita() {
-        withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             val db = ComunitaDatabase.getInstance(requireContext())
             updateHistory(viewModel.listId)
             db.comunitaDao().updateComnuita(viewModel.comunita)
@@ -806,7 +806,7 @@ open class CommunityDetailFragment : Fragment() {
     }
 
     private suspend fun deleteComunita() {
-        withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             val db = ComunitaDatabase.getInstance(requireContext())
             db.fratelloDao().truncateTableByComunita(viewModel.listId)
             db.incontroDao().truncateTableByComunita(viewModel.listId)
@@ -825,7 +825,7 @@ open class CommunityDetailFragment : Fragment() {
     }
 
     private suspend fun addPromemoria(idComunita: Long, data: Date?, descrizione: String) {
-        withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             val db = ComunitaDatabase.getInstance(requireContext())
             val promemoria = Promemoria()
             promemoria.note = descrizione
@@ -843,7 +843,7 @@ open class CommunityDetailFragment : Fragment() {
     private suspend fun retrieveData() {
         Log.d(TAG, "createMode ${viewModel.createMode}")
         if (!viewModel.createMode) {
-            withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+            withContext(Dispatchers.IO) {
                 val comunitaFratello = ComunitaDatabase.getInstance(requireContext()).fratelloDao()
                     .getComunitaWithFratelli(viewModel.listId)
                 if (comunitaFratello != null) viewModel.comunita = comunitaFratello.comunita

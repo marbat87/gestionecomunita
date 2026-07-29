@@ -10,7 +10,6 @@ import android.view.Window
 import android.widget.Button
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import com.google.android.material.appbar.MaterialToolbar
@@ -27,7 +26,7 @@ class SmallEditVisitaDialogFragment : EditVisitaDialogFragment() {
         get() = if (arguments?.containsKey(BUILDER_TAG) != true) null else arguments?.getSerializableWrapper(
             BUILDER_TAG,
             Builder::class.java
-        ) as? Builder
+        )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,9 +105,9 @@ class SmallEditVisitaDialogFragment : EditVisitaDialogFragment() {
 
         private fun newInstance(builder: Builder): SmallEditVisitaDialogFragment {
             return newInstance().apply {
-                arguments = bundleOf(
-                    Pair(BUILDER_TAG, builder)
-                )
+                arguments = Bundle().apply {
+                    putSerializable(BUILDER_TAG, builder)
+                }
             }
         }
 

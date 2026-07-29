@@ -1,20 +1,20 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="fab_margin_bottom_navigation">96dp</dimen>
-    <dimen name="item_width">200dp</dimen>
-    <dimen name="app_bar_height">200dp</dimen>
+<!--    <dimen name="item_width">200dp</dimen>-->
+<!--    <dimen name="app_bar_height">200dp</dimen>-->
     <dimen name="text_margin">16dp</dimen>
-    <dimen name="container_margin">8dp</dimen>
+<!--    <dimen name="container_margin">8dp</dimen>-->
     <dimen name="container_horizontal_margin">16dp</dimen>
     <dimen name="text_view_vertical_margin">12dp</dimen>
     <dimen name="text_field_space">0dp</dimen>
     <dimen name="text_field_space_no_error">20dp</dimen>
     <dimen name="activity_min_margin">5dip</dimen>
-    <dimen name="activity_min_top_margin">10dip</dimen>
-    <dimen name="m3_btn_icon_only_default_size" tools:override="true">24dp</dimen>
+<!--    <dimen name="activity_min_top_margin">10dip</dimen>-->
+<!--    <dimen name="m3_btn_icon_only_default_size" tools:override="true">24dp</dimen>-->
     <dimen name="recycler_fab_padding_bottom">88dp</dimen>
     <dimen name="listLeadingItemPaddingStart">8dp</dimen>
     <dimen name="listItemMarginStart">8dp</dimen>

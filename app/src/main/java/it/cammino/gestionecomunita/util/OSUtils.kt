@@ -1,7 +1,7 @@
 package it.cammino.gestionecomunita.util
 
 import android.os.Build
-import java.util.*
+import java.util.Locale
 
 @Suppress("unused")
 object OSUtils {
@@ -37,10 +37,6 @@ object OSUtils {
 
     fun hasQ(): Boolean {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
-    }
-
-    fun hasN(): Boolean {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
     }
 
     fun hasP(): Boolean {

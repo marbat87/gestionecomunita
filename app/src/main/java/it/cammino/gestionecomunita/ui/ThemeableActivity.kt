@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import it.cammino.gestionecomunita.util.createTaskDescription
 import it.cammino.gestionecomunita.util.isDarkMode
-import it.cammino.gestionecomunita.util.setLigthStatusBar
+import it.cammino.gestionecomunita.util.setLightStatusBar
 import it.cammino.gestionecomunita.util.setupNavBarColor
 
 abstract class ThemeableActivity : AppCompatActivity() {
@@ -12,7 +12,7 @@ abstract class ThemeableActivity : AppCompatActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
 
         setupNavBarColor()
-        updateStatusBarLightMode(true)
+        updateStatusBarLightMode()
 
         setTaskDescription(this.createTaskDescription(TAG ?: "TAG"))
 
@@ -21,11 +21,11 @@ abstract class ThemeableActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        updateStatusBarLightMode(true)
+        updateStatusBarLightMode()
     }
 
-    fun updateStatusBarLightMode(auto: Boolean) {
-        setLigthStatusBar(if (auto) !isDarkMode else false)
+    private fun updateStatusBarLightMode() {
+        setLightStatusBar(!isDarkMode)
     }
 
     companion object {

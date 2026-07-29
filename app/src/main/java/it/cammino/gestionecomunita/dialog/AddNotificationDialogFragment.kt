@@ -192,7 +192,7 @@ open class AddNotificationDialogFragment : DialogFragment() {
         viewModel.dataFilled.value = false
         lateinit var comunitaList: List<Comunita>
         lateinit var comunita: Comunita
-        withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             comunitaList =
                 ComunitaDatabase.getInstance(requireContext()).comunitaDao().allByName
             if (!mBuilder.mFreeMode || mBuilder.mEditMode)

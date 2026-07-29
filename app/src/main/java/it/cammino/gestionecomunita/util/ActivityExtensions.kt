@@ -4,10 +4,10 @@ import android.app.Activity
 import android.app.ActivityManager
 import android.content.Intent
 import android.os.Build
+import android.os.Bundle
 import androidx.annotation.AnimRes
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityOptionsCompat
-import androidx.core.os.bundleOf
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.transition.platform.MaterialSharedAxis
 import it.cammino.gestionecomunita.R
@@ -19,20 +19,6 @@ fun Activity.createTaskDescription(tag: String): ActivityManager.TaskDescription
         OSUtils.hasP() -> createTaskDescriptionP(tag)
         else -> createTaskDescriptionLegacy(tag)
     }
-}
-
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
-private fun Activity.createTaskDescriptionTiramisu(tag: String): ActivityManager.TaskDescription {
-    val builder = ActivityManager.TaskDescription.Builder()
-    builder.setIcon(R.mipmap.ic_launcher)
-    builder.setPrimaryColor(
-        MaterialColors.getColor(
-            this,
-            androidx.appcompat.R.attr.colorPrimary,
-            tag
-        )
-    )
-    return builder.build()
 }
 
 @Suppress("DEPRECATION")
@@ -52,6 +38,20 @@ private fun Activity.createTaskDescriptionLegacy(tag: String): ActivityManager.T
         null,
         MaterialColors.getColor(this, androidx.appcompat.R.attr.colorPrimary, tag)
     )
+}
+
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+private fun Activity.createTaskDescriptionTiramisu(tag: String): ActivityManager.TaskDescription {
+    return ActivityManager.TaskDescription.Builder().apply {
+        setIcon(R.mipmap.ic_launcher)
+        setPrimaryColor(
+            MaterialColors.getColor(
+                this@createTaskDescriptionTiramisu,
+                androidx.appcompat.R.attr.colorPrimary,
+                tag
+            )
+        )
+    }.build()
 }
 
 fun Activity.slideInRight() {
@@ -96,12 +96,15 @@ fun Activity.startActivityWithTransition(intent: Intent, axis: Int) {
         val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this)
         startActivity(
             intent.putExtras(
-                bundleOf(SHARED_AXIS to axis)
+                Bundle().apply {
+                    putInt(SHARED_AXIS, axis)
+                }
             ), options.toBundle()
         )
     }
 
 }
+
 fun Activity.setEnterTransition() {
     if (!OSUtils.isObySamsung()) {
         val axis = intent.getIntExtra(SHARED_AXIS, MaterialSharedAxis.X)

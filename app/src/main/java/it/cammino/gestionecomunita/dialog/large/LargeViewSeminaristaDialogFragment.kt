@@ -4,7 +4,6 @@ package it.cammino.gestionecomunita.dialog.large
 import android.app.Dialog
 import android.os.Bundle
 import android.view.KeyEvent
-import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import it.cammino.gestionecomunita.R
@@ -17,7 +16,7 @@ class LargeViewSeminaristaDialogFragment : ViewSeminaristaDialogFragment() {
         get() = if (arguments?.containsKey(BUILDER_TAG) != true) null else arguments?.getSerializableWrapper(
             BUILDER_TAG,
             Builder::class.java
-        ) as? Builder
+        )
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val mBuilder = builder
@@ -30,7 +29,7 @@ class LargeViewSeminaristaDialogFragment : ViewSeminaristaDialogFragment() {
 
         dialog.setTitle(R.string.seminarista_title)
 
-        mBuilder.mPositiveButton?.let { it ->
+        mBuilder.mPositiveButton?.let {
             dialog.setPositiveButton(it) { _, _ ->
                 dismiss()
             }
@@ -64,9 +63,9 @@ class LargeViewSeminaristaDialogFragment : ViewSeminaristaDialogFragment() {
 
         private fun newInstance(builder: Builder): LargeViewSeminaristaDialogFragment {
             return newInstance().apply {
-                arguments = bundleOf(
-                    Pair(BUILDER_TAG, builder)
-                )
+                arguments = Bundle().apply {
+                    putSerializable(BUILDER_TAG, builder)
+                }
             }
         }
 

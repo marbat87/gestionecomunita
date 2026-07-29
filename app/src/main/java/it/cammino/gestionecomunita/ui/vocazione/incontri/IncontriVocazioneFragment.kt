@@ -232,7 +232,7 @@ class IncontriVocazioneFragment : AccountMenuFragment() {
         idIncontro: Long,
         update: Boolean = false
     ) {
-        withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             val db = ComunitaDatabase.getInstance(requireContext())
             val incontro = IncontroVocazionale()
             incontro.tipo = tipo
@@ -253,7 +253,7 @@ class IncontriVocazioneFragment : AccountMenuFragment() {
 
     private suspend fun removeIncontro(idIncontro: Long) {
         var rimosso = false
-        withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             val db = ComunitaDatabase.getInstance(requireContext())
 
             viewModel.removedIncontro = db.incontroVocazionaleDao().getById(idIncontro)
@@ -276,7 +276,7 @@ class IncontriVocazioneFragment : AccountMenuFragment() {
     }
 
     private suspend fun restoreIncontro(incontro: IncontroVocazionale) {
-        withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             ComunitaDatabase.getInstance(requireContext()).incontroVocazionaleDao()
                 .insertIncontroVocazionale(incontro)
         }

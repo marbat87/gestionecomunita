@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.KeyEvent
-import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -21,7 +20,7 @@ class LargeEditSeminaristaDialogFragment : EditSeminaristaDialogFragment() {
         get() = if (arguments?.containsKey(BUILDER_TAG) != true) null else arguments?.getSerializableWrapper(
             BUILDER_TAG,
             Builder::class.java
-        ) as? Builder
+        )
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val mBuilder = builder
@@ -34,7 +33,7 @@ class LargeEditSeminaristaDialogFragment : EditSeminaristaDialogFragment() {
 
         dialog.setTitle(if (mBuilder.editMode) R.string.modifica_seminarista else R.string.nuovo_seminarista)
 
-        mBuilder.mPositiveButton?.let { it ->
+        mBuilder.mPositiveButton?.let {
             dialog.setPositiveButton(it) { _, _ ->
                 if (validateForm(mView)) {
                     viewModel.mTag = mBuilder.mTag
@@ -109,9 +108,9 @@ class LargeEditSeminaristaDialogFragment : EditSeminaristaDialogFragment() {
 
         private fun newInstance(builder: Builder): LargeEditSeminaristaDialogFragment {
             return newInstance().apply {
-                arguments = bundleOf(
-                    Pair(BUILDER_TAG, builder)
-                )
+                arguments = Bundle().apply {
+                    putSerializable(BUILDER_TAG, builder)
+                }
             }
         }
 

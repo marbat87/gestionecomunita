@@ -39,7 +39,7 @@ open class CommunityHistoryDialogFragment : DialogFragment() {
 
     private suspend fun getData(ctx: Context, idComunita: Long) {
         val passaggiList = ArrayList<CommunityHistoryListItem>()
-        withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             ComunitaDatabase.getInstance(ctx).passaggioDao().getComunitaWithPassaggi(idComunita)
                 ?.let {
                     it.passaggi.forEach { passaggio ->

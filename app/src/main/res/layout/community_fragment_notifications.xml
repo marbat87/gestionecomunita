@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_behavior=".ui.FABAwareScrollingViewBehavior"
+        app:layout_behavior="it.cammino.gestionecomunita.ui.FABAwareScrollingViewBehavior"
         tools:listitem="@layout/promemoria_row_item" />
 
     <androidx.constraintlayout.widget.ConstraintLayout

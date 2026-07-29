@@ -410,7 +410,7 @@ open class VocazioneDetailFragment : Fragment() {
     }
 
     private suspend fun saveVocazione() {
-        withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             ComunitaDatabase.getInstance(requireContext()).vocazioneDao()
                 .insertVocazione(viewModel.vocazione)
         }
@@ -418,7 +418,7 @@ open class VocazioneDetailFragment : Fragment() {
     }
 
     private suspend fun updateVocazione() {
-        withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             ComunitaDatabase.getInstance(requireContext()).vocazioneDao()
                 .updateVocazione(viewModel.vocazione)
         }
@@ -426,7 +426,7 @@ open class VocazioneDetailFragment : Fragment() {
     }
 
     private suspend fun deleteVocazione() {
-        withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             ComunitaDatabase.getInstance(requireContext()).vocazioneDao()
                 .deleteVocazione(Vocazione().apply { idVocazione = viewModel.listId })
         }
@@ -443,7 +443,7 @@ open class VocazioneDetailFragment : Fragment() {
 
     private suspend fun retrieveData(loadAll: Boolean) {
         Log.d(TAG, "createMode ${viewModel.createMode}")
-        withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             viewModel.comunitaList =
                 ComunitaDatabase.getInstance(requireContext()).comunitaDao().allByName
         }
@@ -463,7 +463,7 @@ open class VocazioneDetailFragment : Fragment() {
 
         if (!viewModel.createMode) {
             lateinit var comunita: Comunita
-            withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+            withContext(Dispatchers.IO) {
                 viewModel.vocazione = ComunitaDatabase.getInstance(requireContext()).vocazioneDao()
                     .getById(viewModel.listId) ?: Vocazione()
                 if (viewModel.vocazione.idComunita != (-1).toLong())

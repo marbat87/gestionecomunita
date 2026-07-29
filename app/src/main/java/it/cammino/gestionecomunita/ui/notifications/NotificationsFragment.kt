@@ -240,7 +240,7 @@ class NotificationsFragment : AccountMenuFragment() {
     }
 
     private suspend fun addPromemoria(idComunita: Long, data: Date?, descrizione: String) {
-        withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             val db = ComunitaDatabase.getInstance(requireContext())
             val promemoria = Promemoria()
             promemoria.note = descrizione
@@ -262,7 +262,7 @@ class NotificationsFragment : AccountMenuFragment() {
         data: Date?,
         descrizione: String
     ) {
-        withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             val db = ComunitaDatabase.getInstance(requireContext())
             val promemoria = Promemoria()
             promemoria.idPromemoria = idPromemoria
@@ -281,7 +281,7 @@ class NotificationsFragment : AccountMenuFragment() {
 
     private suspend fun rimuoviPromemoria(idPromemoria: Long, confirmed: Boolean = false) {
         if (confirmed) {
-            withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+            withContext(Dispatchers.IO) {
                 viewModel.removedPromemoria?.let {
                     ComunitaDatabase.getInstance(requireContext()).promemoriaDao()
                         .deletePromemoria(it)
@@ -304,7 +304,7 @@ class NotificationsFragment : AccountMenuFragment() {
                     }
                 }.show()
         } else {
-            withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+            withContext(Dispatchers.IO) {
                 viewModel.removedPromemoria =
                     ComunitaDatabase.getInstance(requireContext()).promemoriaDao()
                         .getById(idPromemoria)
@@ -327,7 +327,7 @@ class NotificationsFragment : AccountMenuFragment() {
     }
 
     private suspend fun restorePromemoria(promemoria: Promemoria) {
-        withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             ComunitaDatabase.getInstance(requireContext()).promemoriaDao()
                 .insertPromemoria(promemoria)
         }

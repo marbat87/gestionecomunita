@@ -887,7 +887,7 @@ open class SeminarioDetailFragment : Fragment() {
     }
 
     private suspend fun saveSeminario() {
-        withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             val db = ComunitaDatabase.getInstance(requireContext())
             val insertedId = db.seminarioDao().insertSeminario(viewModel.seminario.seminario)
             Log.d(TAG, "save insertedId : $insertedId")
@@ -897,7 +897,7 @@ open class SeminarioDetailFragment : Fragment() {
     }
 
     private suspend fun updateSeminario() {
-        withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             val db = ComunitaDatabase.getInstance(requireContext())
 
             //update seminario
@@ -915,7 +915,7 @@ open class SeminarioDetailFragment : Fragment() {
     }
 
     private suspend fun deleteSeminario() {
-        withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             val db = ComunitaDatabase.getInstance(requireContext())
             truncateRelatedTables(viewModel.listId)
             db.seminarioDao().deleteSeminario(Seminario().apply { id = viewModel.listId })
@@ -1034,7 +1034,7 @@ open class SeminarioDetailFragment : Fragment() {
     private suspend fun retrieveData() {
         Log.d(TAG, "createMode ${viewModel.createMode}")
         val seminaristi: List<SeminaristaWithComunita>
-        withContext(lifecycleScope.coroutineContext + Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             val db = ComunitaDatabase.getInstance(requireContext())
             viewModel.seminario = db.seminarioDao()
                 .getByIdWithDetails(viewModel.listId)
