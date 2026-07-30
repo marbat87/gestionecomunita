@@ -14,7 +14,7 @@ android {
         minSdk = 24
         targetSdk = 37
         multiDexEnabled = true
-        versionCode = 1600
+        versionCode = 1602
         versionName = "1.6.0"
     }
 

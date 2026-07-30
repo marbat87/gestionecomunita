@@ -26,7 +26,7 @@ interface ComunitaDao {
     fun insertComunita(comunita: List<Comunita>)
 
     @Update
-    fun updateComnuita(comunita: Comunita)
+    fun updateComunita(comunita: Comunita)
 
     @Delete
     fun deleteComunita(comunita: Comunita)

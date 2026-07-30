@@ -19,3 +19,6 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Joda-Time uses org.joda.convert as an optional dependency.
+-dontwarn org.joda.convert.**

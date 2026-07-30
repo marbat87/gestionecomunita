@@ -765,7 +765,7 @@ open class CommunityDetailFragment : Fragment() {
         withContext(Dispatchers.IO) {
             val db = ComunitaDatabase.getInstance(requireContext())
             updateHistory(viewModel.listId)
-            db.comunitaDao().updateComnuita(viewModel.comunita)
+            db.comunitaDao().updateComunita(viewModel.comunita)
             db.fratelloDao().truncateTableByComunita(viewModel.listId)
             val fratelli = ArrayList<Fratello>()
             viewModel.elementi =

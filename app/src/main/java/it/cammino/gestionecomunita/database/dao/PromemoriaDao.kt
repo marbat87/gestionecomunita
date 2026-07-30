@@ -8,7 +8,7 @@ import it.cammino.gestionecomunita.database.item.PromemoriaComunita
 @Dao
 interface PromemoriaDao {
 
-    @get:Query("SELECT a.*, b.numero, b.parrocchia FROM promemoria a, comunita b WHERE a.idComunita = b.id ORDER BY case when data is null then 1 else 0 end, data")
+    @get:Query("SELECT a.*, b.numero AS numero, b.parrocchia AS parrocchia FROM promemoria AS a, comunita AS b WHERE a.idComunita = b.id ORDER BY CASE WHEN data IS NULL THEN 1 ELSE 0 END, data")
     val liveAllWithComunita: LiveData<List<PromemoriaComunita>>
 
     @get:Query("SELECT * FROM promemoria ORDER BY data asc")

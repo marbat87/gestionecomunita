@@ -10,18 +10,18 @@ import it.cammino.gestionecomunita.database.dao.*
 import it.cammino.gestionecomunita.database.entity.*
 
 @Database(
-    entities = [(Comunita::class),
-        (Fratello::class),
-        (Promemoria::class),
-        (Passaggio::class),
-        (Vocazione::class),
-        (Incontro::class),
-        (Seminario::class),
-        (VisitaSeminario::class),
-        (ResponsabileSeminario::class),
-        (Seminarista::class),
-        (ComunitaSeminarista::class),
-        (IncontroVocazionale::class)],
+    entities = [Comunita::class,
+        Fratello::class,
+        Promemoria::class,
+        Passaggio::class,
+        Vocazione::class,
+        Incontro::class,
+        Seminario::class,
+        VisitaSeminario::class,
+        ResponsabileSeminario::class,
+        Seminarista::class,
+        ComunitaSeminarista::class,
+        IncontroVocazionale::class],
     version = 5,
     autoMigrations = [
         AutoMigration(

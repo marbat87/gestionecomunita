@@ -20,8 +20,8 @@ class IncontriViewModel(application: Application) : AndroidViewModel(application
 
     init {
         val mDb = ComunitaDatabase.getInstance(getApplication())
-        itemsResultTodo = mDb.incontroDao().liveByDate()
-        itemsResultDone = mDb.incontroDao().liveByDate(true)
+        itemsResultTodo = mDb.incontroDao().liveByDateFiltered()
+        itemsResultDone = mDb.incontroDao().liveByDateFiltered(true)
     }
 
 }
